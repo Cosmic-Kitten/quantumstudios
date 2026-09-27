@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#edf0e9">
-  <meta name="description" content="Xavier Boudoin is a Houston-based video editor working in CapCut, with a focus on audio, timing, and clear storytelling.">
-  <title>Xavier Boudoin — Video Editor</title>
+  <meta name="description" content="Xavier Boudoin is a Houston-based video editor who shapes clear, engaging edits in CapCut.">
+  <title>Xavier Boudoin - Video Editor</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -39,7 +39,7 @@
     .hero { min-height: 610px; padding: 70px 0 76px; display: grid; grid-template-columns: 1.05fr .95fr; gap: 6.5%; align-items: center; }
     .eyebrow { display: flex; align-items: center; gap: 10px; color: var(--muted); }
     .eyebrow::before { content: ""; width: 24px; height: 2px; background: var(--orange); }
-    h1 { max-width: 670px; margin: 26px 0 20px; font-size: clamp(54px, 8.2vw, 112px); line-height: .93; letter-spacing: -.075em; font-weight: 800; }
+    h1 { max-width: 670px; margin: 26px 0 20px; font-size: clamp(54px, 8.2vw, 112px); line-height: .93; letter-spacing: 0; font-weight: 800; }
     h1 span { display: block; color: var(--blue); }
     .hero-copy { max-width: 460px; color: #46514c; font-size: 17px; line-height: 1.7; }
     .hero-actions { display: flex; align-items: center; gap: 23px; margin-top: 32px; }
@@ -51,21 +51,37 @@
     .hero-photo img { width: 100%; height: 100%; object-fit: cover; display: block; filter: saturate(.8); }
     .photo-index { position: absolute; top: 18px; left: 18px; padding: 9px 11px; background: var(--lime); color: var(--ink); }
     .photo-note { position: absolute; right: 0; bottom: 0; width: 182px; min-height: 140px; padding: 18px; background: var(--orange); color: var(--ink); display: flex; flex-direction: column; justify-content: space-between; }
-    .photo-note strong { font-size: 28px; line-height: 1; letter-spacing: -.06em; }
+    .photo-note strong { font-size: 28px; line-height: 1; letter-spacing: 0; }
     .photo-note span { max-width: 130px; line-height: 1.4; }
-    .wave-band { background: var(--ink); color: var(--paper); overflow: hidden; }
-    .wave-inner { min-height: 94px; display: flex; align-items: center; gap: 28px; }
-    .wave-label { white-space: nowrap; color: var(--lime); }
-    .waveform { height: 48px; flex: 1; display: flex; align-items: center; justify-content: space-between; gap: 4px; }
-    .waveform i { display: block; width: 3px; height: var(--h); flex: 1; max-width: 5px; background: #82918a; transform-origin: center; animation: pulse var(--speed) ease-in-out infinite alternate; }
-    .waveform i:nth-child(3n) { background: var(--orange); }
-    .waveform i:nth-child(5n) { background: var(--lime); }
-    .wave-caption { white-space: nowrap; color: #aeb8b1; }
-    @keyframes pulse { to { transform: scaleY(.24); opacity: .7; } }
+    .edit-band { background: var(--ink); color: var(--paper); overflow: hidden; }
+    .edit-inner { padding: 19px 0 22px; }
+    .edit-top { display: flex; justify-content: space-between; align-items: center; }
+    .edit-label { color: var(--lime); }
+    .edit-caption { color: #aeb8b1; }
+    .timeline { position: relative; display: grid; grid-template-columns: 58px 1fr; gap: 6px 14px; margin-top: 14px; }
+    .track-label { display: flex; align-items: center; color: #aeb8b1; font-size: 9px; }
+    .track { height: 18px; display: flex; gap: 5px; overflow: hidden; }
+    .clip { display: block; height: 100%; }
+    .video-track .clip:nth-child(odd) { background: var(--blue); }
+    .video-track .clip:nth-child(even) { background: var(--orange); }
+    .video-track .clip:nth-child(1) { width: 23%; }
+    .video-track .clip:nth-child(2) { width: 17%; }
+    .video-track .clip:nth-child(3) { width: 28%; }
+    .video-track .clip:nth-child(4) { width: 20%; }
+    .title-track .clip { height: 11px; margin-top: 3px; background: var(--lime); }
+    .title-track .clip:nth-child(1) { width: 15%; }
+    .title-track .clip:nth-child(2) { width: 22%; }
+    .title-track .clip:nth-child(3) { width: 14%; }
+    .audio-track .clip { height: 7px; margin-top: 5px; background: var(--orange); opacity: .8; }
+    .audio-track .clip:nth-child(1) { width: 30%; }
+    .audio-track .clip:nth-child(2) { width: 21%; }
+    .audio-track .clip:nth-child(3) { width: 34%; }
+    .playhead { position: absolute; z-index: 1; top: -5px; bottom: -5px; left: 24%; width: 2px; background: var(--lime); animation: scrub 7s ease-in-out infinite alternate; }
+    @keyframes scrub { to { left: 88%; } }
     section { scroll-margin-top: 24px; }
     .section-head { display: flex; justify-content: space-between; align-items: end; gap: 32px; }
     .section-kicker { color: var(--muted); margin-bottom: 17px; }
-    h2 { margin: 0; font-size: clamp(38px, 5.3vw, 68px); line-height: 1.02; letter-spacing: -.07em; }
+    h2 { margin: 0; font-size: clamp(38px, 5.3vw, 68px); line-height: 1.02; letter-spacing: 0; }
     .approach { padding: 112px 0 120px; }
     .section-kicker { color: var(--muted); margin-bottom: 17px; }
     .approach-intro { max-width: 380px; margin: 0 0 4px; color: var(--muted); font-size: 14px; line-height: 1.7; }
@@ -74,7 +90,7 @@
     .focus-item + .focus-item { padding-left: 26px; }
     .focus-item:last-child { border-right: 0; }
     .focus-num { color: var(--orange); }
-    .focus-item h3 { margin: 42px 0 10px; font-size: 22px; letter-spacing: -.04em; }
+    .focus-item h3 { margin: 42px 0 10px; font-size: 22px; letter-spacing: 0; }
     .focus-item p { max-width: 300px; margin: 0; color: var(--muted); font-size: 13px; line-height: 1.75; }
     .statement { padding: 88px 0 94px; background: var(--blue); color: white; position: relative; overflow: hidden; }
     .statement .wrap { position: relative; z-index: 1; }
@@ -113,10 +129,10 @@
       .hero-art { min-height: 360px; }
       .hero-photo { inset: 0 22px 22px 0; }
       .photo-note { width: 154px; min-height: 120px; }
-      .wave-inner { min-height: 80px; gap: 14px; }
-      .wave-label, .wave-caption { font-size: 9px; }
-      .waveform { gap: 2px; }
-      .waveform i { width: 2px; }
+      .edit-inner { padding: 17px 0 19px; }
+      .edit-caption { font-size: 9px; }
+      .timeline { grid-template-columns: 42px 1fr; gap: 6px 9px; }
+      .track-label { font-size: 8px; }
       .approach { padding: 78px 0 82px; }
       .section-head { display: block; }
       .approach-intro { margin-top: 22px; }
@@ -147,40 +163,45 @@
 <body>
   <header class="wrap topbar">
     <a class="brand" href="#top" aria-label="Xavier Boudoin, home"><span class="brand-mark" aria-hidden="true">XB</span><span class="brand-name">Xavier Boudoin</span></a>
-    <nav class="nav" aria-label="Main navigation"><a href="#approach">Approach</a><a href="#about">About</a><a class="nav-cta" href="#contact">Get in touch <span aria-hidden="true">↗</span></a></nav>
+    <nav class="nav" aria-label="Main navigation"><a href="#approach">Approach</a><a href="#about">About</a><a class="nav-cta" href="#contact">Get in touch <span aria-hidden="true">&rarr;</span></a></nav>
   </header>
   <main id="top">
     <section class="wrap hero" aria-labelledby="hero-title">
       <div class="hero-text">
         <div class="eyebrow mono">Video editor / Houston, TX</div>
         <h1 id="hero-title">Xavier<span>Boudoin.</span></h1>
-        <p class="hero-copy">I shape video around the sound: clean cuts, considered pacing, and audio that helps the story land.</p>
-        <div class="hero-actions"><a class="button" href="#approach">Explore my approach <span aria-hidden="true">↓</span></a><a class="text-link" href="tel:+13463848972">Call me</a></div>
+        <p class="hero-copy">I edit in CapCut, shaping clips into clear, engaging stories with thoughtful pacing, smooth transitions, and polished details.</p>
+        <div class="hero-actions"><a class="button" href="#approach">Explore my approach <span aria-hidden="true">&darr;</span></a><a class="text-link" href="tel:+13463848972">Call me</a></div>
       </div>
-      <div class="hero-art" aria-label="Audio mixing desk in a recording studio">
-        <div class="hero-photo"><img src="https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?auto=format&fit=crop&w=1200&q=85" alt="Studio mixing desk and audio equipment" fetchpriority="high"><span class="photo-index mono">01 / sound first</span></div>
-        <div class="photo-note"><strong>Hear<br>the cut.</strong><span class="mono">Rhythm is part of the story.</span></div>
+      <div class="hero-art" aria-label="Video camera and production setup">
+        <div class="hero-photo"><img src="https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=1200&q=85" alt="Video camera ready for filming" fetchpriority="high"><span class="photo-index mono">CapCut / edit suite</span></div>
+        <div class="photo-note"><strong>Shape<br>the story.</strong><span class="mono">One clip at a time.</span></div>
       </div>
     </section>
-    <div class="wave-band" aria-label="Decorative animated audio waveform"><div class="wrap wave-inner"><span class="wave-label mono">Listen closely</span><div class="waveform" aria-hidden="true">
-      <i style="--h:22%;--speed:.68s"></i><i style="--h:57%;--speed:.82s"></i><i style="--h:38%;--speed:.73s"></i><i style="--h:78%;--speed:.91s"></i><i style="--h:45%;--speed:.75s"></i><i style="--h:92%;--speed:.86s"></i><i style="--h:30%;--speed:.7s"></i><i style="--h:65%;--speed:.95s"></i><i style="--h:42%;--speed:.77s"></i><i style="--h:100%;--speed:.89s"></i><i style="--h:50%;--speed:.71s"></i><i style="--h:76%;--speed:.83s"></i><i style="--h:26%;--speed:.96s"></i><i style="--h:62%;--speed:.79s"></i><i style="--h:89%;--speed:.87s"></i><i style="--h:35%;--speed:.74s"></i><i style="--h:70%;--speed:.9s"></i><i style="--h:44%;--speed:.8s"></i><i style="--h:96%;--speed:.72s"></i><i style="--h:32%;--speed:.93s"></i><i style="--h:58%;--speed:.78s"></i><i style="--h:83%;--speed:.85s"></i><i style="--h:28%;--speed:.69s"></i><i style="--h:67%;--speed:.92s"></i><i style="--h:49%;--speed:.76s"></i><i style="--h:100%;--speed:.88s"></i><i style="--h:37%;--speed:.74s"></i><i style="--h:72%;--speed:.95s"></i><i style="--h:24%;--speed:.81s"></i><i style="--h:61%;--speed:.7s"></i><i style="--h:90%;--speed:.89s"></i><i style="--h:43%;--speed:.77s"></i><i style="--h:80%;--speed:.94s"></i><i style="--h:31%;--speed:.73s"></i><i style="--h:56%;--speed:.86s"></i><i style="--h:98%;--speed:.8s"></i><i style="--h:40%;--speed:.91s"></i><i style="--h:68%;--speed:.75s"></i>
-    </div><span class="wave-caption mono">Audio / pacing / CapCut</span></div></div>
+    <div class="edit-band" aria-label="Decorative CapCut editing timeline"><div class="wrap edit-inner">
+      <div class="edit-top"><span class="edit-label mono">Built in CapCut</span><span class="edit-caption mono">Video / titles / audio</span></div>
+      <div class="timeline" aria-hidden="true"><span class="playhead"></span>
+        <span class="track-label mono">Video</span><div class="track video-track"><i class="clip"></i><i class="clip"></i><i class="clip"></i><i class="clip"></i></div>
+        <span class="track-label mono">Titles</span><div class="track title-track"><i class="clip"></i><i class="clip"></i><i class="clip"></i></div>
+        <span class="track-label mono">Audio</span><div class="track audio-track"><i class="clip"></i><i class="clip"></i><i class="clip"></i></div>
+      </div>
+    </div></div>
     <section class="wrap approach" id="approach" aria-labelledby="approach-title">
-      <div class="section-head reveal"><div><div class="section-kicker mono">How I work / 001—003</div><h2 id="approach-title">The details make<br>the difference.</h2></div><p class="approach-intro">A good edit feels effortless because every small choice is doing its job. I start with the sound, then shape the picture to match.</p></div>
+      <div class="section-head reveal"><div><div class="section-kicker mono">CapCut workflow / 001-003</div><h2 id="approach-title">A clear story,<br>cut in CapCut.</h2></div><p class="approach-intro">I shape the story, arrange the clips, and refine the pacing in CapCut. Audio gets its polish in the final pass.</p></div>
       <div class="focus-grid">
-        <article class="focus-item reveal"><span class="focus-num mono">01 / listen</span><h3>Find the rhythm</h3><p>I pay attention to the audio first, then build pacing and cuts that feel natural to the moment.</p></article>
-        <article class="focus-item reveal"><span class="focus-num mono">02 / shape</span><h3>Keep it clear</h3><p>Thoughtful timing and clean transitions keep the viewer with the story, without adding noise.</p></article>
-        <article class="focus-item reveal"><span class="focus-num mono">03 / finish</span><h3>Polish the sound</h3><p>Audio is part of the picture. I give it care so the final edit feels complete, not just assembled.</p></article>
+        <article class="focus-item reveal"><span class="focus-num mono">01 / select</span><h3>Find the story</h3><p>Choose the moments that matter and give the edit a clear beginning, middle, and finish.</p></article>
+        <article class="focus-item reveal"><span class="focus-num mono">02 / edit</span><h3>Build in CapCut</h3><p>Arrange clips, tune the timing, and use transitions with intention so the story stays easy to follow.</p></article>
+        <article class="focus-item reveal"><span class="focus-num mono">03 / refine</span><h3>Polish the details</h3><p>Make a final pass on pacing, picture, and audio so the finished video feels considered.</p></article>
       </div>
     </section>
     <section class="statement" aria-label="Editing philosophy"><div class="statement-art" aria-hidden="true"></div><div class="wrap reveal"><span class="mono">A note on editing</span><h2>Make every second<br>feel like it <em>belongs.</em></h2></div></section>
     <section class="wrap about" id="about" aria-labelledby="about-title">
       <div class="about-label mono reveal">A little about me</div>
-      <div class="about-copy reveal"><h2 id="about-title">Video, with an ear for audio.</h2><p>I’m Xavier, a Houston-based video editor with a background in Technology and Digital Media. I work in CapCut and bring a sound-first approach to the way I shape a cut.</p><div class="facts"><div class="fact"><span class="mono">Based in</span><strong>Houston, Texas</strong></div><div class="fact"><span class="mono">Editing with</span><strong>CapCut + audio</strong></div></div></div>
+      <div class="about-copy reveal"><h2 id="about-title">CapCut, from rough cut to finish.</h2><p>I'm Xavier, a Houston-based video editor with a background in Technology and Digital Media. CapCut is the tool I use to shape my edits, with audio as an important finishing detail.</p><div class="facts"><div class="fact"><span class="mono">Based in</span><strong>Houston, Texas</strong></div><div class="fact"><span class="mono">Editing with</span><strong>CapCut</strong></div></div></div>
     </section>
-    <section class="contact" id="contact" aria-labelledby="contact-title"><div class="wrap contact-row reveal"><div><div class="section-kicker mono">Have a video in mind?</div><h2 id="contact-title">Let’s talk<br>about the cut.</h2></div><a class="button" href="tel:+13463848972">Call Xavier <span aria-hidden="true">↗</span></a></div></section>
+    <section class="contact" id="contact" aria-labelledby="contact-title"><div class="wrap contact-row reveal"><div><div class="section-kicker mono">Have a video in mind?</div><h2 id="contact-title">Let's talk<br>about the cut.</h2></div><a class="button" href="tel:+13463848972">Call Xavier <span aria-hidden="true">&rarr;</span></a></div></section>
   </main>
-  <footer class="wrap"><span class="mono">Xavier Boudoin / Houston, TX</span><span class="mono">Video editing · audio-first</span></footer>
+  <footer class="wrap"><span class="mono">Xavier Boudoin / Houston, TX</span><span class="mono">Video editing &middot; CapCut</span></footer>
   <script>
     const revealItems = document.querySelectorAll('.reveal');
     if ('IntersectionObserver' in window) {
