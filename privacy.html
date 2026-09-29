@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#111713">
+  <meta name="description" content="Privacy policy for the Orbit Roblox Launcher.">
+  <title>Privacy Policy - Orbit</title>
+  <link rel="icon" href="/icons/orbit.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root { color-scheme: dark; --bg: #111713; --panel: #19211c; --line: #344139; --text: #f2f4ed; --muted: #a0aca2; --lime: #c9f36b; --blue: #7c9cff; --sans: "Manrope", sans-serif; --mono: "DM Mono", monospace; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--sans); }
+    a { color: var(--lime); text-underline-offset: 3px; }
+    .shell { width: min(900px, calc(100% - 40px)); margin: 0 auto; }
+    header { min-height: 76px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--line); }
+    .brand { display: inline-flex; align-items: center; gap: 11px; color: var(--text); font-size: 13px; font-weight: 800; text-decoration: none; }
+    .mark { width: 32px; height: 32px; display: grid; place-items: center; border: 1px solid var(--lime); border-radius: 50%; color: var(--lime); }
+    nav { display: flex; gap: 20px; font-size: 11px; font-weight: 700; }
+    nav a { color: var(--muted); text-decoration: none; }
+    nav a:hover, nav a[aria-current="page"] { color: var(--lime); }
+    main { padding: 65px 0 86px; }
+    .eyebrow { color: var(--lime); font: 10px var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+    h1 { margin: 13px 0 9px; font-size: clamp(38px, 8vw, 64px); line-height: 1.05; letter-spacing: 0; }
+    .updated { color: var(--muted); font: 10px var(--mono); }
+    .intro { max-width: 690px; margin: 25px 0 42px; color: var(--muted); font-size: 14px; line-height: 1.8; }
+    article { max-width: 720px; }
+    h2 { margin: 32px 0 10px; font-size: 17px; }
+    p, li { color: #c2cbc2; font-size: 13px; line-height: 1.85; }
+    ul { padding-left: 20px; }
+    li + li { margin-top: 6px; }
+    footer { padding: 18px 0 24px; border-top: 1px solid var(--line); color: var(--muted); font: 9px var(--mono); }
+    footer a { margin-left: 14px; text-decoration: none; }
+    @media (max-width: 480px) { header { min-height: 66px; } nav { gap: 12px; font-size: 10px; } main { padding: 46px 0 64px; } .intro { font-size: 13px; } }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header>
+      <a class="brand" href="/" aria-label="Orbit home"><span class="mark" aria-hidden="true">O</span> ORBIT</a>
+      <nav aria-label="Legal pages"><a href="/privacy.html" aria-current="page">Privacy</a><a href="/terms.html">Terms</a></nav>
+    </header>
+    <main>
+      <div class="eyebrow">Orbit / Privacy</div>
+      <h1>Privacy Policy</h1>
+      <div class="updated">Effective September 29, 2026</div>
+      <p class="intro">This policy explains what the Orbit Roblox Launcher processes when you use it. Orbit is a personal launcher interface; Roblox handles your Roblox account sign-in and game sessions.</p>
+      <article>
+        <h2>Information Orbit processes</h2>
+        <p>If you choose Connect Roblox, Orbit requests the OpenID Connect <code>openid</code> and <code>profile</code> scopes. After Roblox authorizes the request, Orbit receives basic profile information such as your Roblox user ID, username, display name, and, if provided, profile image URL. Orbit does not request your Roblox password.</p>
+        <p>Orbit exchanges the one-time authorization code on its server. The access token is used to request your profile and is not saved in the browser or Orbit's session. Orbit stores the returned basic profile in an encrypted, HttpOnly session cookie for up to seven days. A separate encrypted OAuth state and PKCE verifier cookie is temporary and expires after ten minutes.</p>
+        <p>When you open a game, Orbit saves up to five Roblox place IDs in your browser's local storage so they can appear in Recently opened. You can remove individual entries in the launcher or clear this site's browser storage.</p>
+
+        <h2>How information is used</h2>
+        <p>Orbit uses the profile only to show which Roblox account is connected. The saved place IDs are used only to populate your recent list. Orbit does not currently use analytics, advertising trackers, or sell personal information.</p>
+
+        <h2>Service providers and external links</h2>
+        <p>The site is hosted by Vercel. Roblox operates OAuth sign-in and the experience pages opened by the launcher. The site also loads fonts from Google Fonts. These providers may receive technical information such as your IP address and browser request data when your browser connects to their services. Their own privacy policies govern their handling of that information. Orbit does not control third-party sites or services.</p>
+
+        <h2>Storage, security, and retention</h2>
+        <p>The session cookie is encrypted by Orbit's server and marked HttpOnly, so page scripts cannot read it. Cookies are sent only to Orbit's Roblox API routes. The session expires within seven days, and signing out clears it. Recent place IDs remain in this browser until removed or browser storage is cleared. No online service can guarantee absolute security.</p>
+
+        <h2>Children and Roblox accounts</h2>
+        <p>Orbit does not knowingly ask children to provide information directly. Roblox controls account authentication and any age-related requirements for Roblox accounts. Use Orbit only with permission from a parent or guardian when required by your local rules or Roblox's terms.</p>
+
+        <h2>Changes and contact</h2>
+        <p>This policy may be updated when Orbit's features or data practices change. The effective date above identifies the latest version. For privacy questions or requests about Orbit-held session data, use the contact channel provided by the person or organization that operates your Orbit deployment.</p>
+      </article>
+    </main>
+    <footer>ORBIT / BROWSER LAUNCHER <a href="/terms.html">Terms of Service</a><a href="/">Back to Orbit</a></footer>
+  </div>
+</body>
+</html>

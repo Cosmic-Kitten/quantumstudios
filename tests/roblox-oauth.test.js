@@ -48,9 +48,12 @@ test('sealed sessions round-trip and cannot be read with a different secret', ()
 
 test('tampered session ciphertext is rejected', () => {
   const sealed = seal({ user: 'orbit' }, 'local-test-secret-with-at-least-32-characters');
-  const replacement = sealed.endsWith('A') ? 'B' : 'A';
+  const parts = sealed.split('.');
+  const ciphertext = Buffer.from(parts[3], 'base64url');
+  ciphertext[0] ^= 1;
+  parts[3] = ciphertext.toString('base64url');
 
-  assert.equal(unseal(`${sealed.slice(0, -1)}${replacement}`, 'local-test-secret-with-at-least-32-characters'), null);
+  assert.equal(unseal(parts.join('.'), 'local-test-secret-with-at-least-32-characters'), null);
 });
 
 test('cookie parsing preserves values containing equals signs', () => {
