@@ -1,1 +1,4 @@
 /Xavier Boudoin Resume.pdf
+.vercel
+.env*
+!.env.example

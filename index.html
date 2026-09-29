@@ -214,6 +214,8 @@
     .game-tile { min-width: 0; min-height: 132px; padding: 13px; display: flex; flex-direction: column; justify-content: space-between; gap: 16px; border: 1px solid var(--orbit-line); border-top: 2px solid var(--tile-accent, var(--orbit-lime)); background: var(--orbit-panel); }
     .game-tile-top, .game-tile-bottom { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
     .game-tile-title { min-width: 0; overflow: hidden; font-size: 11px; font-weight: 800; text-overflow: ellipsis; white-space: nowrap; }
+    button.game-tile-title { padding: 0; border: 0; background: none; color: var(--orbit-text); text-align: left; cursor: pointer; }
+    button.game-tile-title:hover { color: var(--orbit-lime); }
     .game-tile-id { color: var(--orbit-muted); font: 8px var(--orbit-mono); }
     .game-tile-actions { display: flex; align-items: center; gap: 4px; }
     .icon-button { width: 28px; height: 28px; display: grid; place-items: center; border: 1px solid transparent; background: transparent; color: var(--orbit-muted); cursor: pointer; }
@@ -245,6 +247,53 @@
     .theme-choice { min-height: 48px; padding: 7px; display: flex; align-items: center; gap: 8px; border: 1px solid var(--orbit-line); background: var(--orbit-bg); color: var(--orbit-text); font-size: 9px; cursor: pointer; }
     .theme-choice[aria-pressed="true"] { border-color: var(--orbit-lime); }
     .theme-swatch { width: 14px; height: 14px; background: var(--swatch); }
+    .search-form { display: flex; gap: 8px; }
+    .search-form .dialog-input { flex: 1; }
+    .search-results { max-height: min(42vh, 340px); margin-top: 12px; display: grid; gap: 7px; overflow: auto; }
+    .search-empty, .search-status { padding: 13px; border: 1px dashed var(--orbit-line); color: var(--orbit-muted); font-size: 10px; line-height: 1.6; }
+    .search-result { width: 100%; min-height: 75px; padding: 11px; display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 12px; border: 1px solid var(--orbit-line); background: var(--orbit-bg); color: var(--orbit-text); text-align: left; cursor: pointer; }
+    .search-result:hover, .search-result[aria-pressed="true"] { border-color: var(--orbit-lime); background: var(--orbit-panel-2); }
+    .search-result-copy { min-width: 0; display: grid; gap: 5px; }
+    .search-result-copy strong { overflow: hidden; font-size: 11px; text-overflow: ellipsis; white-space: nowrap; }
+    .search-result-copy span { color: var(--orbit-muted); font-size: 9px; }
+    .search-result-stat { color: var(--orbit-lime); font: 9px var(--orbit-mono); text-align: right; }
+    .search-more { min-height: 36px; justify-self: center; padding: 0 12px; border: 1px solid var(--orbit-line); background: var(--orbit-panel); color: var(--orbit-text); font-size: 10px; font-weight: 700; cursor: pointer; }
+    .search-more:hover { border-color: var(--orbit-lime); color: var(--orbit-lime); }
+    .intel-body { display: grid; gap: 18px; padding: 18px 20px 22px; }
+    .intel-overview { display: grid; grid-template-columns: 110px minmax(0, 1fr); gap: 15px; align-items: start; }
+    .intel-cover { width: 110px; aspect-ratio: 1; object-fit: cover; background: var(--orbit-bg); }
+    .intel-title { margin: 0 0 5px; font-size: 18px; line-height: 1.25; }
+    .intel-creator { color: var(--orbit-muted); font-size: 10px; }
+    .intel-description { max-height: 110px; overflow: auto; margin: 10px 0 0; color: #c2cbc2; font-size: 10px; line-height: 1.7; white-space: pre-wrap; }
+    .intel-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 7px; }
+    .intel-stat { padding: 9px; border: 1px solid var(--orbit-line); background: var(--orbit-bg); }
+    .intel-stat strong { display: block; font-size: 11px; }
+    .intel-stat span { display: block; margin-top: 4px; color: var(--orbit-muted); font: 8px var(--orbit-mono); text-transform: uppercase; }
+    .intel-subhead { margin: 0; color: var(--orbit-muted); font: 9px var(--orbit-mono); letter-spacing: .05em; text-transform: uppercase; }
+    .gameplay-web { padding: 14px; background: var(--orbit-bg); border: 1px solid var(--orbit-line); }
+    .gameplay-center { width: min(300px, 100%); min-height: 48px; margin: 0 auto; padding: 9px 12px; display: grid; place-content: center; gap: 4px; border: 1px solid var(--orbit-lime); text-align: center; }
+    .gameplay-center strong { color: var(--orbit-lime); font-size: 10px; }
+    .gameplay-center span { color: var(--orbit-muted); font: 8px var(--orbit-mono); }
+    .gameplay-links { width: 72%; height: 24px; margin: 0 auto; display: block; overflow: visible; color: #6f846f; }
+    .gameplay-nodes { display: grid; grid-template-columns: repeat(auto-fit, minmax(135px, 1fr)); gap: 7px; }
+    .gameplay-node { min-width: 0; min-height: 72px; padding: 9px; display: grid; align-content: start; gap: 8px; border: 1px solid var(--orbit-line); }
+    .gameplay-node strong { font-size: 9px; }
+    .gameplay-evidence { display: flex; flex-wrap: wrap; gap: 4px; }
+    .gameplay-evidence span { padding: 3px 5px; background: var(--orbit-panel-2); color: var(--orbit-lime); font: 8px var(--orbit-mono); }
+    .gameplay-empty { padding: 14px; border: 1px dashed var(--orbit-line); color: var(--orbit-muted); font-size: 9px; line-height: 1.6; }
+    .intel-map { padding: 14px; background: var(--orbit-bg); border: 1px solid var(--orbit-line); }
+    .intel-center { width: min(250px, 100%); min-height: 45px; margin: 0 auto; display: grid; place-items: center; padding: 10px; border: 1px solid var(--orbit-lime); color: var(--orbit-lime); font-size: 10px; font-weight: 800; text-align: center; }
+    .intel-links { width: 66%; height: 20px; margin: 0 auto; display: block; overflow: visible; }
+    .intel-nodes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px; }
+    .intel-node { min-width: 0; min-height: 49px; padding: 8px; display: grid; align-content: center; gap: 4px; border: 1px solid var(--orbit-line); text-align: center; }
+    .intel-node strong { overflow-wrap: anywhere; font-size: 9px; }
+    .intel-node span { color: var(--orbit-muted); font: 8px var(--orbit-mono); text-transform: uppercase; }
+    .intel-related { display: grid; grid-template-columns: repeat(auto-fit, minmax(135px, 1fr)); gap: 7px; }
+    .related-game { min-width: 0; padding: 10px; display: grid; gap: 7px; border: 1px solid var(--orbit-line); background: var(--orbit-bg); }
+    .related-game strong { overflow: hidden; font-size: 9px; text-overflow: ellipsis; white-space: nowrap; }
+    .related-game span { color: var(--orbit-muted); font-size: 8px; }
+    .related-game button { justify-self: start; padding: 0; border: 0; background: none; color: var(--orbit-lime); font-size: 9px; cursor: pointer; }
+    .intel-source { color: var(--orbit-muted); font-size: 8px; line-height: 1.5; }
     :root[data-theme="coral"] { --orbit-lime: #ff926e; --orbit-blue: #ffd166; --orbit-bg: #171310; --orbit-panel: #241d19; --orbit-panel-2: #30251f; --orbit-line: #49382f; }
     :root[data-theme="ice"] { --orbit-lime: #7ce0db; --orbit-blue: #9baeff; --orbit-bg: #10171b; --orbit-panel: #192328; --orbit-panel-2: #222f35; --orbit-line: #34464d; }
     .account-tools { display: flex; align-items: center; gap: 9px; }
@@ -351,6 +400,15 @@
       .game-tile { min-height: 120px; padding: 10px; }
       .library-empty { align-items: flex-start; flex-direction: column; }
       .theme-options { grid-template-columns: 1fr; }
+      .intel-overview { grid-template-columns: 76px minmax(0, 1fr); gap: 10px; }
+      .intel-cover { width: 76px; }
+      .intel-title { font-size: 14px; }
+      .intel-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .intel-nodes { grid-template-columns: 1fr; }
+      .intel-links { height: 14px; }
+      .gameplay-nodes { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .gameplay-links { height: 18px; }
+      .search-form { flex-direction: column; }
       .quick-link { min-height: 72px; align-items: center; padding: 12px; }
       .quick-copy { margin-top: 0; }
       .quick-copy strong { font-size: 10px; }
@@ -440,6 +498,24 @@
     </div>
     <div class="dialog-foot"><button class="orbit-button" type="button" data-close-dialog="customize-dialog">Done</button></div>
   </dialog>
+  <dialog class="orbit-dialog" id="search-dialog" aria-labelledby="search-title">
+    <form id="search-form">
+      <div class="dialog-head"><h2 id="search-title">Find a Roblox game</h2><button class="icon-button" type="button" data-close-dialog="search-dialog" aria-label="Close">×</button></div>
+      <div class="dialog-body">
+        <label class="dialog-label" for="search-query">Game name</label>
+        <div class="search-form"><input class="dialog-input" id="search-query" name="q" minlength="2" maxlength="80" required placeholder="Search Roblox experiences"><button class="orbit-button primary" type="submit">Search</button></div>
+        <div class="search-results" id="search-results" role="listbox" aria-label="Matching Roblox games"><div class="search-empty">Enter a game name. If several match, choose the exact experience before adding it.</div></div>
+        <p class="dialog-help" id="search-selection">Search results and descriptions come from Roblox. You can change the tile name after adding.</p>
+        <span class="dialog-label">Tile color</span><div class="color-options" id="search-colors"><button class="color-choice" type="button" style="--swatch:#c9f36b" data-color="lime" aria-label="Lime" aria-pressed="true"></button><button class="color-choice" type="button" style="--swatch:#7c9cff" data-color="blue" aria-label="Blue" aria-pressed="false"></button><button class="color-choice" type="button" style="--swatch:#ff926e" data-color="coral" aria-label="Coral" aria-pressed="false"></button><button class="color-choice" type="button" style="--swatch:#7ce0db" data-color="ice" aria-label="Ice" aria-pressed="false"></button></div>
+      </div>
+      <div class="dialog-foot"><button class="orbit-button" type="button" data-close-dialog="search-dialog">Cancel</button><button class="orbit-button primary" id="pin-selected" type="button" disabled>Add selected game</button></div>
+    </form>
+  </dialog>
+  <dialog class="orbit-dialog" id="intel-dialog" aria-labelledby="intel-dialog-title">
+    <div class="dialog-head"><h2 id="intel-dialog-title">Game intel</h2><button class="icon-button" type="button" data-close-dialog="intel-dialog" aria-label="Close">×</button></div>
+    <div class="intel-body" id="intel-content"><div class="search-status">Loading public Roblox information...</div></div>
+    <div class="dialog-foot"><button class="orbit-button" type="button" data-close-dialog="intel-dialog">Close</button></div>
+  </dialog>
   <script>
     const gameForm = document.querySelector('#launch-form');
     const gameInput = document.querySelector('#game-input');
@@ -452,6 +528,14 @@
     const gameTitleInput = document.querySelector('#game-title-input');
     const gameIdInput = document.querySelector('#game-id-input');
     const gameFormError = document.querySelector('#game-form-error');
+    const searchDialog = document.querySelector('#search-dialog');
+    const searchForm = document.querySelector('#search-form');
+    const searchQuery = document.querySelector('#search-query');
+    const searchResults = document.querySelector('#search-results');
+    const searchSelection = document.querySelector('#search-selection');
+    const pinSelectedButton = document.querySelector('#pin-selected');
+    const intelDialog = document.querySelector('#intel-dialog');
+    const intelContent = document.querySelector('#intel-content');
     const customizeDialog = document.querySelector('#customize-dialog');
     const sectionSettings = document.querySelector('#section-settings');
     const homeSections = document.querySelector('#home-sections');
@@ -464,6 +548,7 @@
     const libraryKey = 'orbit-games-library';
     const settingsKey = 'orbit-home-settings';
     const notesKey = 'orbit-personal-notes';
+    const searchCacheKey = 'orbit-game-search-cache';
     const gameColors = { lime: '#c9f36b', blue: '#7c9cff', coral: '#ff926e', ice: '#7ce0db' };
     const sectionDefinitions = [
       { id: 'launch', label: 'Launch game' },
@@ -474,6 +559,10 @@
     ];
     let editingPlaceId = null;
     let selectedGameColor = 'lime';
+    let currentSearchResults = [];
+    let selectedSearchGame = null;
+    let searchRequestId = 0;
+    let nextSearchPageToken = null;
     let installPrompt = null;
 
     function loadJson(key, fallback) {
@@ -512,7 +601,13 @@
       if (!Array.isArray(saved)) return [];
       return saved.filter(game => game && /^\d+$/.test(game.id) && typeof game.title === 'string')
         .slice(0, 30)
-        .map(game => ({ id: game.id, title: game.title.slice(0, 48), color: gameColors[game.color] ? game.color : 'lime' }));
+        .map(game => ({
+          ...game,
+          id: game.id,
+          title: game.title.slice(0, 48),
+          universeId: /^\d+$/.test(game.universeId || '') ? game.universeId : null,
+          color: gameColors[game.color] ? game.color : 'lime'
+        }));
     }
 
     function renderLibrary() {
@@ -527,7 +622,7 @@
         addButton.className = 'orbit-button';
         addButton.type = 'button';
         addButton.textContent = 'Add your first game';
-        addButton.addEventListener('click', () => openGameEditor());
+        addButton.addEventListener('click', () => openGameSearch());
         empty.append(message, addButton);
         libraryGrid.append(empty);
         return;
@@ -542,8 +637,12 @@
         const mark = document.createElement('span');
         mark.className = 'tile-mark';
         mark.textContent = game.title.trim().charAt(0).toUpperCase() || 'G';
-        const title = document.createElement('span');
+        const title = document.createElement('button');
         title.className = 'game-tile-title';
+        title.type = 'button';
+        title.dataset.action = 'details';
+        title.dataset.id = game.id;
+        title.setAttribute('aria-label', `View ${game.title} game details and connections`);
         title.textContent = game.title;
         const actions = document.createElement('span');
         actions.className = 'game-tile-actions';
@@ -625,6 +724,349 @@
       setGameColor(game?.color || 'lime');
       gameDialog.showModal();
       gameTitleInput.focus();
+    }
+
+    function openGameSearch() {
+      searchRequestId += 1;
+      currentSearchResults = [];
+      selectedSearchGame = null;
+      nextSearchPageToken = null;
+      searchForm.reset();
+      pinSelectedButton.disabled = true;
+      searchSelection.textContent = 'Search results and descriptions come from Roblox. Select the exact experience you want to pin.';
+      searchResults.replaceChildren();
+      const empty = document.createElement('div');
+      empty.className = 'search-empty';
+      empty.textContent = 'Enter a game name. If several match, choose the exact experience before adding it.';
+      searchResults.append(empty);
+      setGameColor('lime');
+      searchDialog.showModal();
+      searchQuery.focus();
+    }
+
+    function loadSearchCache() {
+      return loadJson(searchCacheKey, {});
+    }
+
+    function saveSearchCache(keyword, results, cursor) {
+      const cache = loadSearchCache();
+      cache[keyword.toLowerCase()] = { results, cursor, savedAt: Date.now() };
+      const recent = Object.entries(cache).sort((left, right) => right[1].savedAt - left[1].savedAt).slice(0, 10);
+      saveJson(searchCacheKey, Object.fromEntries(recent));
+    }
+
+    async function readApiResponse(response, operation) {
+      const body = await response.text();
+      let result;
+      try {
+        result = JSON.parse(body);
+      } catch {
+        if (response.status === 403) throw new Error(`${operation} was blocked by the server (HTTP 403). Check the Vercel deployment's API access settings.`);
+        throw new Error(`${operation} returned an unexpected response (HTTP ${response.status}). Try again.`);
+      }
+      if (!response.ok) throw new Error(result.error || `${operation} failed (HTTP ${response.status}).`);
+      return result;
+    }
+
+    function renderSearchResults(results, { append = false, cursor = null, keepSelection = false } = {}) {
+      if (append) searchResults.querySelector('#load-more-search')?.remove();
+      else {
+        currentSearchResults = [];
+        if (!keepSelection) selectedSearchGame = null;
+        searchResults.replaceChildren();
+      }
+
+      const existingIds = new Set(currentSearchResults.map(result => result.placeId));
+      const freshResults = results.filter(result => !existingIds.has(result.placeId));
+      const firstIndex = currentSearchResults.length;
+      currentSearchResults.push(...freshResults);
+      nextSearchPageToken = cursor;
+      if (!keepSelection) pinSelectedButton.disabled = true;
+
+      if (!currentSearchResults.length) {
+        const empty = document.createElement('div');
+        empty.className = 'search-empty';
+        empty.textContent = 'No matching experiences were returned. Try another name.';
+        searchResults.append(empty);
+      }
+
+      freshResults.forEach((result, index) => {
+        const option = document.createElement('button');
+        option.className = 'search-result';
+        option.type = 'button';
+        option.role = 'option';
+        option.dataset.resultIndex = String(firstIndex + index);
+        const isSelected = selectedSearchGame?.placeId === result.placeId;
+        option.setAttribute('aria-selected', String(isSelected));
+        option.setAttribute('aria-pressed', String(isSelected));
+        const copy = document.createElement('span');
+        copy.className = 'search-result-copy';
+        const title = document.createElement('strong');
+        title.textContent = result.name;
+        const creator = document.createElement('span');
+        creator.textContent = `By ${result.creator}${result.ageRating ? ` · ${result.ageRating}` : ''}`;
+        const description = document.createElement('span');
+        description.textContent = result.description || 'No public description';
+        copy.append(title, creator, description);
+        const stats = document.createElement('span');
+        stats.className = 'search-result-stat';
+        stats.textContent = `${formatCount(result.playerCount)} playing`;
+        option.append(copy, stats);
+        searchResults.append(option);
+      });
+
+      if (nextSearchPageToken) {
+        const loadMore = document.createElement('button');
+        loadMore.className = 'search-more';
+        loadMore.id = 'load-more-search';
+        loadMore.type = 'button';
+        loadMore.textContent = 'Load more results';
+        loadMore.addEventListener('click', loadMoreRobloxGames);
+        searchResults.append(loadMore);
+      }
+    }
+
+    async function searchRobloxGames(event) {
+      event.preventDefault();
+      const requestId = ++searchRequestId;
+      const keyword = searchQuery.value.trim();
+      if (keyword.length < 2) {
+        searchSelection.textContent = 'Enter at least two characters to search.';
+        return;
+      }
+
+      const normalizedKeyword = keyword.toLowerCase();
+      const cached = loadSearchCache()[normalizedKeyword];
+      const hasFreshCache = cached && Date.now() - cached.savedAt < 5 * 60 * 1000;
+      if (hasFreshCache) {
+        renderSearchResults(cached.results, { cursor: cached.cursor });
+        searchSelection.textContent = `Showing saved matches for "${keyword}". Search again after five minutes to refresh.`;
+        return;
+      }
+      await fetchRobloxGamePage(keyword, '', false, false, requestId);
+    }
+
+    async function loadMoreRobloxGames(event) {
+      const cursor = nextSearchPageToken;
+      if (!cursor) return;
+      const button = event.currentTarget;
+      button.disabled = true;
+      button.textContent = 'Loading...';
+      await fetchRobloxGamePage(searchQuery.value.trim(), cursor, true, true);
+    }
+
+    async function fetchRobloxGamePage(keyword, cursor, append, keepSelection, requestId = ++searchRequestId) {
+      if (!keepSelection && !append) {
+        searchResults.replaceChildren();
+        const status = document.createElement('div');
+        status.className = 'search-status';
+        status.textContent = `Searching Roblox for "${keyword}"...`;
+        searchResults.append(status);
+        searchSelection.textContent = 'Matching Roblox experiences';
+      } else if (append) {
+        searchSelection.textContent = 'Loading more Roblox matches...';
+      }
+
+      try {
+        const params = new URLSearchParams({ q: keyword });
+        if (cursor) params.set('cursor', cursor);
+        const response = await fetch(`/api/roblox/search?${params}`, { cache: 'no-store' });
+        const result = await readApiResponse(response, 'Roblox game search');
+        if (requestId !== searchRequestId) return;
+        const allResults = append ? [...currentSearchResults, ...(result.results || [])] : result.results || [];
+        saveSearchCache(keyword, allResults, result.nextPageToken || null);
+        renderSearchResults(result.results || [], {
+          append,
+          cursor: result.nextPageToken || null,
+          keepSelection
+        });
+        searchSelection.textContent = nextSearchPageToken
+          ? 'Choose a result or load more matches to find an exact title.'
+          : 'Choose the exact experience you want to pin.';
+      } catch (error) {
+        if (requestId !== searchRequestId) return;
+        const message = document.createElement('div');
+        message.className = 'search-status';
+        message.textContent = error.message || 'Could not search Roblox right now.';
+        if (append) {
+          const moreButton = searchResults.querySelector('#load-more-search');
+          if (moreButton) {
+            moreButton.disabled = false;
+            moreButton.textContent = 'Retry loading more';
+          }
+          searchResults.append(message);
+          searchSelection.textContent = message.textContent;
+        } else if (keepSelection && currentSearchResults.length) {
+          searchSelection.textContent = `${message.textContent} Showing the saved matches.`;
+        } else {
+          searchResults.replaceChildren(message);
+          searchSelection.textContent = message.textContent;
+        }
+      }
+    }
+
+    function formatCount(value) {
+      return new Intl.NumberFormat(undefined, { notation: 'compact', maximumFractionDigits: 1 }).format(Number(value) || 0);
+    }
+
+    function makeIntelElement(tag, className, text) {
+      const element = document.createElement(tag);
+      if (className) element.className = className;
+      if (text !== undefined) element.textContent = text;
+      return element;
+    }
+
+    function addIntelStat(container, label, value) {
+      const item = makeIntelElement('div', 'intel-stat');
+      item.append(makeIntelElement('strong', '', value), makeIntelElement('span', '', label));
+      container.append(item);
+    }
+
+    function renderGameIntel(payload) {
+      const game = payload.game;
+      document.querySelector('#intel-dialog-title').textContent = game.name;
+      intelContent.replaceChildren();
+
+      const overview = makeIntelElement('section', 'intel-overview');
+      const cover = makeIntelElement('img', 'intel-cover');
+      cover.src = game.thumbnail || '/icons/orbit-192.png';
+      cover.alt = `${game.name} Roblox game icon`;
+      cover.loading = 'lazy';
+      const intro = makeIntelElement('div', '');
+      intro.append(makeIntelElement('h3', 'intel-title', game.name));
+      const creator = makeIntelElement('a', 'intel-creator', `${game.creator.name}${game.creator.verified ? ' · Verified' : ''}`);
+      creator.href = game.creator.type === 'Group'
+        ? `https://www.roblox.com/groups/${encodeURIComponent(game.creator.id)}`
+        : `https://www.roblox.com/users/${encodeURIComponent(game.creator.id)}/profile`;
+      creator.target = '_blank';
+      creator.rel = 'noopener noreferrer';
+      intro.append(creator);
+      intro.append(makeIntelElement('p', 'intel-description', game.description || 'The creator has not provided a public description.'));
+      overview.append(cover, intro);
+      intelContent.append(overview);
+
+      const stats = makeIntelElement('div', 'intel-stats');
+      addIntelStat(stats, 'Playing now', formatCount(game.playing));
+      addIntelStat(stats, 'Visits', formatCount(game.visits));
+      addIntelStat(stats, 'Favorites', formatCount(game.favorites));
+      addIntelStat(stats, 'Server size', game.maxPlayers ? String(game.maxPlayers) : 'Not listed');
+      intelContent.append(stats);
+
+      const gameplayWeb = makeIntelElement('section', 'gameplay-web');
+      gameplayWeb.append(makeIntelElement('h3', 'intel-subhead', 'Gameplay web / from public description'));
+      const gameplayCenter = makeIntelElement('div', 'gameplay-center');
+      gameplayCenter.append(makeIntelElement('strong', '', game.name));
+      gameplayCenter.append(makeIntelElement('span', '', 'Creator-described experience'));
+      gameplayWeb.append(gameplayCenter);
+      const gameplaySystems = Array.isArray(game.gameplay) ? game.gameplay : [];
+      if (!gameplaySystems.length) {
+        gameplayWeb.append(makeIntelElement('p', 'gameplay-empty', 'The public description does not mention enough gameplay details to map specific systems.'));
+      } else {
+        const gameplayLinks = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        gameplayLinks.setAttribute('class', 'gameplay-links');
+        gameplayLinks.setAttribute('viewBox', '0 0 400 24');
+        gameplayLinks.setAttribute('preserveAspectRatio', 'none');
+        gameplayLinks.setAttribute('aria-hidden', 'true');
+        gameplaySystems.forEach((system, index) => {
+          const x = Math.round((400 / (gameplaySystems.length + 1)) * (index + 1));
+          const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+          path.setAttribute('d', `M200 0 V9 L${x} 24`);
+          path.setAttribute('fill', 'none');
+          path.setAttribute('stroke', 'currentColor');
+          path.setAttribute('stroke-width', '1');
+          gameplayLinks.append(path);
+        });
+        gameplayWeb.append(gameplayLinks);
+        const gameplayNodes = makeIntelElement('div', 'gameplay-nodes');
+        gameplaySystems.forEach(system => {
+          const node = makeIntelElement('article', 'gameplay-node');
+          node.append(makeIntelElement('strong', '', system.label));
+          const evidence = makeIntelElement('div', 'gameplay-evidence');
+          system.evidence.forEach(term => evidence.append(makeIntelElement('span', '', term)));
+          node.append(evidence);
+          gameplayNodes.append(node);
+        });
+        gameplayWeb.append(gameplayNodes);
+      }
+      gameplayWeb.append(makeIntelElement('p', 'intel-source', 'Connections are keyword signals from the creator-written description, not an inspection of private game systems.'));
+      intelContent.append(gameplayWeb);
+
+      intelContent.append(makeIntelElement('h3', 'intel-subhead', 'Experience connections'));
+      const map = makeIntelElement('div', 'intel-map');
+      map.append(makeIntelElement('div', 'intel-center', game.name));
+      const connectors = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      connectors.setAttribute('class', 'intel-links');
+      connectors.setAttribute('viewBox', '0 0 300 24');
+      connectors.setAttribute('preserveAspectRatio', 'none');
+      connectors.setAttribute('aria-hidden', 'true');
+      for (const end of [50, 150, 250]) {
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path.setAttribute('d', `M150 0 V8 L${end} 24`);
+        path.setAttribute('fill', 'none');
+        path.setAttribute('stroke', 'currentColor');
+        path.setAttribute('stroke-width', '1');
+        connectors.append(path);
+      }
+      map.append(connectors);
+      const nodes = makeIntelElement('div', 'intel-nodes');
+      const creatorNode = makeIntelElement('a', 'intel-node');
+      creatorNode.href = creator.href;
+      creatorNode.target = '_blank';
+      creatorNode.rel = 'noopener noreferrer';
+      creatorNode.append(makeIntelElement('span', '', `CREATOR / ${game.creator.type}`), makeIntelElement('strong', '', game.creator.name));
+      const genreNode = makeIntelElement('div', 'intel-node');
+      genreNode.append(makeIntelElement('span', '', 'CATEGORY'), makeIntelElement('strong', '', game.subgenre ? `${game.genre} / ${game.subgenre}` : game.genre));
+      const placeNode = makeIntelElement('a', 'intel-node');
+      placeNode.href = game.url;
+      placeNode.target = '_blank';
+      placeNode.rel = 'noopener noreferrer';
+      placeNode.append(makeIntelElement('span', '', 'ROOT PLACE'), makeIntelElement('strong', '', game.placeId));
+      nodes.append(creatorNode, genreNode, placeNode);
+      map.append(nodes);
+      intelContent.append(map);
+
+      const related = makeIntelElement('section', '');
+      related.append(makeIntelElement('h3', 'intel-subhead', 'Related experiences on Roblox'));
+      const relatedGrid = makeIntelElement('div', 'intel-related');
+      if (!payload.connections.length) {
+        relatedGrid.append(makeIntelElement('div', 'search-empty', 'Roblox has no related experiences available for this game right now.'));
+      }
+      payload.connections.forEach(connection => {
+        const card = makeIntelElement('article', 'related-game');
+        card.append(makeIntelElement('strong', '', connection.name));
+        card.append(makeIntelElement('span', '', `By ${connection.creator} · ${formatCount(connection.playerCount)} playing`));
+        const inspect = makeIntelElement('button', '', 'View connections');
+        inspect.type = 'button';
+        inspect.addEventListener('click', () => showGameIntel(connection));
+        card.append(inspect);
+        relatedGrid.append(card);
+      });
+      related.append(relatedGrid);
+      intelContent.append(related);
+
+      const source = makeIntelElement('p', 'intel-source', 'Public Roblox experience metadata and recommendations. The description is creator-provided; this view cannot inspect private game code or guarantee that described systems match the live game.');
+      const pageLink = makeIntelElement('a', 'intel-source', 'Open Roblox experience page');
+      pageLink.href = game.url;
+      pageLink.target = '_blank';
+      pageLink.rel = 'noopener noreferrer';
+      intelContent.append(source, pageLink);
+    }
+
+    async function showGameIntel(game) {
+      if (!intelDialog.open) intelDialog.showModal();
+      intelContent.replaceChildren(makeIntelElement('div', 'search-status', 'Loading public Roblox information...'));
+      if (!game.universeId || !/^\d+$/.test(game.universeId)) {
+        intelContent.replaceChildren(makeIntelElement('div', 'search-status', 'This older/manual tile has no Roblox universe ID. Add it again by searching its name to see its public connection map.'));
+        return;
+      }
+
+      try {
+        const response = await fetch(`/api/roblox/game?universeId=${encodeURIComponent(game.universeId)}`, { cache: 'no-store' });
+        const payload = await readApiResponse(response, 'Roblox game details');
+        renderGameIntel(payload);
+      } catch (error) {
+        intelContent.replaceChildren(makeIntelElement('div', 'search-status', error.message || 'Could not load public game details.'));
+      }
     }
 
     function setGameColor(color) {
@@ -722,7 +1164,14 @@
       games.unshift({ id });
       saveJson(storageKey, games.slice(0, 5));
       renderRecents();
-      window.open(`https://www.roblox.com/games/${id}`, '_blank', 'noopener,noreferrer');
+      const fallback = window.open(`https://www.roblox.com/games/${id}`, '_blank', 'noopener,noreferrer');
+      const launchLink = document.createElement('a');
+      launchLink.href = `roblox://experiences/start?placeId=${encodeURIComponent(id)}`;
+      launchLink.rel = 'noopener';
+      document.body.append(launchLink);
+      launchLink.click();
+      launchLink.remove();
+      if (!fallback) window.location.assign(`https://www.roblox.com/games/${id}`);
     }
 
     gameForm.addEventListener('submit', event => {
@@ -754,7 +1203,39 @@
       }
     });
 
-    document.querySelector('#add-game-open').addEventListener('click', () => openGameEditor());
+    document.querySelector('#add-game-open').addEventListener('click', () => openGameSearch());
+    searchForm.addEventListener('submit', searchRobloxGames);
+    searchResults.addEventListener('click', event => {
+      const option = event.target.closest('button[data-result-index]');
+      if (!option) return;
+      selectedSearchGame = currentSearchResults[Number(option.dataset.resultIndex)] || null;
+      searchResults.querySelectorAll('.search-result').forEach(result => {
+        const selected = result === option;
+        result.setAttribute('aria-selected', String(selected));
+        result.setAttribute('aria-pressed', String(selected));
+      });
+      pinSelectedButton.disabled = !selectedSearchGame;
+      searchSelection.textContent = selectedSearchGame ? `Selected: ${selectedSearchGame.name} by ${selectedSearchGame.creator}` : 'Choose a game result.';
+    });
+    pinSelectedButton.addEventListener('click', () => {
+      if (!selectedSearchGame) return;
+      const games = loadLibrary();
+      if (games.length >= 30 && !games.some(game => game.id === selectedSearchGame.placeId)) {
+        searchSelection.textContent = 'Your library is full (30 games). Remove a tile before adding another.';
+        return;
+      }
+      const savedGame = {
+        id: selectedSearchGame.placeId,
+        placeId: selectedSearchGame.placeId,
+        universeId: selectedSearchGame.universeId,
+        title: selectedSearchGame.name.slice(0, 48),
+        color: selectedGameColor
+      };
+      saveJson(libraryKey, [...games.filter(game => game.id !== savedGame.id), savedGame]);
+      searchDialog.close();
+      renderLibrary();
+      renderRecents();
+    });
     document.querySelector('#customize-open').addEventListener('click', () => customizeDialog.showModal());
     document.querySelectorAll('[data-close-dialog]').forEach(button => {
       button.addEventListener('click', () => document.getElementById(button.dataset.closeDialog).close());
@@ -793,6 +1274,7 @@
       const game = loadLibrary().find(item => item.id === button.dataset.id);
       if (!game) return;
       if (button.dataset.action === 'open') openPlace(game.id);
+      if (button.dataset.action === 'details') showGameIntel(game);
       if (button.dataset.action === 'edit') openGameEditor(game);
       if (button.dataset.action === 'remove') {
         saveJson(libraryKey, loadLibrary().filter(item => item.id !== game.id));

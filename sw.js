@@ -1,4 +1,4 @@
-const CACHE_NAME = 'orbit-shell-v1';
+const CACHE_NAME = 'orbit-shell-v2';
 const APP_SHELL = [
   '/',
   '/index.html',
@@ -29,7 +29,7 @@ self.addEventListener('activate', event => {
 self.addEventListener('fetch', event => {
   const request = event.request;
   const url = new URL(request.url);
-  if (request.method !== 'GET' || url.origin !== self.location.origin) return;
+  if (request.method !== 'GET' || url.origin !== self.location.origin || url.pathname.startsWith('/api/')) return;
 
   if (request.mode === 'navigate') {
     event.respondWith(

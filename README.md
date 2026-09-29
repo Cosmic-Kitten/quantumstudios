@@ -2,16 +2,18 @@
 
 Orbit is a Vercel-hosted static launcher with serverless Roblox OAuth sign-in. Roblox handles the account login; Orbit never asks for or receives the Roblox password.
 
+The deployed site is `https://quantumstudios.org`. Game-name search and experience details use public Roblox game/search/thumbnail APIs through the Vercel functions in `api/roblox`; these features do not use Roblox account permissions. Search results may contain multiple matches, so choose the intended experience before pinning it.
+
 ## Configure Roblox OAuth
 
 1. Register an OAuth application in the Roblox Creator Dashboard.
-2. Add this exact redirect URI to the application: `https://quantumstudios.vercel.app/api/roblox/callback`.
+2. Add this exact redirect URI to the application: `https://quantumstudios.org/api/roblox/callback`.
 3. Enable the `openid` and `profile` scopes.
 4. In Vercel project settings, add these environment variables for the deployment environments you use:
 
    - `ROBLOX_CLIENT_ID`: the OAuth application's client ID.
    - `ROBLOX_CLIENT_SECRET`: the OAuth application's client secret.
-   - `ROBLOX_REDIRECT_URI`: `https://quantumstudios.vercel.app/api/roblox/callback`.
+   - `ROBLOX_REDIRECT_URI`: `https://quantumstudios.org/api/roblox/callback`.
    - `ORBIT_SESSION_SECRET`: a random secret with at least 32 characters. Generate one with `openssl rand -base64 32`.
 
 5. Redeploy the Vercel project and open the deployed HTTPS URL. Choose **Connect Roblox** and approve the requested scopes on Roblox.
@@ -20,10 +22,10 @@ Do not put the client secret or session secret in `index.html`, commit them, or 
 
 ## Local checks
 
-Run the OAuth helper tests with:
+Run the OAuth and public game API tests with:
 
 ```sh
-node --test tests/roblox-oauth.test.js
+node --test tests/roblox-oauth.test.js tests/roblox-games.test.js
 ```
 
 OAuth callback testing also requires a Roblox OAuth application and an HTTPS redirect URI registered with Roblox. `vercel dev` can serve the API routes locally, but the configured redirect URI must still exactly match the Roblox application.
