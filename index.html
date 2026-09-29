@@ -202,6 +202,51 @@
     .orbit-status { display: inline-flex; align-items: center; gap: 8px; color: var(--orbit-muted); font: 10px var(--orbit-mono); text-transform: uppercase; }
     .orbit-status i { width: 7px; height: 7px; border-radius: 50%; background: var(--orbit-lime); box-shadow: 0 0 10px #c9f36b70; }
     .orbit-top-actions { display: flex; align-items: center; gap: 18px; }
+    .customize-button { min-height: 34px; padding: 0 11px; display: inline-flex; align-items: center; gap: 7px; border: 1px solid #53634f; background: #202a23; color: var(--orbit-text); font-size: 10px; font-weight: 700; cursor: pointer; }
+    .customize-button:hover { border-color: var(--orbit-lime); color: var(--orbit-lime); }
+    .orbit-button { min-height: 36px; padding: 0 12px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; border: 1px solid var(--orbit-line); background: #202a23; color: var(--orbit-text); font-size: 10px; font-weight: 700; text-decoration: none; cursor: pointer; }
+    .orbit-button:hover { border-color: var(--orbit-lime); color: var(--orbit-lime); }
+    .orbit-button.primary { border-color: var(--orbit-lime); background: var(--orbit-lime); color: #172014; }
+    .orbit-button.primary:hover { background: #d8ff89; }
+    .home-section[hidden] { display: none !important; }
+    .library-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(205px, 1fr)); gap: 10px; }
+    .library-empty { grid-column: 1 / -1; min-height: 118px; padding: 22px; display: flex; align-items: center; justify-content: space-between; gap: 18px; border: 1px dashed #53634f; color: var(--orbit-muted); font-size: 11px; line-height: 1.6; }
+    .game-tile { min-width: 0; min-height: 132px; padding: 13px; display: flex; flex-direction: column; justify-content: space-between; gap: 16px; border: 1px solid var(--orbit-line); border-top: 2px solid var(--tile-accent, var(--orbit-lime)); background: var(--orbit-panel); }
+    .game-tile-top, .game-tile-bottom { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .game-tile-title { min-width: 0; overflow: hidden; font-size: 11px; font-weight: 800; text-overflow: ellipsis; white-space: nowrap; }
+    .game-tile-id { color: var(--orbit-muted); font: 8px var(--orbit-mono); }
+    .game-tile-actions { display: flex; align-items: center; gap: 4px; }
+    .icon-button { width: 28px; height: 28px; display: grid; place-items: center; border: 1px solid transparent; background: transparent; color: var(--orbit-muted); cursor: pointer; }
+    .icon-button:hover { border-color: var(--orbit-line); color: var(--orbit-text); }
+    .game-tile .orbit-button { min-height: 30px; flex: 1; }
+    .tile-mark { width: 30px; height: 30px; display: grid; place-items: center; flex: 0 0 auto; background: color-mix(in srgb, var(--tile-accent, var(--orbit-lime)) 18%, transparent); color: var(--tile-accent, var(--orbit-lime)); font-size: 13px; font-weight: 800; }
+    .note-widget { width: 100%; min-height: 105px; padding: 12px; resize: vertical; border: 1px solid var(--orbit-line); outline: none; background: var(--orbit-bg); color: var(--orbit-text); font-size: 11px; line-height: 1.6; }
+    .note-widget:focus { border-color: var(--orbit-lime); }
+    dialog.orbit-dialog { width: min(520px, calc(100% - 28px)); max-height: min(84vh, 760px); padding: 0; overflow: auto; border: 1px solid #465348; background: var(--orbit-panel); color: var(--orbit-text); }
+    dialog.orbit-dialog::backdrop { background: #080b09cc; backdrop-filter: blur(4px); }
+    .dialog-head { padding: 19px 20px 15px; display: flex; align-items: center; justify-content: space-between; gap: 15px; border-bottom: 1px solid var(--orbit-line); }
+    .dialog-head h2 { margin: 0; font-size: 15px; }
+    .dialog-body { padding: 18px 20px 20px; }
+    .dialog-foot { padding: 13px 20px; display: flex; justify-content: flex-end; gap: 8px; border-top: 1px solid var(--orbit-line); }
+    .dialog-label { display: block; margin: 15px 0 7px; color: var(--orbit-muted); font: 9px var(--orbit-mono); text-transform: uppercase; }
+    .dialog-input { width: 100%; min-height: 40px; padding: 0 11px; border: 1px solid #465348; outline: none; background: #101612; color: var(--orbit-text); font-size: 11px; }
+    .dialog-input:focus { border-color: var(--orbit-lime); }
+    .dialog-help { margin: 8px 0 0; color: var(--orbit-muted); font-size: 9px; line-height: 1.6; }
+    .color-options { display: flex; gap: 9px; }
+    .color-choice { width: 27px; height: 27px; padding: 0; border: 2px solid transparent; background: var(--swatch); cursor: pointer; }
+    .color-choice[aria-pressed="true"] { outline: 2px solid var(--orbit-text); outline-offset: 2px; }
+    .section-settings { display: grid; gap: 7px; }
+    .section-setting { min-height: 43px; padding: 6px 9px; display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 9px; border: 1px solid var(--orbit-line); }
+    .section-setting span { font-size: 10px; font-weight: 700; }
+    .section-setting input { accent-color: var(--orbit-lime); }
+    .section-setting button { width: 26px; height: 26px; border: 1px solid transparent; background: transparent; color: var(--orbit-muted); cursor: pointer; }
+    .section-setting button:hover { border-color: var(--orbit-line); color: var(--orbit-text); }
+    .theme-options { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .theme-choice { min-height: 48px; padding: 7px; display: flex; align-items: center; gap: 8px; border: 1px solid var(--orbit-line); background: var(--orbit-bg); color: var(--orbit-text); font-size: 9px; cursor: pointer; }
+    .theme-choice[aria-pressed="true"] { border-color: var(--orbit-lime); }
+    .theme-swatch { width: 14px; height: 14px; background: var(--swatch); }
+    :root[data-theme="coral"] { --orbit-lime: #ff926e; --orbit-blue: #ffd166; --orbit-bg: #171310; --orbit-panel: #241d19; --orbit-panel-2: #30251f; --orbit-line: #49382f; }
+    :root[data-theme="ice"] { --orbit-lime: #7ce0db; --orbit-blue: #9baeff; --orbit-bg: #10171b; --orbit-panel: #192328; --orbit-panel-2: #222f35; --orbit-line: #34464d; }
     .account-tools { display: flex; align-items: center; gap: 9px; }
     .account-tools [hidden] { display: none !important; }
     .account-link, .account-logout { min-height: 34px; padding: 0 10px; display: inline-flex; align-items: center; border: 1px solid #53634f; background: #202a23; color: var(--orbit-text); font-size: 10px; font-weight: 700; text-decoration: none; cursor: pointer; }
@@ -289,6 +334,7 @@
       .orbit-topbar { min-height: 62px; }
       .orbit-status { font-size: 8px; }
       .orbit-top-actions { gap: 8px; }
+      .customize-button { min-height: 30px; padding-inline: 7px; font-size: 9px; }
       .account-tools { gap: 5px; }
       .account-link, .account-logout { min-height: 30px; padding-inline: 7px; font-size: 9px; }
       .account-name { max-width: 78px; font-size: 9px; }
@@ -301,6 +347,10 @@
       .launch-button { width: 100%; }
       .orbit-visual { min-height: 130px; }
       .quick-grid { grid-template-columns: 1fr; gap: 7px; }
+      .library-grid { grid-template-columns: repeat(auto-fill, minmax(145px, 1fr)); gap: 7px; }
+      .game-tile { min-height: 120px; padding: 10px; }
+      .library-empty { align-items: flex-start; flex-direction: column; }
+      .theme-options { grid-template-columns: 1fr; }
       .quick-link { min-height: 72px; align-items: center; padding: 12px; }
       .quick-copy { margin-top: 0; }
       .quick-copy strong { font-size: 10px; }
@@ -324,6 +374,7 @@
       <nav class="orbit-nav" aria-label="Launcher navigation">
         <a class="active" href="#top"><span class="nav-icon" aria-hidden="true">⌂</span><span>Launch hub</span></a>
         <a href="#launch"><span class="nav-icon" aria-hidden="true">◎</span><span>Launch game</span></a>
+        <a href="#library"><span class="nav-icon" aria-hidden="true">▦</span><span>My games</span></a>
         <a href="#recent"><span class="nav-icon" aria-hidden="true">◷</span><span>Recent</span></a>
       </nav>
       <div class="orbit-side-bottom">
@@ -332,9 +383,10 @@
       </div>
     </aside>
     <main class="orbit-main" id="top">
-      <header class="orbit-topbar"><div class="orbit-breadcrumb">Orbit <span aria-hidden="true">/</span> <strong>Launch hub</strong></div><div class="orbit-top-actions"><span class="orbit-status"><i aria-hidden="true"></i> Roblox web</span><div class="account-tools"><a class="account-link" id="account-link" href="/api/roblox/login">Connect Roblox</a><span class="account-name" id="account-name" hidden></span><button class="account-logout" id="account-logout" type="button" hidden>Sign out</button><span class="account-message" id="account-message" role="status" aria-live="polite"></span></div><button class="install-button" id="install-button" type="button"><span aria-hidden="true">↓</span> Install Orbit</button></div></header>
+      <header class="orbit-topbar"><div class="orbit-breadcrumb">Orbit <span aria-hidden="true">/</span> <strong>Launch hub</strong></div><div class="orbit-top-actions"><span class="orbit-status"><i aria-hidden="true"></i> Roblox web</span><button class="customize-button" id="customize-open" type="button" aria-label="Customize your Orbit home"><span aria-hidden="true">☷</span> Customize</button><div class="account-tools"><a class="account-link" id="account-link" href="/api/roblox/login">Connect Roblox</a><span class="account-name" id="account-name" hidden></span><button class="account-logout" id="account-logout" type="button" hidden>Sign out</button><span class="account-message" id="account-message" role="status" aria-live="polite"></span></div><button class="install-button" id="install-button" type="button"><span aria-hidden="true">↓</span> Install Orbit</button></div></header>
       <section class="orbit-welcome"><div class="orbit-kicker">Your game library, one step away</div><h1>Where to today?</h1><p>Start with a Roblox experience link or place ID. Orbit will open the official Roblox game page.</p></section>
-      <section class="orbit-launch-panel" id="launch" aria-labelledby="launch-title">
+      <div id="home-sections">
+      <section class="orbit-launch-panel home-section" id="launch" data-home-section="launch" aria-labelledby="launch-title">
         <div class="launch-content">
           <div class="launch-heading" id="launch-title"><span class="launch-heading-mark" aria-hidden="true">↗</span> Launch an experience</div>
           <p class="launch-description">Paste a game URL from Roblox or enter its place ID. You'll continue on Roblox to use its Play button.</p>
@@ -347,7 +399,11 @@
         </div>
         <div class="orbit-visual" aria-hidden="true"><div class="visual-grid"></div><div class="visual-ring ring-two"></div><div class="visual-ring"></div><div class="visual-core">O</div><i class="visual-orbit-dot"></i><span class="visual-label">Orbit connection / Ready</span></div>
       </section>
-      <section aria-labelledby="quick-title">
+      <section class="home-section" id="library" data-home-section="library" aria-labelledby="library-title">
+        <div class="orbit-section-head"><h2 id="library-title">My games</h2><button class="orbit-button primary" id="add-game-open" type="button"><span aria-hidden="true">+</span> Add game</button></div>
+        <div class="library-grid" id="library-grid"></div>
+      </section>
+      <section class="home-section" id="discover" data-home-section="discover" aria-labelledby="quick-title">
         <div class="orbit-section-head"><h2 id="quick-title">Quick access</h2><span>Official Roblox links</span></div>
         <div class="quick-grid">
           <a class="quick-link" href="https://www.roblox.com/home" target="_blank" rel="noopener noreferrer"><span class="quick-link-main"><span class="quick-icon" aria-hidden="true">⌂</span><span class="quick-copy"><strong>Roblox home</strong><span>Open your account home</span></span></span><span class="quick-arrow" aria-hidden="true">↗</span></a>
@@ -355,25 +411,78 @@
           <a class="quick-link" href="https://www.roblox.com/my/avatar" target="_blank" rel="noopener noreferrer"><span class="quick-link-main"><span class="quick-icon" aria-hidden="true">◉</span><span class="quick-copy"><strong>Avatar</strong><span>Open avatar editor</span></span></span><span class="quick-arrow" aria-hidden="true">↗</span></a>
         </div>
       </section>
-      <div class="orbit-bottom-grid">
+      <div class="orbit-bottom-grid home-section" data-home-section="activity">
         <section class="orbit-info-panel" id="recent" aria-labelledby="recent-title"><h2 class="orbit-info-title" id="recent-title">Recently opened</h2><div class="recent-list" id="recent-list"><div class="recent-empty">Your opened game links will appear here on this device.</div></div></section>
         <section class="orbit-info-panel" aria-labelledby="safety-title"><h2 class="orbit-info-title" id="safety-title">Built to keep it simple</h2><div class="safety-list"><div class="safety-line"><i aria-hidden="true">✓</i> Roblox handles account sign-in</div><div class="safety-line"><i aria-hidden="true">✓</i> Passwords and access tokens stay off this page</div><div class="safety-line"><i aria-hidden="true">✓</i> Only a basic profile is kept in an encrypted session</div></div></section>
+      </div>
+      <section class="orbit-info-panel home-section" data-home-section="notes" aria-labelledby="notes-title"><h2 class="orbit-info-title" id="notes-title">Quick notes</h2><textarea class="note-widget" id="personal-notes" maxlength="1000" placeholder="Write a note for this browser..." aria-label="Personal Orbit notes"></textarea><p class="dialog-help">Stored only in this browser, not encrypted or synced.</p></section>
       </div>
       <footer class="orbit-footer"><span>ORBIT LAUNCH HUB / BROWSER EDITION</span><span><a href="/privacy.html">Privacy</a> · <a href="/terms.html">Terms</a> · <a href="https://www.roblox.com" target="_blank" rel="noopener noreferrer">Roblox ↗</a></span></footer>
     </main>
   </div>
+  <dialog class="orbit-dialog" id="game-dialog" aria-labelledby="game-dialog-title">
+    <form id="game-form">
+      <div class="dialog-head"><h2 id="game-dialog-title">Add a game</h2><button class="icon-button" type="button" data-close-dialog="game-dialog" aria-label="Close">×</button></div>
+      <div class="dialog-body">
+        <label class="dialog-label" for="game-title-input">Tile name</label><input class="dialog-input" id="game-title-input" name="title" maxlength="48" required placeholder="My favorite game">
+        <label class="dialog-label" for="game-id-input">Roblox game link or place ID</label><input class="dialog-input" id="game-id-input" name="place" required placeholder="roblox.com/games/123456 or place ID"><p class="dialog-help" id="game-form-error" role="status" aria-live="polite">Games are saved in this browser only.</p>
+        <span class="dialog-label">Tile color</span><div class="color-options" id="game-colors"><button class="color-choice" type="button" style="--swatch:#c9f36b" data-color="lime" aria-label="Lime" aria-pressed="true"></button><button class="color-choice" type="button" style="--swatch:#7c9cff" data-color="blue" aria-label="Blue" aria-pressed="false"></button><button class="color-choice" type="button" style="--swatch:#ff926e" data-color="coral" aria-label="Coral" aria-pressed="false"></button><button class="color-choice" type="button" style="--swatch:#7ce0db" data-color="ice" aria-label="Ice" aria-pressed="false"></button></div>
+      </div>
+      <div class="dialog-foot"><button class="orbit-button" type="button" data-close-dialog="game-dialog">Cancel</button><button class="orbit-button primary" id="game-save" type="submit">Save game</button></div>
+    </form>
+  </dialog>
+  <dialog class="orbit-dialog" id="customize-dialog" aria-labelledby="customize-title">
+    <div class="dialog-head"><h2 id="customize-title">Customize Orbit</h2><button class="icon-button" type="button" data-close-dialog="customize-dialog" aria-label="Close">×</button></div>
+    <div class="dialog-body">
+      <span class="dialog-label">Color theme</span><div class="theme-options" id="theme-options"><button class="theme-choice" type="button" data-theme="orbit" aria-pressed="true"><i class="theme-swatch" style="--swatch:#c9f36b"></i> Orbit green</button><button class="theme-choice" type="button" data-theme="coral" aria-pressed="false"><i class="theme-swatch" style="--swatch:#ff926e"></i> Solar coral</button><button class="theme-choice" type="button" data-theme="ice" aria-pressed="false"><i class="theme-swatch" style="--swatch:#7ce0db"></i> Ice blue</button></div>
+      <span class="dialog-label">Home sections</span><div class="section-settings" id="section-settings"></div>
+      <p class="dialog-help">Use the arrows to reorder sections. Hidden sections stay saved and can be turned back on.</p>
+    </div>
+    <div class="dialog-foot"><button class="orbit-button" type="button" data-close-dialog="customize-dialog">Done</button></div>
+  </dialog>
   <script>
     const gameForm = document.querySelector('#launch-form');
     const gameInput = document.querySelector('#game-input');
     const launchError = document.querySelector('#launch-error');
     const recentList = document.querySelector('#recent-list');
     const installButton = document.querySelector('#install-button');
+    const libraryGrid = document.querySelector('#library-grid');
+    const gameDialog = document.querySelector('#game-dialog');
+    const gameFormEditor = document.querySelector('#game-form');
+    const gameTitleInput = document.querySelector('#game-title-input');
+    const gameIdInput = document.querySelector('#game-id-input');
+    const gameFormError = document.querySelector('#game-form-error');
+    const customizeDialog = document.querySelector('#customize-dialog');
+    const sectionSettings = document.querySelector('#section-settings');
+    const homeSections = document.querySelector('#home-sections');
+    const personalNotes = document.querySelector('#personal-notes');
     const accountLink = document.querySelector('#account-link');
     const accountName = document.querySelector('#account-name');
     const accountLogout = document.querySelector('#account-logout');
     const accountMessage = document.querySelector('#account-message');
     const storageKey = 'orbit-recent-games';
+    const libraryKey = 'orbit-games-library';
+    const settingsKey = 'orbit-home-settings';
+    const notesKey = 'orbit-personal-notes';
+    const gameColors = { lime: '#c9f36b', blue: '#7c9cff', coral: '#ff926e', ice: '#7ce0db' };
+    const sectionDefinitions = [
+      { id: 'launch', label: 'Launch game' },
+      { id: 'library', label: 'My games' },
+      { id: 'discover', label: 'Quick access' },
+      { id: 'activity', label: 'Recently opened' },
+      { id: 'notes', label: 'Quick notes' }
+    ];
+    let editingPlaceId = null;
+    let selectedGameColor = 'lime';
     let installPrompt = null;
+
+    function loadJson(key, fallback) {
+      try { return JSON.parse(localStorage.getItem(key) || 'null') ?? fallback; } catch { return fallback; }
+    }
+
+    function saveJson(key, value) {
+      try { localStorage.setItem(key, JSON.stringify(value)); } catch {}
+    }
 
     function getPlaceId(value) {
       const input = value.trim();
@@ -392,25 +501,226 @@
     function loadRecents() {
       try {
         const saved = JSON.parse(localStorage.getItem(storageKey) || '[]');
-        return Array.isArray(saved) ? saved.filter(game => /^\d+$/.test(game.id)) : [];
+        return Array.isArray(saved) ? saved.filter(game => game && /^\d+$/.test(game.id)).slice(0, 5) : [];
       } catch {
         return [];
       }
     }
 
-    function renderRecents() {
-      const games = loadRecents();
+    function loadLibrary() {
+      const saved = loadJson(libraryKey, []);
+      if (!Array.isArray(saved)) return [];
+      return saved.filter(game => game && /^\d+$/.test(game.id) && typeof game.title === 'string')
+        .slice(0, 30)
+        .map(game => ({ id: game.id, title: game.title.slice(0, 48), color: gameColors[game.color] ? game.color : 'lime' }));
+    }
+
+    function renderLibrary() {
+      const games = loadLibrary();
+      libraryGrid.replaceChildren();
       if (!games.length) {
-        recentList.innerHTML = '<div class="recent-empty">Your opened game links will appear here on this device.</div>';
+        const empty = document.createElement('div');
+        empty.className = 'library-empty';
+        const message = document.createElement('span');
+        message.textContent = 'Pin your go-to Roblox experiences here. Rename tiles, choose colors, and launch them with one click.';
+        const addButton = document.createElement('button');
+        addButton.className = 'orbit-button';
+        addButton.type = 'button';
+        addButton.textContent = 'Add your first game';
+        addButton.addEventListener('click', () => openGameEditor());
+        empty.append(message, addButton);
+        libraryGrid.append(empty);
         return;
       }
-      recentList.innerHTML = games.map(game => `<div class="recent-item"><span class="recent-game">Place ID ${game.id}</span><span class="recent-actions"><button type="button" data-open="${game.id}">Open</button><button type="button" data-remove="${game.id}" aria-label="Remove place ID ${game.id}">Remove</button></span></div>`).join('');
+
+      games.forEach(game => {
+        const tile = document.createElement('article');
+        tile.className = 'game-tile';
+        tile.style.setProperty('--tile-accent', gameColors[game.color]);
+        const top = document.createElement('div');
+        top.className = 'game-tile-top';
+        const mark = document.createElement('span');
+        mark.className = 'tile-mark';
+        mark.textContent = game.title.trim().charAt(0).toUpperCase() || 'G';
+        const title = document.createElement('span');
+        title.className = 'game-tile-title';
+        title.textContent = game.title;
+        const actions = document.createElement('span');
+        actions.className = 'game-tile-actions';
+        const editButton = document.createElement('button');
+        editButton.className = 'icon-button';
+        editButton.type = 'button';
+        editButton.dataset.action = 'edit';
+        editButton.dataset.id = game.id;
+        editButton.setAttribute('aria-label', `Edit ${game.title}`);
+        editButton.textContent = '✎';
+        const removeButton = document.createElement('button');
+        removeButton.className = 'icon-button';
+        removeButton.type = 'button';
+        removeButton.dataset.action = 'remove';
+        removeButton.dataset.id = game.id;
+        removeButton.setAttribute('aria-label', `Remove ${game.title}`);
+        removeButton.textContent = '×';
+        actions.append(editButton, removeButton);
+        top.append(mark, title, actions);
+
+        const bottom = document.createElement('div');
+        bottom.className = 'game-tile-bottom';
+        const placeId = document.createElement('span');
+        placeId.className = 'game-tile-id';
+        placeId.textContent = `ID ${game.id}`;
+        const openButton = document.createElement('button');
+        openButton.className = 'orbit-button';
+        openButton.type = 'button';
+        openButton.dataset.action = 'open';
+        openButton.dataset.id = game.id;
+        openButton.textContent = 'Play';
+        bottom.append(placeId, openButton);
+        tile.append(top, bottom);
+        libraryGrid.append(tile);
+      });
+    }
+
+    function renderRecents() {
+      const games = loadRecents();
+      const library = loadLibrary();
+      recentList.replaceChildren();
+      if (!games.length) {
+        const empty = document.createElement('div');
+        empty.className = 'recent-empty';
+        empty.textContent = 'Games you launch will appear here on this device.';
+        recentList.append(empty);
+        return;
+      }
+      games.forEach(game => {
+        const row = document.createElement('div');
+        row.className = 'recent-item';
+        const label = document.createElement('span');
+        label.className = 'recent-game';
+        label.textContent = library.find(item => item.id === game.id)?.title || `Place ID ${game.id}`;
+        const actions = document.createElement('span');
+        actions.className = 'recent-actions';
+        const openButton = document.createElement('button');
+        openButton.type = 'button';
+        openButton.dataset.open = game.id;
+        openButton.textContent = 'Open';
+        const removeButton = document.createElement('button');
+        removeButton.type = 'button';
+        removeButton.dataset.remove = game.id;
+        removeButton.setAttribute('aria-label', `Remove ${label.textContent} from recent games`);
+        removeButton.textContent = 'Remove';
+        actions.append(openButton, removeButton);
+        row.append(label, actions);
+        recentList.append(row);
+      });
+    }
+
+    function openGameEditor(game = null) {
+      editingPlaceId = game?.id || null;
+      document.querySelector('#game-dialog-title').textContent = game ? 'Edit game tile' : 'Add a game';
+      document.querySelector('#game-save').textContent = game ? 'Save changes' : 'Save game';
+      gameTitleInput.value = game?.title || '';
+      gameIdInput.value = game ? game.id : '';
+      gameFormError.textContent = game ? 'Update the tile name, game link, or color.' : 'Games are saved in this browser only.';
+      setGameColor(game?.color || 'lime');
+      gameDialog.showModal();
+      gameTitleInput.focus();
+    }
+
+    function setGameColor(color) {
+      selectedGameColor = gameColors[color] ? color : 'lime';
+      document.querySelectorAll('.color-choice').forEach(button => {
+        button.setAttribute('aria-pressed', String(button.dataset.color === selectedGameColor));
+      });
+    }
+
+    function loadSettings() {
+      const saved = loadJson(settingsKey, {});
+      const requestedOrder = Array.isArray(saved.order) ? saved.order : [];
+      const validIds = sectionDefinitions.map(section => section.id);
+      const order = [...requestedOrder.filter(id => validIds.includes(id))];
+      validIds.forEach(id => { if (!order.includes(id)) order.push(id); });
+      const visible = saved.visible && typeof saved.visible === 'object' ? saved.visible : {};
+      return {
+        theme: ['orbit', 'coral', 'ice'].includes(saved.theme) ? saved.theme : 'orbit',
+        order,
+        visible: Object.fromEntries(validIds.map(id => [id, visible[id] !== false]))
+      };
+    }
+
+    function applySettings() {
+      const settings = loadSettings();
+      document.documentElement.dataset.theme = settings.theme;
+      settings.order.forEach(id => {
+        const section = homeSections.querySelector(`[data-home-section="${id}"]`);
+        if (!section) return;
+        section.hidden = !settings.visible[id];
+        homeSections.append(section);
+      });
+      document.querySelectorAll('.theme-choice').forEach(button => {
+        button.setAttribute('aria-pressed', String(button.dataset.theme === settings.theme));
+      });
+      renderSectionSettings(settings);
+    }
+
+    function renderSectionSettings(settings = loadSettings()) {
+      sectionSettings.replaceChildren();
+      settings.order.forEach((id, index) => {
+        const definition = sectionDefinitions.find(section => section.id === id);
+        if (!definition) return;
+        const row = document.createElement('label');
+        row.className = 'section-setting';
+        const name = document.createElement('span');
+        name.textContent = definition.label;
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.checked = settings.visible[id];
+        checkbox.setAttribute('aria-label', `Show ${definition.label}`);
+        checkbox.addEventListener('change', () => {
+          settings.visible[id] = checkbox.checked;
+          saveJson(settingsKey, settings);
+          applySettings();
+        });
+        const move = document.createElement('span');
+        const up = document.createElement('button');
+        up.type = 'button';
+        up.textContent = '↑';
+        up.disabled = index === 0;
+        up.setAttribute('aria-label', `Move ${definition.label} up`);
+        up.addEventListener('click', () => moveSection(id, -1));
+        const down = document.createElement('button');
+        down.type = 'button';
+        down.textContent = '↓';
+        down.disabled = index === settings.order.length - 1;
+        down.setAttribute('aria-label', `Move ${definition.label} down`);
+        down.addEventListener('click', () => moveSection(id, 1));
+        move.append(up, down);
+        row.append(name, checkbox, move);
+        sectionSettings.append(row);
+      });
+    }
+
+    function moveSection(id, offset) {
+      const settings = loadSettings();
+      const index = settings.order.indexOf(id);
+      const nextIndex = index + offset;
+      if (index < 0 || nextIndex < 0 || nextIndex >= settings.order.length) return;
+      [settings.order[index], settings.order[nextIndex]] = [settings.order[nextIndex], settings.order[index]];
+      saveJson(settingsKey, settings);
+      applySettings();
+    }
+
+    function setTheme(theme) {
+      const settings = loadSettings();
+      settings.theme = ['orbit', 'coral', 'ice'].includes(theme) ? theme : 'orbit';
+      saveJson(settingsKey, settings);
+      applySettings();
     }
 
     function openPlace(id) {
       const games = loadRecents().filter(game => game.id !== id);
       games.unshift({ id });
-      try { localStorage.setItem(storageKey, JSON.stringify(games.slice(0, 5))); } catch {}
+      saveJson(storageKey, games.slice(0, 5));
       renderRecents();
       window.open(`https://www.roblox.com/games/${id}`, '_blank', 'noopener,noreferrer');
     }
@@ -439,12 +749,70 @@
       const removeId = event.target.dataset.remove;
       if (openId) openPlace(openId);
       if (removeId) {
-        const games = loadRecents().filter(game => game.id !== removeId);
-        try { localStorage.setItem(storageKey, JSON.stringify(games)); } catch {}
+        saveJson(storageKey, loadRecents().filter(game => game.id !== removeId));
         renderRecents();
       }
     });
 
+    document.querySelector('#add-game-open').addEventListener('click', () => openGameEditor());
+    document.querySelector('#customize-open').addEventListener('click', () => customizeDialog.showModal());
+    document.querySelectorAll('[data-close-dialog]').forEach(button => {
+      button.addEventListener('click', () => document.getElementById(button.dataset.closeDialog).close());
+    });
+    document.querySelectorAll('.color-choice').forEach(button => button.addEventListener('click', () => setGameColor(button.dataset.color)));
+    document.querySelectorAll('.theme-choice').forEach(button => button.addEventListener('click', () => setTheme(button.dataset.theme)));
+
+    gameFormEditor.addEventListener('submit', event => {
+      event.preventDefault();
+      const id = getPlaceId(gameIdInput.value);
+      const title = gameTitleInput.value.trim();
+      if (!id || !title) {
+        gameFormError.textContent = 'Enter a tile name and a valid Roblox game link or place ID.';
+        return;
+      }
+      const games = loadLibrary();
+      if (!editingPlaceId && games.length >= 30) {
+        gameFormError.textContent = 'You can pin up to 30 games.';
+        return;
+      }
+      if (games.some(game => game.id === id && game.id !== editingPlaceId)) {
+        gameFormError.textContent = 'That game is already in your library. Edit its existing tile instead.';
+        return;
+      }
+      const next = games.filter(game => game.id !== editingPlaceId && game.id !== id);
+      next.push({ id, title: title.slice(0, 48), color: selectedGameColor });
+      saveJson(libraryKey, next);
+      gameDialog.close();
+      renderLibrary();
+      renderRecents();
+    });
+
+    libraryGrid.addEventListener('click', event => {
+      const button = event.target.closest('button[data-action]');
+      if (!button) return;
+      const game = loadLibrary().find(item => item.id === button.dataset.id);
+      if (!game) return;
+      if (button.dataset.action === 'open') openPlace(game.id);
+      if (button.dataset.action === 'edit') openGameEditor(game);
+      if (button.dataset.action === 'remove') {
+        saveJson(libraryKey, loadLibrary().filter(item => item.id !== game.id));
+        renderLibrary();
+        renderRecents();
+      }
+    });
+
+    document.querySelector('#theme-options').addEventListener('click', event => {
+      const button = event.target.closest('button[data-theme]');
+      if (button) setTheme(button.dataset.theme);
+    });
+
+    personalNotes.value = loadJson(notesKey, '');
+    personalNotes.addEventListener('input', () => {
+      saveJson(notesKey, personalNotes.value.slice(0, 1000));
+    });
+
+    applySettings();
+    renderLibrary();
     renderRecents();
 
     async function loadRobloxAccount() {

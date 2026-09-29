@@ -52,16 +52,16 @@
         <h2>Information Orbit processes</h2>
         <p>If you choose Connect Roblox, Orbit requests the OpenID Connect <code>openid</code> and <code>profile</code> scopes. After Roblox authorizes the request, Orbit receives basic profile information such as your Roblox user ID, username, display name, and, if provided, profile image URL. Orbit does not request your Roblox password.</p>
         <p>Orbit exchanges the one-time authorization code on its server. The access token is used to request your profile and is not saved in the browser or Orbit's session. Orbit stores the returned basic profile in an encrypted, HttpOnly session cookie for up to seven days. A separate encrypted OAuth state and PKCE verifier cookie is temporary and expires after ten minutes.</p>
-        <p>When you open a game, Orbit saves up to five Roblox place IDs in your browser's local storage so they can appear in Recently opened. You can remove individual entries in the launcher or clear this site's browser storage.</p>
+        <p>Your Orbit library can save up to 30 Roblox place IDs, tile names, and color choices in this browser. Orbit also stores up to five recently opened place IDs, your selected theme and home-section visibility/order, and up to 1,000 characters of notes. These settings and notes stay in browser local storage; Orbit does not send them to its server. They are not encrypted and may be visible to anyone with access to this browser profile. Remove games in Orbit or clear this site's browser storage to erase them.</p>
 
         <h2>How information is used</h2>
-        <p>Orbit uses the profile only to show which Roblox account is connected. The saved place IDs are used only to populate your recent list. Orbit does not currently use analytics, advertising trackers, or sell personal information.</p>
+        <p>Orbit uses the profile only to show which Roblox account is connected. Locally stored library entries, recent games, preferences, and notes are used to personalize the launcher on this browser. Orbit does not currently use analytics, advertising trackers, or sell personal information.</p>
 
         <h2>Service providers and external links</h2>
         <p>The site is hosted by Vercel. Roblox operates OAuth sign-in and the experience pages opened by the launcher. The site also loads fonts from Google Fonts. These providers may receive technical information such as your IP address and browser request data when your browser connects to their services. Their own privacy policies govern their handling of that information. Orbit does not control third-party sites or services.</p>
 
         <h2>Storage, security, and retention</h2>
-        <p>The session cookie is encrypted by Orbit's server and marked HttpOnly, so page scripts cannot read it. Cookies are sent only to Orbit's Roblox API routes. The session expires within seven days, and signing out clears it. Recent place IDs remain in this browser until removed or browser storage is cleared. No online service can guarantee absolute security.</p>
+        <p>The session cookie is encrypted by Orbit's server and marked HttpOnly, so page scripts cannot read it. Cookies are sent only to Orbit's Roblox API routes. The session expires within seven days, and signing out clears it. Local game entries, preferences, and notes remain in this browser until removed or browser storage is cleared; signing out does not erase them. No online service can guarantee absolute security.</p>
 
         <h2>Children and Roblox accounts</h2>
         <p>Orbit does not knowingly ask children to provide information directly. Roblox controls account authentication and any age-related requirements for Roblox accounts. Use Orbit only with permission from a parent or guardian when required by your local rules or Roblox's terms.</p>

@@ -5,13 +5,13 @@ Orbit is a Vercel-hosted static launcher with serverless Roblox OAuth sign-in. R
 ## Configure Roblox OAuth
 
 1. Register an OAuth application in the Roblox Creator Dashboard.
-2. Add the exact redirect URI `https://YOUR-VERCEL-DOMAIN/api/roblox/callback` to the application.
+2. Add this exact redirect URI to the application: `https://quantumstudios.vercel.app/api/roblox/callback`.
 3. Enable the `openid` and `profile` scopes.
 4. In Vercel project settings, add these environment variables for the deployment environments you use:
 
    - `ROBLOX_CLIENT_ID`: the OAuth application's client ID.
    - `ROBLOX_CLIENT_SECRET`: the OAuth application's client secret.
-   - `ROBLOX_REDIRECT_URI`: the same full callback URL registered with Roblox.
+   - `ROBLOX_REDIRECT_URI`: `https://quantumstudios.vercel.app/api/roblox/callback`.
    - `ORBIT_SESSION_SECRET`: a random secret with at least 32 characters. Generate one with `openssl rand -base64 32`.
 
 5. Redeploy the Vercel project and open the deployed HTTPS URL. Choose **Connect Roblox** and approve the requested scopes on Roblox.
