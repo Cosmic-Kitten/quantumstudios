@@ -166,10 +166,10 @@
     }
   </style>
   <style>
-    :root { --orbit-bg: #111713; --orbit-panel: #19211c; --orbit-panel-2: #202a23; --orbit-line: #344139; --orbit-text: #f2f4ed; --orbit-muted: #a0aca2; --orbit-lime: #c9f36b; --orbit-blue: #7c9cff; --orbit-font: "Manrope", sans-serif; --orbit-mono: "DM Mono", monospace; }
+    :root { --orbit-bg: #111713; --orbit-panel: #19211c; --orbit-panel-2: #202a23; --orbit-line: #344139; --orbit-text: #f2f4ed; --orbit-muted: #a0aca2; --orbit-lime: #c9f36b; --orbit-blue: #7c9cff; --orbit-font: "Manrope", sans-serif; --orbit-mono: "DM Mono", monospace; --orbit-radius: 2px; --orbit-card-padding: 16px; --orbit-section-gap: 27px; --orbit-panel-padding: 29px; --orbit-panel-padding-mobile: 19px; }
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
-    body { margin: 0; background: var(--orbit-bg); color: var(--orbit-text); font-family: var(--orbit-font); -webkit-font-smoothing: antialiased; }
+    body { margin: 0; background: radial-gradient(ellipse at 82% -8%, color-mix(in srgb, var(--orbit-lime) 10%, transparent), transparent 33rem), radial-gradient(ellipse at 0% 42%, color-mix(in srgb, var(--orbit-blue) 6%, transparent), transparent 34rem), var(--orbit-bg); background-attachment: fixed; color: var(--orbit-text); font-family: var(--orbit-font); -webkit-font-smoothing: antialiased; }
     button, input { font: inherit; }
     button, a { -webkit-tap-highlight-color: transparent; }
     a { color: inherit; }
@@ -202,16 +202,17 @@
     .orbit-status { display: inline-flex; align-items: center; gap: 8px; color: var(--orbit-muted); font: 10px var(--orbit-mono); text-transform: uppercase; }
     .orbit-status i { width: 7px; height: 7px; border-radius: 50%; background: var(--orbit-lime); box-shadow: 0 0 10px #c9f36b70; }
     .orbit-top-actions { display: flex; align-items: center; gap: 18px; }
-    .customize-button { min-height: 34px; padding: 0 11px; display: inline-flex; align-items: center; gap: 7px; border: 1px solid #53634f; background: #202a23; color: var(--orbit-text); font-size: 10px; font-weight: 700; cursor: pointer; }
+    .customize-button { min-height: 34px; padding: 0 11px; display: inline-flex; align-items: center; gap: 7px; border: 1px solid #53634f; border-radius: var(--orbit-radius); background: #202a23; color: var(--orbit-text); font-size: 10px; font-weight: 700; cursor: pointer; }
     .customize-button:hover { border-color: var(--orbit-lime); color: var(--orbit-lime); }
-    .orbit-button { min-height: 36px; padding: 0 12px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; border: 1px solid var(--orbit-line); background: #202a23; color: var(--orbit-text); font-size: 10px; font-weight: 700; text-decoration: none; cursor: pointer; }
+    .orbit-button { min-height: 36px; padding: 0 12px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; border: 1px solid var(--orbit-line); border-radius: var(--orbit-radius); background: #202a23; color: var(--orbit-text); font-size: 10px; font-weight: 700; text-decoration: none; cursor: pointer; }
     .orbit-button:hover { border-color: var(--orbit-lime); color: var(--orbit-lime); }
     .orbit-button.primary { border-color: var(--orbit-lime); background: var(--orbit-lime); color: #172014; }
     .orbit-button.primary:hover { background: #d8ff89; }
     .home-section[hidden] { display: none !important; }
     .library-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(205px, 1fr)); gap: 10px; }
     .library-empty { grid-column: 1 / -1; min-height: 118px; padding: 22px; display: flex; align-items: center; justify-content: space-between; gap: 18px; border: 1px dashed #53634f; color: var(--orbit-muted); font-size: 11px; line-height: 1.6; }
-    .game-tile { min-width: 0; min-height: 132px; padding: 13px; display: flex; flex-direction: column; justify-content: space-between; gap: 16px; border: 1px solid var(--orbit-line); border-top: 2px solid var(--tile-accent, var(--orbit-lime)); background: var(--orbit-panel); }
+    .game-tile { min-width: 0; min-height: 132px; padding: var(--orbit-card-padding); display: flex; flex-direction: column; justify-content: space-between; gap: 16px; border: 1px solid var(--orbit-line); border-top: 2px solid var(--tile-accent, var(--orbit-lime)); border-radius: var(--orbit-radius); background: linear-gradient(145deg, color-mix(in srgb, var(--orbit-panel) 95%, white), var(--orbit-panel)); box-shadow: 0 10px 26px #00000012; transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease; }
+    .game-tile:hover { transform: translateY(-3px); border-color: color-mix(in srgb, var(--tile-accent, var(--orbit-lime)) 48%, var(--orbit-line)); box-shadow: 0 16px 34px #00000024; }
     .game-tile-top, .game-tile-bottom { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
     .game-tile-title { min-width: 0; overflow: hidden; font-size: 11px; font-weight: 800; text-overflow: ellipsis; white-space: nowrap; }
     button.game-tile-title { padding: 0; border: 0; background: none; color: var(--orbit-text); text-align: left; cursor: pointer; }
@@ -231,9 +232,10 @@
     .dialog-body { padding: 18px 20px 20px; }
     .dialog-foot { padding: 13px 20px; display: flex; justify-content: flex-end; gap: 8px; border-top: 1px solid var(--orbit-line); }
     .dialog-label { display: block; margin: 15px 0 7px; color: var(--orbit-muted); font: 9px var(--orbit-mono); text-transform: uppercase; }
-    .dialog-input { width: 100%; min-height: 40px; padding: 0 11px; border: 1px solid #465348; outline: none; background: #101612; color: var(--orbit-text); font-size: 11px; }
+    .dialog-input { width: 100%; min-height: 40px; padding: 0 11px; border: 1px solid #465348; border-radius: var(--orbit-radius); outline: none; background: #101612; color: var(--orbit-text); font-size: 11px; }
     .dialog-input:focus { border-color: var(--orbit-lime); }
     .dialog-help { margin: 8px 0 0; color: var(--orbit-muted); font-size: 9px; line-height: 1.6; }
+    .text-button { padding: 0; border: 0; background: none; color: var(--orbit-lime); font: inherit; text-decoration: underline; text-underline-offset: 2px; cursor: pointer; }
     .color-options { display: flex; gap: 9px; }
     .color-choice { width: 27px; height: 27px; padding: 0; border: 2px solid transparent; background: var(--swatch); cursor: pointer; }
     .color-choice[aria-pressed="true"] { outline: 2px solid var(--orbit-text); outline-offset: 2px; }
@@ -244,9 +246,22 @@
     .section-setting button { width: 26px; height: 26px; border: 1px solid transparent; background: transparent; color: var(--orbit-muted); cursor: pointer; }
     .section-setting button:hover { border-color: var(--orbit-line); color: var(--orbit-text); }
     .theme-options { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-    .theme-choice { min-height: 48px; padding: 7px; display: flex; align-items: center; gap: 8px; border: 1px solid var(--orbit-line); background: var(--orbit-bg); color: var(--orbit-text); font-size: 9px; cursor: pointer; }
+    .theme-choice { min-height: 48px; padding: 7px; display: flex; align-items: center; gap: 8px; border: 1px solid var(--orbit-line); border-radius: var(--orbit-radius); background: var(--orbit-bg); color: var(--orbit-text); font-size: 9px; cursor: pointer; }
     .theme-choice[aria-pressed="true"] { border-color: var(--orbit-lime); }
     .theme-swatch { width: 14px; height: 14px; background: var(--swatch); }
+    .accent-control { min-height: 48px; padding: 8px 10px; display: flex; align-items: center; justify-content: space-between; gap: 12px; border: 1px solid var(--orbit-line); border-radius: var(--orbit-radius); background: var(--orbit-bg); color: var(--orbit-text); font-size: 10px; font-weight: 700; }
+    .accent-input { width: 38px; height: 32px; padding: 2px; border: 1px solid var(--orbit-line); border-radius: var(--orbit-radius); background: var(--orbit-panel); cursor: pointer; }
+    .setting-options { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .setting-choice { min-height: 39px; border: 1px solid var(--orbit-line); border-radius: var(--orbit-radius); background: var(--orbit-bg); color: var(--orbit-muted); font-size: 10px; font-weight: 700; cursor: pointer; }
+    .setting-choice:hover, .setting-choice[aria-pressed="true"] { border-color: var(--orbit-lime); color: var(--orbit-text); }
+    .setting-choice[aria-pressed="true"] { background: color-mix(in srgb, var(--orbit-lime) 10%, var(--orbit-bg)); }
+    .platform-options { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .platform-choice { min-height: 54px; padding: 8px 10px; display: grid; align-content: center; gap: 3px; border: 1px solid var(--orbit-line); border-radius: var(--orbit-radius); background: var(--orbit-bg); color: var(--orbit-muted); text-align: left; cursor: pointer; transition: border-color .18s ease, background .18s ease, color .18s ease, transform .16s ease; }
+    .platform-choice strong { color: var(--orbit-text); font-size: 10px; }
+    .platform-choice span { font-size: 8px; }
+    .platform-choice:hover, .platform-choice[aria-pressed="true"] { border-color: var(--orbit-lime); color: var(--orbit-text); }
+    .platform-choice[aria-pressed="true"] { background: color-mix(in srgb, var(--orbit-lime) 10%, var(--orbit-bg)); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--orbit-lime) 18%, transparent); }
+    .platform-choice:hover { transform: translateY(-1px); }
     .search-form { display: flex; gap: 8px; }
     .search-form .dialog-input { flex: 1; }
     .search-results { max-height: min(42vh, 340px); margin-top: 12px; display: grid; gap: 7px; overflow: auto; }
@@ -296,6 +311,10 @@
     .intel-source { color: var(--orbit-muted); font-size: 8px; line-height: 1.5; }
     :root[data-theme="coral"] { --orbit-lime: #ff926e; --orbit-blue: #ffd166; --orbit-bg: #171310; --orbit-panel: #241d19; --orbit-panel-2: #30251f; --orbit-line: #49382f; }
     :root[data-theme="ice"] { --orbit-lime: #7ce0db; --orbit-blue: #9baeff; --orbit-bg: #10171b; --orbit-panel: #192328; --orbit-panel-2: #222f35; --orbit-line: #34464d; }
+    :root[data-corners="soft"] { --orbit-radius: 14px; }
+    :root[data-density="compact"] { --orbit-card-padding: 12px; --orbit-panel-padding: 21px; --orbit-panel-padding-mobile: 14px; --orbit-section-gap: 17px; }
+    :root[data-density="compact"] .orbit-section-head { margin-top: var(--orbit-section-gap); }
+    :root[data-density="compact"] .orbit-bottom-grid { margin-top: var(--orbit-section-gap); }
     .account-tools { display: flex; align-items: center; gap: 9px; }
     .account-tools [hidden] { display: none !important; }
     .account-link, .account-logout { min-height: 34px; padding: 0 10px; display: inline-flex; align-items: center; border: 1px solid #53634f; background: #202a23; color: var(--orbit-text); font-size: 10px; font-weight: 700; text-decoration: none; cursor: pointer; }
@@ -309,22 +328,22 @@
     .orbit-kicker { color: var(--orbit-lime); font: 10px var(--orbit-mono); letter-spacing: .08em; text-transform: uppercase; }
     .orbit-welcome h1 { margin: 12px 0 8px; font-size: clamp(32px, 4vw, 48px); line-height: 1.1; letter-spacing: 0; }
     .orbit-welcome p { margin: 0; max-width: 600px; color: var(--orbit-muted); font-size: 13px; line-height: 1.7; }
-    .orbit-launch-panel { position: relative; overflow: hidden; padding: 29px; display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(230px, .8fr); gap: 25px; background: var(--orbit-panel); border: 1px solid var(--orbit-line); }
+    .orbit-launch-panel { position: relative; overflow: hidden; padding: var(--orbit-panel-padding); display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(230px, .8fr); gap: 25px; background: linear-gradient(135deg, color-mix(in srgb, var(--orbit-panel) 90%, var(--orbit-lime) 10%), var(--orbit-panel) 48%); border: 1px solid var(--orbit-line); border-radius: var(--orbit-radius); box-shadow: 0 18px 48px #00000018; }
     .launch-content { position: relative; z-index: 1; }
     .launch-heading { display: flex; align-items: center; gap: 10px; color: var(--orbit-text); font-size: 14px; font-weight: 800; }
     .launch-heading-mark { width: 27px; height: 27px; display: grid; place-items: center; color: #151c17; background: var(--orbit-lime); font-size: 13px; }
     .launch-description { max-width: 470px; margin: 11px 0 20px; color: var(--orbit-muted); font-size: 11px; line-height: 1.65; }
     .launch-form { display: flex; gap: 8px; }
     .launch-input-wrap { position: relative; flex: 1; min-width: 0; }
-    .launch-input { width: 100%; height: 46px; padding: 0 13px 0 39px; outline: none; border: 1px solid #465348; border-radius: 0; background: #101612; color: var(--orbit-text); font-size: 11px; transition: border-color .18s ease; }
+    .launch-input { width: 100%; height: 46px; padding: 0 13px 0 39px; outline: none; border: 1px solid #465348; border-radius: var(--orbit-radius); background: #101612; color: var(--orbit-text); font-size: 11px; transition: border-color .18s ease; }
     .launch-input::placeholder { color: #778279; }
     .launch-input:focus { border-color: var(--orbit-lime); }
     .input-icon { position: absolute; top: 50%; left: 14px; color: var(--orbit-lime); transform: translateY(-50%); font-size: 15px; }
-    .launch-button { min-width: 116px; height: 46px; padding: 0 15px; display: inline-flex; justify-content: center; align-items: center; gap: 9px; border: 0; border-radius: 0; background: var(--orbit-lime); color: #172014; font-size: 11px; font-weight: 800; cursor: pointer; transition: background .18s ease, transform .18s ease; }
+    .launch-button { min-width: 116px; height: 46px; padding: 0 15px; display: inline-flex; justify-content: center; align-items: center; gap: 9px; border: 0; border-radius: var(--orbit-radius); background: var(--orbit-lime); color: #172014; font-size: 11px; font-weight: 800; cursor: pointer; transition: background .18s ease, transform .18s ease; }
     .launch-button:hover { background: #d8ff89; transform: translateY(-2px); }
     .launch-error { min-height: 18px; margin-top: 7px; color: #ff957d; font-size: 10px; }
     .launch-hint { margin-top: 3px; color: #849087; font: 9px var(--orbit-mono); }
-    .orbit-visual { min-height: 178px; position: relative; display: grid; place-items: center; overflow: hidden; background: #222e26; }
+    .orbit-visual { min-height: 178px; position: relative; display: grid; place-items: center; overflow: hidden; border: 1px solid color-mix(in srgb, var(--orbit-lime) 16%, transparent); border-radius: var(--orbit-radius); background: radial-gradient(circle at 50% 48%, color-mix(in srgb, var(--orbit-lime) 13%, #222e26), #18221c 70%); }
     .visual-grid { position: absolute; inset: 0; opacity: .18; background-image: linear-gradient(#7d9980 1px, transparent 1px), linear-gradient(90deg, #7d9980 1px, transparent 1px); background-size: 22px 22px; mask-image: linear-gradient(90deg, transparent, black); }
     .visual-ring { position: absolute; width: 128px; height: 70px; border: 1px solid #c9f36b90; border-radius: 50%; transform: rotate(-31deg); }
     .visual-ring.ring-two { width: 160px; height: 88px; transform: rotate(42deg); border-color: #7c9cff88; }
@@ -336,15 +355,15 @@
     .orbit-section-head h2 { margin: 0; font-size: 16px; letter-spacing: 0; }
     .orbit-section-head span { color: var(--orbit-muted); font: 9px var(--orbit-mono); text-transform: uppercase; }
     .quick-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 11px; }
-    .quick-link { min-height: 107px; padding: 16px; display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; border: 1px solid var(--orbit-line); background: var(--orbit-panel); text-decoration: none; transition: border-color .18s ease, background .18s ease; }
-    .quick-link:hover { border-color: #72836f; background: var(--orbit-panel-2); }
+    .quick-link { min-height: 107px; padding: var(--orbit-card-padding); display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; border: 1px solid var(--orbit-line); border-radius: var(--orbit-radius); background: linear-gradient(145deg, color-mix(in srgb, var(--orbit-panel) 95%, white), var(--orbit-panel)); text-decoration: none; box-shadow: 0 10px 26px #00000012; transition: transform .2s ease, border-color .18s ease, background .18s ease; }
+    .quick-link:hover { transform: translateY(-3px); border-color: var(--orbit-lime); background: var(--orbit-panel-2); }
     .quick-icon { width: 30px; height: 30px; display: grid; place-items: center; background: #2a352d; color: var(--orbit-lime); font-size: 14px; }
     .quick-copy { display: grid; gap: 5px; margin-top: 11px; }
     .quick-copy strong { font-size: 11px; }
     .quick-copy span { color: var(--orbit-muted); font-size: 9px; }
     .quick-arrow { color: #87948a; font-size: 13px; }
     .orbit-bottom-grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: 11px; margin-top: 27px; }
-    .orbit-info-panel { min-height: 137px; padding: 19px; border: 1px solid var(--orbit-line); background: var(--orbit-panel); }
+    .orbit-info-panel { min-height: 137px; padding: var(--orbit-card-padding); border: 1px solid var(--orbit-line); border-radius: var(--orbit-radius); background: linear-gradient(145deg, color-mix(in srgb, var(--orbit-panel) 96%, white), var(--orbit-panel)); box-shadow: 0 10px 26px #00000012; }
     .orbit-info-title { margin: 0 0 13px; font-size: 11px; }
     .recent-list { display: grid; gap: 8px; }
     .recent-empty { color: var(--orbit-muted); font-size: 10px; line-height: 1.6; }
@@ -391,7 +410,7 @@
       .orbit-welcome { padding: 32px 0 22px; }
       .orbit-welcome h1 { font-size: 34px; }
       .orbit-welcome p { font-size: 11px; }
-      .orbit-launch-panel { padding: 19px; grid-template-columns: 1fr; gap: 14px; }
+      .orbit-launch-panel { padding: var(--orbit-panel-padding-mobile); grid-template-columns: 1fr; gap: 14px; }
       .launch-form { flex-direction: column; }
       .launch-button { width: 100%; }
       .orbit-visual { min-height: 130px; }
@@ -400,6 +419,7 @@
       .game-tile { min-height: 120px; padding: 10px; }
       .library-empty { align-items: flex-start; flex-direction: column; }
       .theme-options { grid-template-columns: 1fr; }
+      .platform-options { grid-template-columns: 1fr; }
       .intel-overview { grid-template-columns: 76px minmax(0, 1fr); gap: 10px; }
       .intel-cover { width: 76px; }
       .intel-title { font-size: 14px; }
@@ -423,8 +443,451 @@
       *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
     }
   </style>
+  <style>
+    /* --- Orbit UI polish layer ------------------------------------------- */
+    :root {
+      --orbit-shadow-sm: 0 1px 2px #0006;
+      --orbit-shadow-md: 0 12px 30px -12px #000a;
+      --orbit-shadow-lg: 0 28px 60px -24px #000c;
+      --orbit-ring: 0 0 0 1px color-mix(in srgb, var(--orbit-lime) 45%, transparent), 0 0 0 4px color-mix(in srgb, var(--orbit-lime) 18%, transparent);
+      --orbit-ease: cubic-bezier(.22, .68, .36, 1);
+    }
+    html { scroll-padding-top: 24px; }
+    body { overflow-x: hidden; }
+    ::selection { background: color-mix(in srgb, var(--orbit-lime) 45%, transparent); color: var(--orbit-text); }
+    ::-webkit-scrollbar { width: 11px; height: 11px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #2c352e; border: 3px solid transparent; background-clip: content-box; border-radius: 99px; }
+    ::-webkit-scrollbar-thumb:hover { background: #3c4a40; background-clip: content-box; }
+
+    /* Focus that reads on dark surfaces */
+    :where(a, button, input, textarea):focus-visible { outline: none; box-shadow: var(--orbit-ring); border-radius: var(--orbit-radius); }
+
+    /* Sidebar */
+    .orbit-sidebar {
+      background: linear-gradient(180deg, #161e19 0%, #131a15 100%);
+      box-shadow: 1px 0 0 #0000004d, 12px 0 40px -30px #000;
+    }
+    .orbit-brand { transition: transform .25s var(--orbit-ease); }
+    .orbit-brand:hover { transform: translateX(2px); }
+    .orbit-mark { transition: box-shadow .35s ease, transform .35s var(--orbit-ease); }
+    .orbit-brand:hover .orbit-mark { transform: rotate(-12deg); box-shadow: 0 0 22px -4px color-mix(in srgb, var(--orbit-lime) 60%, transparent); }
+    .orbit-nav a { position: relative; transition: color .2s ease, background .2s ease, border-color .2s ease, transform .2s var(--orbit-ease); }
+    .orbit-nav a::before {
+      content: ""; position: absolute; left: -17px; top: 50%; width: 3px; height: 0;
+      background: var(--orbit-lime); border-radius: 0 3px 3px 0;
+      transform: translateY(-50%); transition: height .25s var(--orbit-ease);
+    }
+    .orbit-nav a:hover { transform: translateX(2px); }
+    .orbit-nav a.active::before { height: 20px; }
+    .orbit-nav a.active { background: linear-gradient(90deg, color-mix(in srgb, var(--orbit-lime) 14%, transparent), transparent); border-color: color-mix(in srgb, var(--orbit-lime) 28%, var(--orbit-line)); }
+    .orbit-safety { border-radius: var(--orbit-radius); background: linear-gradient(150deg, color-mix(in srgb, var(--orbit-lime) 8%, #1d261f), #1d261f); }
+    .orbit-avatar { border-radius: 50%; background: linear-gradient(140deg, color-mix(in srgb, var(--orbit-lime) 30%, #38443a), #2c382f); }
+
+    /* Topbar */
+    .orbit-topbar { position: sticky; top: 0; z-index: 4; background: color-mix(in srgb, var(--orbit-bg) 82%, transparent); backdrop-filter: blur(14px) saturate(1.3); }
+    .orbit-status i { animation: orbit-pulse 2.4s ease-in-out infinite; }
+    @keyframes orbit-pulse { 50% { opacity: .35; transform: scale(.8); } }
+    .orbit-button, .customize-button, .account-link, .account-logout, .install-button {
+      transition: transform .18s var(--orbit-ease), border-color .18s ease, background .18s ease, color .18s ease, box-shadow .18s ease;
+    }
+    .orbit-button:hover, .customize-button:hover, .account-link:hover, .account-logout:hover, .install-button:hover { transform: translateY(-1px); }
+    .orbit-button:active, .customize-button:active, .launch-button:active { transform: translateY(0) scale(.98); }
+    .orbit-button.primary { box-shadow: 0 10px 24px -12px color-mix(in srgb, var(--orbit-lime) 70%, transparent); }
+
+    /* Panels & cards */
+    .orbit-launch-panel { box-shadow: var(--orbit-shadow-lg); }
+    .orbit-launch-panel::after {
+      content: ""; position: absolute; inset: 0; pointer-events: none; border-radius: inherit;
+      background: linear-gradient(120deg, #ffffff0f, transparent 38%);
+    }
+    .quick-link, .game-tile, .orbit-info-panel { box-shadow: var(--orbit-shadow-md); }
+    .quick-link:active, .game-tile:active { transform: translateY(-1px) scale(.995); }
+    .tile-mark, .quick-icon, .launch-heading-mark { border-radius: calc(var(--orbit-radius) * 2); }
+    .game-tile-title { transition: color .18s ease; }
+    .icon-button { border-radius: var(--orbit-radius); transition: border-color .18s ease, color .18s ease, background .18s ease; }
+    .icon-button:hover { background: #202a23; }
+
+    /* Launch panel input affordance */
+    .launch-input { transition: border-color .2s ease, box-shadow .2s ease, background .2s ease; }
+    .launch-input:focus { box-shadow: 0 0 0 3px color-mix(in srgb, var(--orbit-lime) 16%, transparent); }
+    .launch-error { transition: opacity .2s ease; }
+
+    /* Visual */
+    .visual-core { box-shadow: 0 0 34px -6px color-mix(in srgb, var(--orbit-lime) 55%, transparent); }
+    .visual-ring { animation: orbit-spin 14s linear infinite; }
+    .visual-ring.ring-two { animation-duration: 22s; animation-direction: reverse; }
+    @keyframes orbit-spin { to { rotate: 360deg; } }
+    .visual-orbit-dot { animation: orbit-drift 5.5s ease-in-out infinite alternate; border-radius: 50%; }
+    @keyframes orbit-drift { to { transform: rotate(-160deg) translate(16px, 10px); } }
+
+    /* Dialogs */
+    dialog.orbit-dialog { border-radius: calc(var(--orbit-radius) + 6px); box-shadow: var(--orbit-shadow-lg); animation: dialog-in .28s var(--orbit-ease); }
+    dialog.orbit-dialog[open] { animation: dialog-in .28s var(--orbit-ease); }
+    @keyframes dialog-in { from { opacity: 0; transform: translateY(10px) scale(.98); } }
+    .dialog-head h2 { letter-spacing: -.01em; }
+    .dialog-input, .note-widget { transition: border-color .2s ease, box-shadow .2s ease; }
+    .dialog-input:focus, .note-widget:focus { box-shadow: 0 0 0 3px color-mix(in srgb, var(--orbit-lime) 14%, transparent); }
+    .theme-choice, .setting-choice, .color-choice { transition: transform .16s var(--orbit-ease), border-color .18s ease, background .18s ease, color .18s ease; }
+    .theme-choice:hover, .setting-choice:hover { transform: translateY(-1px); }
+    .color-choice { border-radius: 50%; }
+    .search-result { transition: border-color .18s ease, background .18s ease, transform .18s var(--orbit-ease); }
+    .search-result:hover { transform: translateX(2px); }
+
+    /* Section entrances */
+    .home-section { animation: orbit-in .5s var(--orbit-ease) both; }
+    .home-section[hidden] { display: none !important; }
+    @keyframes orbit-in { from { opacity: 0; transform: translateY(10px); } }
+
+    .orbit-footer { opacity: .85; }
+    .orbit-footer a { transition: color .18s ease; }
+    @media (max-width: 620px) {
+      .orbit-topbar { padding-inline: 0; }
+      .orbit-nav a::before { display: none; }
+      .orbit-nav a.active { background: #222b24; }
+    }
+  </style>
+  <style>
+    /* --- Platform-aware layer: iOS / Android / desktop ------------------- */
+    :root { --orbit-tap: 44px; }
+
+    /* ---- iOS: frosted glass, continuous corners, touch-first sizing ---- */
+    :root[data-corners="sharp"][data-platform="ios"] { --orbit-radius: 16px; }
+    :root[data-corners="soft"][data-platform="ios"] { --orbit-radius: 22px; }
+    :root[data-platform="ios"] {
+      --orbit-font: -apple-system, "SF Pro Text", "Manrope", system-ui, sans-serif;
+      --orbit-tap: 46px;
+      --orbit-shadow-md: 0 10px 30px -14px #000a;
+      --orbit-shadow-lg: 0 24px 60px -26px #000b;
+    }
+    :root[data-platform="ios"] body {
+      font-family: -apple-system, "SF Pro Text", "Manrope", system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+    :root[data-platform="ios"] .orbit-sidebar { background: #1c241fcc; backdrop-filter: blur(22px) saturate(1.7); -webkit-backdrop-filter: blur(22px) saturate(1.7); }
+    :root[data-platform="ios"] .orbit-topbar { background: #111713cc; backdrop-filter: blur(22px) saturate(1.7); -webkit-backdrop-filter: blur(22px) saturate(1.7); }
+    :root[data-platform="ios"] .orbit-nav a { min-height: var(--orbit-tap); border-radius: 12px; }
+    :root[data-platform="ios"] .orbit-nav a.active { background: color-mix(in srgb, var(--orbit-lime) 16%, transparent); }
+    :root[data-platform="ios"] .orbit-button,
+    :root[data-platform="ios"] .customize-button,
+    :root[data-platform="ios"] .account-link,
+    :root[data-platform="ios"] .account-logout,
+    :root[data-platform="ios"] .install-button { min-height: var(--orbit-tap); border-radius: 12px; font-size: 12px; }
+    :root[data-platform="ios"] .launch-input { height: 50px; font-size: 15px; border-radius: 12px; }
+    :root[data-platform="ios"] .launch-input,
+    :root[data-platform="ios"] .dialog-input { font-size: 15px; }
+    :root[data-platform="ios"] .launch-button { height: 50px; border-radius: 12px; font-size: 13px; }
+    :root[data-platform="ios"] .game-tile,
+    :root[data-platform="ios"] .quick-link,
+    :root[data-platform="ios"] .orbit-info-panel,
+    :root[data-platform="ios"] .orbit-launch-panel { border-radius: 18px; }
+    :root[data-platform="ios"] .game-tile { min-height: 140px; }
+    :root[data-platform="ios"] .game-tile-title { font-size: 12px; }
+    :root[data-platform="ios"] .icon-button { width: 34px; height: 34px; border-radius: 10px; }
+    :root[data-platform="ios"] dialog.orbit-dialog { border-radius: calc(var(--orbit-radius) + 6px); }
+    :root[data-platform="ios"] .search-result { min-height: 84px; border-radius: 14px; }
+    :root[data-platform="ios"] .color-choice { width: 34px; height: 34px; }
+    :root[data-platform="ios"] .setting-choice,
+    :root[data-platform="ios"] .theme-choice { min-height: var(--orbit-tap); border-radius: 12px; }
+    /* No hover lift on touch: movement reads as a glitch on iOS */
+    :root[data-platform="ios"] .game-tile:hover,
+    :root[data-platform="ios"] .quick-link:hover,
+    :root[data-platform="ios"] .orbit-button:hover,
+    :root[data-platform="ios"] .launch-button:hover { transform: none; }
+    :root[data-platform="ios"] .game-tile:active,
+    :root[data-platform="ios"] .quick-link:active { transform: scale(.97); transition-duration: .08s; }
+
+    /* ---- Android: Material-ish elevation, ripples, Roboto system face -- */
+    :root[data-corners="sharp"][data-platform="android"] { --orbit-radius: 18px; }
+    :root[data-corners="soft"][data-platform="android"] { --orbit-radius: 24px; }
+    :root[data-platform="android"] {
+      --orbit-font: Roboto, "Manrope", system-ui, sans-serif;
+      --orbit-tap: 48px;
+      --orbit-shadow-md: 0 6px 16px -4px #0009, 0 1px 3px #0006;
+      --orbit-shadow-lg: 0 18px 40px -14px #000b;
+    }
+    :root[data-platform="android"] body { font-family: Roboto, "Manrope", system-ui, sans-serif; padding-bottom: env(safe-area-inset-bottom); }
+    :root[data-platform="android"] .orbit-sidebar { background: #161d18; box-shadow: 4px 0 20px -10px #000a; }
+    :root[data-platform="android"] .orbit-nav a { min-height: var(--orbit-tap); border-radius: 22px; }
+    :root[data-platform="android"] .orbit-nav a.active { background: color-mix(in srgb, var(--orbit-lime) 20%, transparent); }
+    :root[data-platform="android"] .orbit-button,
+    :root[data-platform="android"] .customize-button,
+    :root[data-platform="android"] .account-link,
+    :root[data-platform="android"] .account-logout,
+    :root[data-platform="android"] .install-button { min-height: var(--orbit-tap); border-radius: 22px; font-size: 12px; text-transform: none; }
+    :root[data-platform="android"] .launch-input { height: 52px; font-size: 15px; border-radius: 22px; }
+    :root[data-platform="android"] .launch-input,
+    :root[data-platform="android"] .dialog-input { font-size: 15px; }
+    :root[data-platform="android"] .launch-button { height: 52px; border-radius: 22px; font-size: 13px; }
+    :root[data-platform="android"] .game-tile,
+    :root[data-platform="android"] .quick-link,
+    :root[data-platform="android"] .orbit-info-panel,
+    :root[data-platform="android"] .orbit-launch-panel { border-radius: 20px; }
+    :root[data-platform="android"] .game-tile-title { font-size: 12px; }
+    :root[data-platform="android"] .icon-button { width: 36px; height: 36px; border-radius: 50%; }
+    :root[data-platform="android"] .tile-mark,
+    :root[data-platform="android"] .quick-icon { border-radius: 14px; }
+    :root[data-platform="android"] dialog.orbit-dialog { border-radius: calc(var(--orbit-radius) + 6px); }
+    :root[data-platform="android"] .search-result { min-height: 84px; border-radius: 18px; }
+    :root[data-platform="android"] .setting-choice,
+    :root[data-platform="android"] .theme-choice { min-height: var(--orbit-tap); border-radius: 20px; }
+    /* Ripple-ish press feedback */
+    :root[data-platform="android"] .game-tile,
+    :root[data-platform="android"] .quick-link,
+    :root[data-platform="android"] .orbit-button,
+    :root[data-platform="android"] .launch-button,
+    :root[data-platform="android"] .icon-button { position: relative; overflow: hidden; transition: transform .12s ease, background .12s ease, border-color .2s ease; }
+    :root[data-platform="android"] .game-tile:active,
+    :root[data-platform="android"] .quick-link:active,
+    :root[data-platform="android"] .orbit-button:active { transform: scale(.96); background: color-mix(in srgb, var(--orbit-lime) 12%, var(--orbit-panel-2)); }
+
+    /* ---- Desktop: denser, hover-driven, keyboard focus ------------------- */
+    :root[data-platform="windows"] .orbit-nav a { min-height: 38px; }
+    :root[data-platform="windows"] .orbit-welcome,
+    :root[data-platform="linux"] .orbit-welcome,
+    :root[data-platform="chromebook"] .orbit-welcome { padding: 56px 0 32px; }
+    :root[data-platform="windows"] .orbit-footer,
+    :root[data-platform="linux"] .orbit-footer,
+    :root[data-platform="chromebook"] .orbit-footer { margin-top: 40px; }
+    @media (hover: none) {
+      :root[data-platform="windows"] .game-tile:hover,
+      :root[data-platform="windows"] .quick-link:hover,
+      :root[data-platform="linux"] .game-tile:hover,
+      :root[data-platform="linux"] .quick-link:hover,
+      :root[data-platform="chromebook"] .game-tile:hover,
+      :root[data-platform="chromebook"] .quick-link:hover { transform: none; }
+    }
+
+    /* Android deliberately keeps the original Orbit skin. The platform
+       detector only preserves Android touch sizing; it does not apply a
+       separate Material redesign. */
+    :root[data-platform="android"] { --orbit-radius: 2px; --orbit-font: "Manrope", sans-serif; }
+    :root[data-platform="android"] .orbit-sidebar { background: #151c17; box-shadow: none; }
+    :root[data-platform="android"] .orbit-nav a { min-height: 42px; border-radius: 2px; }
+    :root[data-platform="android"] .orbit-nav a.active { background: #222b24; }
+    :root[data-platform="android"] .orbit-button,
+    :root[data-platform="android"] .customize-button,
+    :root[data-platform="android"] .account-link,
+    :root[data-platform="android"] .account-logout,
+    :root[data-platform="android"] .install-button,
+    :root[data-platform="android"] .launch-button { border-radius: 2px; }
+    :root[data-platform="android"] .launch-input { border-radius: 2px; }
+    :root[data-platform="android"] .game-tile,
+    :root[data-platform="android"] .quick-link,
+    :root[data-platform="android"] .orbit-info-panel,
+    :root[data-platform="android"] .orbit-launch-panel { border-radius: 2px; }
+    :root[data-platform="android"] .icon-button { width: 28px; height: 28px; border-radius: 2px; }
+    :root[data-platform="android"] .tile-mark,
+    :root[data-platform="android"] .quick-icon { border-radius: 2px; }
+    :root[data-platform="android"] dialog.orbit-dialog { border-radius: 2px; }
+    :root[data-platform="android"] .search-result { border-radius: 2px; }
+
+    /* Windows desktop: restrained Fluent-like translucency and compact chrome. */
+    :root[data-platform="windows"] { --orbit-font: "Segoe UI", "Manrope", sans-serif; }
+    :root[data-platform="windows"] body { background: radial-gradient(circle at 80% 0%, #7c9cff16, transparent 28rem), var(--orbit-bg); }
+    :root[data-platform="windows"] .orbit-sidebar { background: #19211ccc; backdrop-filter: blur(18px) saturate(1.2); }
+    :root[data-platform="windows"] .orbit-topbar { background: #111713b8; backdrop-filter: blur(18px) saturate(1.2); }
+    :root[data-platform="windows"] .orbit-nav a { border-radius: 4px; }
+    :root[data-platform="windows"] .orbit-nav a.active { background: #ffffff0d; border-left: 2px solid var(--orbit-lime); }
+    :root[data-platform="windows"] .orbit-button,
+    :root[data-platform="windows"] .customize-button,
+    :root[data-platform="windows"] .account-link,
+    :root[data-platform="windows"] .account-logout,
+    :root[data-platform="windows"] .install-button { border-radius: 4px; }
+    :root[data-platform="windows"] .game-tile,
+    :root[data-platform="windows"] .quick-link,
+    :root[data-platform="windows"] .orbit-info-panel,
+    :root[data-platform="windows"] .orbit-launch-panel { border-radius: 6px; }
+
+    /* Linux desktop: keep the base Orbit look, with a slightly more terminal-like type rhythm. */
+    :root[data-platform="linux"] { --orbit-font: "Manrope", system-ui, sans-serif; }
+    :root[data-platform="linux"] .orbit-sidebar { background: #151c17; }
+    :root[data-platform="linux"] .orbit-nav a.active { box-shadow: inset 3px 0 0 var(--orbit-lime); }
+    :root[data-platform="linux"] .game-tile,
+    :root[data-platform="linux"] .quick-link,
+    :root[data-platform="linux"] .orbit-info-panel,
+    :root[data-platform="linux"] .orbit-launch-panel { border-radius: 2px; }
+
+    /* ChromeOS: lightweight Chromebook card layout and brighter top chrome. */
+    :root[data-platform="chromebook"] { --orbit-font: "Google Sans", "Manrope", system-ui, sans-serif; }
+    :root[data-platform="chromebook"] .orbit-sidebar { background: #202822; }
+    :root[data-platform="chromebook"] .orbit-topbar { background: #1b241e; }
+    :root[data-platform="chromebook"] .orbit-nav a,
+    :root[data-platform="chromebook"] .orbit-button,
+    :root[data-platform="chromebook"] .customize-button { border-radius: 20px; }
+    :root[data-platform="chromebook"] .game-tile,
+    :root[data-platform="chromebook"] .quick-link,
+    :root[data-platform="chromebook"] .orbit-info-panel,
+    :root[data-platform="chromebook"] .orbit-launch-panel { border-radius: 12px; }
+    :root[data-platform="chromebook"] .orbit-launch-panel { background: linear-gradient(135deg, #26372d, var(--orbit-panel)); }
+
+    /* Bottom nav bar on phones gets platform character */
+    @media (max-width: 620px) {
+      :root[data-platform="ios"] .orbit-sidebar { height: 68px; padding: 8px 16px calc(8px + env(safe-area-inset-bottom)); background: #1c241ee6; backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border-radius: 20px 20px 0 0; }
+      :root[data-platform="android"] .orbit-sidebar { height: 70px; background: #1d2520; }
+      :root[data-platform="ios"] .orbit-app { padding-bottom: 76px; }
+      :root[data-platform="android"] .orbit-app { padding-bottom: 78px; }
+    }
+  </style>
+  <style>
+    /* --- iOS Liquid Glass (Clear) material ----------------------------- */
+    .orbit-glass-defs { position: absolute; width: 0; height: 0; overflow: hidden; }
+
+    :root[data-platform="ios"] {
+      --glass-tint: #ffffff1f;
+      --glass-tint-strong: #ffffff2b;
+      --glass-rim: #ffffff5c;
+      --glass-rim-soft: #ffffff2e;
+      --glass-inner: inset 0 1px 0 #ffffff4d, inset 0 -1px 0 #ffffff1a;
+      --glass-blur: saturate(190%) blur(26px);
+      --glass-shadow: 0 18px 44px -20px #000000b3;
+    }
+
+    /* Every iOS surface becomes a glass lens */
+    :root[data-platform="ios"] .orbit-topbar,
+    :root[data-platform="ios"] .orbit-sidebar,
+    :root[data-platform="ios"] .orbit-nav a.active,
+    :root[data-platform="ios"] .orbit-launch-panel,
+    :root[data-platform="ios"] .orbit-info-panel,
+    :root[data-platform="ios"] .game-tile,
+    :root[data-platform="ios"] .quick-link,
+    :root[data-platform="ios"] .library-empty,
+    :root[data-platform="ios"] .orbit-safety,
+    :root[data-platform="ios"] .orbit-button,
+    :root[data-platform="ios"] .customize-button,
+    :root[data-platform="ios"] .account-link,
+    :root[data-platform="ios"] .account-logout,
+    :root[data-platform="ios"] .install-button,
+    :root[data-platform="ios"] .dialog-input,
+    :root[data-platform="ios"] .note-widget,
+    :root[data-platform="ios"] .search-result,
+    :root[data-platform="ios"] .theme-choice,
+    :root[data-platform="ios"] .setting-choice,
+    :root[data-platform="ios"] .section-setting,
+    :root[data-platform="ios"] .accent-control,
+    :root[data-platform="ios"] dialog.orbit-dialog {
+      background: linear-gradient(150deg, var(--glass-tint-strong), var(--glass-tint) 46%, #ffffff12);
+      background-clip: padding-box;
+      -webkit-backdrop-filter: var(--glass-blur);
+      backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--glass-rim-soft);
+      box-shadow: var(--glass-inner), var(--glass-shadow);
+    }
+
+    /* Refraction: true lens distortion of whatever sits behind the glass */
+    :root[data-platform="ios"] .orbit-topbar,
+    :root[data-platform="ios"] .orbit-sidebar,
+    :root[data-platform="ios"] .orbit-launch-panel,
+    :root[data-platform="ios"] .orbit-info-panel,
+    :root[data-platform="ios"] .game-tile,
+    :root[data-platform="ios"] .quick-link,
+    :root[data-platform="ios"] .orbit-safety {
+      filter: url(#orbit-glass);
+    }
+    :root[data-platform="ios"] .orbit-button,
+    :root[data-platform="ios"] .customize-button,
+    :root[data-platform="ios"] .dialog-input,
+    :root[data-platform="ios"] .search-result,
+    :root[data-platform="ios"] .theme-choice,
+    :root[data-platform="ios"] .setting-choice {
+      filter: url(#orbit-glass-subtle);
+    }
+
+    /* Specular sweep across the top edge of each lens */
+    :root[data-platform="ios"] .game-tile::after,
+    :root[data-platform="ios"] .quick-link::after,
+    :root[data-platform="ios"] .orbit-info-panel::after,
+    :root[data-platform="ios"] .orbit-launch-panel::after {
+      content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none;
+      border-radius: inherit;
+      background:
+        radial-gradient(120% 80% at 12% -10%, #ffffff40, transparent 55%),
+        linear-gradient(115deg, #ffffff26, transparent 38%, transparent 72%, #ffffff1a);
+    }
+    :root[data-platform="ios"] .game-tile,
+    :root[data-platform="ios"] .quick-link,
+    :root[data-platform="ios"] .orbit-info-panel { position: relative; overflow: hidden; }
+    :root[data-platform="ios"] .game-tile > *,
+    :root[data-platform="ios"] .quick-link > *,
+    :root[data-platform="ios"] .orbit-info-panel > * { position: relative; z-index: 1; }
+
+    /* Chrome bars read as thin glass sheets */
+    :root[data-platform="ios"] .orbit-topbar { background: #ffffff14; border: 0; border-bottom: 1px solid var(--glass-rim-soft); box-shadow: none; }
+    :root[data-platform="ios"] .orbit-sidebar { background: #ffffff12; border-right: 1px solid var(--glass-rim-soft); box-shadow: none; }
+    @media (max-width: 620px) {
+      :root[data-platform="ios"] .orbit-sidebar { background: #ffffff17; border-top: 1px solid var(--glass-rim-soft); border-radius: 0; }
+      :root[data-platform="ios"] .orbit-app { padding-bottom: 76px; }
+    }
+
+    /* Accent-filled glass: the primary launch button stays solid and punchy */
+    :root[data-platform="ios"] .orbit-button.primary,
+    :root[data-platform="ios"] .launch-button {
+      background: linear-gradient(180deg, color-mix(in srgb, var(--orbit-lime) 96%, white), var(--orbit-lime));
+      border: 1px solid #ffffff6b;
+      box-shadow: inset 0 1px 0 #ffffffcc, 0 12px 28px -14px color-mix(in srgb, var(--orbit-lime) 80%, transparent);
+      filter: none;
+    }
+    :root[data-platform="ios"] .launch-input {
+      background: #ffffff17;
+      -webkit-backdrop-filter: var(--glass-blur);
+      backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--glass-rim-soft);
+      box-shadow: var(--glass-inner);
+    }
+    :root[data-platform="ios"] .orbit-visual {
+      background: radial-gradient(circle at 50% 45%, #ffffff2e, #ffffff0f 70%);
+      border: 1px solid var(--glass-rim-soft);
+      box-shadow: var(--glass-inner);
+    }
+    :root[data-platform="ios"] .tile-mark,
+    :root[data-platform="ios"] .quick-icon,
+    :root[data-platform="ios"] .launch-heading-mark { background: #ffffff24; border: 1px solid var(--glass-rim-soft); box-shadow: var(--glass-inner); }
+    :root[data-platform="ios"] .intel-stat,
+    :root[data-platform="ios"] .intel-node,
+    :root[data-platform="ios"] .gameplay-node,
+    :root[data-platform="ios"] .related-game,
+    :root[data-platform="ios"] .gameplay-web,
+    :root[data-platform="ios"] .intel-map { background: #ffffff12; border-color: var(--glass-rim-soft); box-shadow: none; }
+
+    /* Touching a lens compresses it, like real glass */
+    :root[data-platform="ios"] .game-tile:active,
+    :root[data-platform="ios"] .quick-link:active,
+    :root[data-platform="ios"] .orbit-button:active,
+    :root[data-platform="ios"] .customize-button:active,
+    :root[data-platform="ios"] .icon-button:active { transform: scale(.965); box-shadow: var(--glass-inner), 0 6px 18px -14px #000; }
+    :root[data-platform="ios"] .orbit-nav a { -webkit-backdrop-filter: none; backdrop-filter: none; }
+    :root[data-platform="ios"] .orbit-nav a.active { box-shadow: var(--glass-inner), inset 0 0 22px -14px var(--orbit-lime); }
+
+    @media (prefers-reduced-transparency: reduce) {
+      :root[data-platform="ios"] .orbit-topbar,
+      :root[data-platform="ios"] .orbit-sidebar,
+      :root[data-platform="ios"] .orbit-launch-panel,
+      :root[data-platform="ios"] .orbit-info-panel,
+      :root[data-platform="ios"] .game-tile,
+      :root[data-platform="ios"] .quick-link { -webkit-backdrop-filter: none; backdrop-filter: none; background: #1a221dcc; filter: none; }
+    }
+  </style>
 </head>
 <body>
+  <svg class="orbit-glass-defs" aria-hidden="true" focusable="false"><defs>
+    <filter id="orbit-glass" x="-25%" y="-25%" width="150%" height="150%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.012 0.028" numOctaves="2" seed="7" result="noise" />
+      <feGaussianBlur in="noise" stdDeviation="2.4" result="softNoise" />
+      <feDisplacementMap in="SourceGraphic" in2="softNoise" scale="26" xChannelSelector="R" yChannelSelector="G" result="refracted" />
+      <feGaussianBlur in="refracted" stdDeviation="0.4" result="glass" />
+      <feSpecularLighting in="softNoise" surfaceScale="3.2" specularConstant="0.55" specularExponent="22" lighting-color="#ffffff" result="spec">
+        <feDistantLight azimuth="235" elevation="58" />
+      </feSpecularLighting>
+      <feComposite in="spec" in2="refracted" operator="in" result="specClipped" />
+      <feComposite in="specClipped" in2="glass" operator="arithmetic" k1="0" k2="1" k3="1" k4="0" />
+    </filter>
+    <filter id="orbit-glass-subtle" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.02 0.04" numOctaves="1" seed="3" result="noise" />
+      <feGaussianBlur in="noise" stdDeviation="1.6" result="softNoise" />
+      <feDisplacementMap in="SourceGraphic" in2="softNoise" scale="9" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+  </defs></svg>
   <div class="orbit-app">
     <aside class="orbit-sidebar">
       <a class="orbit-brand" href="#top" aria-label="Orbit dashboard"><span class="orbit-mark" aria-hidden="true">O</span><span class="orbit-brand-name">ORBIT<span>.</span></span></a>
@@ -493,6 +956,23 @@
     <div class="dialog-head"><h2 id="customize-title">Customize Orbit</h2><button class="icon-button" type="button" data-close-dialog="customize-dialog" aria-label="Close">×</button></div>
     <div class="dialog-body">
       <span class="dialog-label">Color theme</span><div class="theme-options" id="theme-options"><button class="theme-choice" type="button" data-theme="orbit" aria-pressed="true"><i class="theme-swatch" style="--swatch:#c9f36b"></i> Orbit green</button><button class="theme-choice" type="button" data-theme="coral" aria-pressed="false"><i class="theme-swatch" style="--swatch:#ff926e"></i> Solar coral</button><button class="theme-choice" type="button" data-theme="ice" aria-pressed="false"><i class="theme-swatch" style="--swatch:#7ce0db"></i> Ice blue</button></div>
+      <label class="dialog-label" for="accent-color">Accent color</label>
+      <div class="accent-control"><span>Make it yours</span><input class="accent-input" id="accent-color" type="color" value="#c9f36b" aria-label="Choose a custom accent color"></div>
+      <p class="dialog-help"><button class="text-button" id="accent-reset" type="button">Use the selected theme color</button> · Saved on this device.</p>
+      <span class="dialog-label">Corners</span>
+      <div class="setting-options" id="corner-options"><button class="setting-choice" type="button" data-corners="sharp" aria-pressed="true">Sharp</button><button class="setting-choice" type="button" data-corners="soft" aria-pressed="false">Soft</button></div>
+      <span class="dialog-label">Layout density</span>
+      <div class="setting-options" id="density-options"><button class="setting-choice" type="button" data-density="roomy" aria-pressed="true">Roomy</button><button class="setting-choice" type="button" data-density="compact" aria-pressed="false">Compact</button></div>
+      <span class="dialog-label">Platform appearance</span>
+      <div class="platform-options" id="platform-options">
+        <button class="platform-choice" type="button" data-platform-choice="auto" aria-pressed="true"><strong>Auto</strong><span>Use this device</span></button>
+        <button class="platform-choice" type="button" data-platform-choice="ios" aria-pressed="false"><strong>iOS</strong><span>Liquid Glass</span></button>
+        <button class="platform-choice" type="button" data-platform-choice="android" aria-pressed="false"><strong>Android</strong><span>Original Orbit</span></button>
+        <button class="platform-choice" type="button" data-platform-choice="windows" aria-pressed="false"><strong>Windows</strong><span>Fluent desktop</span></button>
+        <button class="platform-choice" type="button" data-platform-choice="linux" aria-pressed="false"><strong>Linux</strong><span>Sharp Orbit</span></button>
+        <button class="platform-choice" type="button" data-platform-choice="chromebook" aria-pressed="false"><strong>Chromebook</strong><span>ChromeOS style</span></button>
+      </div>
+      <p class="dialog-help">Auto selects the appearance from your device. You can override it anytime.</p>
       <span class="dialog-label">Home sections</span><div class="section-settings" id="section-settings"></div>
       <p class="dialog-help">Use the arrows to reorder sections. Hidden sections stay saved and can be turned back on.</p>
     </div>
@@ -538,6 +1018,7 @@
     const intelContent = document.querySelector('#intel-content');
     const customizeDialog = document.querySelector('#customize-dialog');
     const sectionSettings = document.querySelector('#section-settings');
+    const accentColor = document.querySelector('#accent-color');
     const homeSections = document.querySelector('#home-sections');
     const personalNotes = document.querySelector('#personal-notes');
     const accountLink = document.querySelector('#account-link');
@@ -550,6 +1031,7 @@
     const notesKey = 'orbit-personal-notes';
     const searchCacheKey = 'orbit-game-search-cache';
     const gameColors = { lime: '#c9f36b', blue: '#7c9cff', coral: '#ff926e', ice: '#7ce0db' };
+    const themeAccents = { orbit: '#c9f36b', coral: '#ff926e', ice: '#7ce0db' };
     const sectionDefinitions = [
       { id: 'launch', label: 'Launch game' },
       { id: 'library', label: 'My games' },
@@ -564,6 +1046,19 @@
     let searchRequestId = 0;
     let nextSearchPageToken = null;
     let installPrompt = null;
+
+    function detectPlatform() {
+      const agent = navigator.userAgent;
+      const platform = navigator.userAgentData?.platform || '';
+      const touchMac = navigator.maxTouchPoints > 1 && /Macintosh/i.test(agent);
+      if (/iPhone|iPad|iPod/i.test(agent) || platform === 'iOS' || (touchMac && !/Android/i.test(agent))) return 'ios';
+      if (/Android/i.test(agent) || /Android/i.test(platform)) return 'android';
+      if (/CrOS/i.test(agent) || /Chrome OS/i.test(platform)) return 'chromebook';
+      if (/Windows/i.test(agent) || /Windows/i.test(platform)) return 'windows';
+      return 'linux';
+    }
+
+    document.documentElement.dataset.platform = detectPlatform();
 
     function loadJson(key, fallback) {
       try { return JSON.parse(localStorage.getItem(key) || 'null') ?? fallback; } catch { return fallback; }
@@ -1085,6 +1580,10 @@
       const visible = saved.visible && typeof saved.visible === 'object' ? saved.visible : {};
       return {
         theme: ['orbit', 'coral', 'ice'].includes(saved.theme) ? saved.theme : 'orbit',
+        accent: typeof saved.accent === 'string' && /^#[0-9a-f]{6}$/i.test(saved.accent) ? saved.accent : '',
+        corners: ['sharp', 'soft'].includes(saved.corners) ? saved.corners : 'sharp',
+        density: ['roomy', 'compact'].includes(saved.density) ? saved.density : 'roomy',
+        platform: ['auto', 'ios', 'android', 'windows', 'linux', 'chromebook'].includes(saved.platform) ? saved.platform : 'auto',
         order,
         visible: Object.fromEntries(validIds.map(id => [id, visible[id] !== false]))
       };
@@ -1092,7 +1591,15 @@
 
     function applySettings() {
       const settings = loadSettings();
+      const detectedPlatform = detectPlatform();
+      document.documentElement.dataset.platform = settings.platform === 'auto' ? detectedPlatform : settings.platform;
+      document.documentElement.dataset.platformChoice = settings.platform;
       document.documentElement.dataset.theme = settings.theme;
+      document.documentElement.dataset.corners = settings.corners;
+      document.documentElement.dataset.density = settings.density;
+      if (settings.accent) document.documentElement.style.setProperty('--orbit-lime', settings.accent);
+      else document.documentElement.style.removeProperty('--orbit-lime');
+      accentColor.value = settings.accent || themeAccents[settings.theme];
       settings.order.forEach(id => {
         const section = homeSections.querySelector(`[data-home-section="${id}"]`);
         if (!section) return;
@@ -1101,6 +1608,15 @@
       });
       document.querySelectorAll('.theme-choice').forEach(button => {
         button.setAttribute('aria-pressed', String(button.dataset.theme === settings.theme));
+      });
+      document.querySelectorAll('[data-corners]').forEach(button => {
+        button.setAttribute('aria-pressed', String(button.dataset.corners === settings.corners));
+      });
+      document.querySelectorAll('[data-density]').forEach(button => {
+        button.setAttribute('aria-pressed', String(button.dataset.density === settings.density));
+      });
+      document.querySelectorAll('[data-platform-choice]').forEach(button => {
+        button.setAttribute('aria-pressed', String(button.dataset.platformChoice === settings.platform));
       });
       renderSectionSettings(settings);
     }
@@ -1155,6 +1671,14 @@
     function setTheme(theme) {
       const settings = loadSettings();
       settings.theme = ['orbit', 'coral', 'ice'].includes(theme) ? theme : 'orbit';
+      saveJson(settingsKey, settings);
+      applySettings();
+    }
+
+    function setAppearance(key, value, allowedValues) {
+      if (!allowedValues.includes(value)) return;
+      const settings = loadSettings();
+      settings[key] = value;
       saveJson(settingsKey, settings);
       applySettings();
     }
@@ -1242,6 +1766,30 @@
     });
     document.querySelectorAll('.color-choice').forEach(button => button.addEventListener('click', () => setGameColor(button.dataset.color)));
     document.querySelectorAll('.theme-choice').forEach(button => button.addEventListener('click', () => setTheme(button.dataset.theme)));
+    accentColor.addEventListener('input', () => {
+      const settings = loadSettings();
+      settings.accent = accentColor.value.toLowerCase();
+      saveJson(settingsKey, settings);
+      applySettings();
+    });
+    document.querySelector('#accent-reset').addEventListener('click', () => {
+      const settings = loadSettings();
+      settings.accent = '';
+      saveJson(settingsKey, settings);
+      applySettings();
+    });
+    document.querySelector('#corner-options').addEventListener('click', event => {
+      const button = event.target.closest('button[data-corners]');
+      if (button) setAppearance('corners', button.dataset.corners, ['sharp', 'soft']);
+    });
+    document.querySelector('#density-options').addEventListener('click', event => {
+      const button = event.target.closest('button[data-density]');
+      if (button) setAppearance('density', button.dataset.density, ['roomy', 'compact']);
+    });
+    document.querySelector('#platform-options').addEventListener('click', event => {
+      const button = event.target.closest('button[data-platform-choice]');
+      if (button) setAppearance('platform', button.dataset.platformChoice, ['auto', 'ios', 'android', 'windows', 'linux', 'chromebook']);
+    });
 
     gameFormEditor.addEventListener('submit', event => {
       event.preventDefault();
