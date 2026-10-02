@@ -775,23 +775,21 @@
       box-shadow: var(--glass-inner), var(--glass-shadow);
     }
 
-    /* Refraction: true lens distortion of whatever sits behind the glass */
+    /* Clear glass stays crisp: blur and light refraction, never underwater distortion. */
     :root[data-platform="ios"] .orbit-topbar,
     :root[data-platform="ios"] .orbit-sidebar,
     :root[data-platform="ios"] .orbit-launch-panel,
     :root[data-platform="ios"] .orbit-info-panel,
     :root[data-platform="ios"] .game-tile,
     :root[data-platform="ios"] .quick-link,
-    :root[data-platform="ios"] .orbit-safety {
-      filter: url(#orbit-glass);
-    }
+    :root[data-platform="ios"] .orbit-safety,
     :root[data-platform="ios"] .orbit-button,
     :root[data-platform="ios"] .customize-button,
     :root[data-platform="ios"] .dialog-input,
     :root[data-platform="ios"] .search-result,
     :root[data-platform="ios"] .theme-choice,
     :root[data-platform="ios"] .setting-choice {
-      filter: url(#orbit-glass-subtle);
+      filter: none;
     }
 
     /* Specular sweep across the top edge of each lens */
@@ -871,21 +869,16 @@
 </head>
 <body>
   <svg class="orbit-glass-defs" aria-hidden="true" focusable="false"><defs>
-    <filter id="orbit-glass" x="-25%" y="-25%" width="150%" height="150%" color-interpolation-filters="sRGB">
-      <feTurbulence type="fractalNoise" baseFrequency="0.012 0.028" numOctaves="2" seed="7" result="noise" />
-      <feGaussianBlur in="noise" stdDeviation="2.4" result="softNoise" />
-      <feDisplacementMap in="SourceGraphic" in2="softNoise" scale="26" xChannelSelector="R" yChannelSelector="G" result="refracted" />
-      <feGaussianBlur in="refracted" stdDeviation="0.4" result="glass" />
-      <feSpecularLighting in="softNoise" surfaceScale="3.2" specularConstant="0.55" specularExponent="22" lighting-color="#ffffff" result="spec">
-        <feDistantLight azimuth="235" elevation="58" />
+    <filter id="orbit-glass" x="-5%" y="-5%" width="110%" height="110%" color-interpolation-filters="sRGB">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="0.18" result="softGlass" />
+      <feSpecularLighting in="SourceGraphic" surfaceScale="1.2" specularConstant="0.22" specularExponent="30" lighting-color="#ffffff" result="spec">
+        <feDistantLight azimuth="225" elevation="60" />
       </feSpecularLighting>
-      <feComposite in="spec" in2="refracted" operator="in" result="specClipped" />
-      <feComposite in="specClipped" in2="glass" operator="arithmetic" k1="0" k2="1" k3="1" k4="0" />
+      <feComposite in="spec" in2="SourceGraphic" operator="in" result="specClipped" />
+      <feBlend in="softGlass" in2="specClipped" mode="screen" />
     </filter>
-    <filter id="orbit-glass-subtle" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
-      <feTurbulence type="fractalNoise" baseFrequency="0.02 0.04" numOctaves="1" seed="3" result="noise" />
-      <feGaussianBlur in="noise" stdDeviation="1.6" result="softNoise" />
-      <feDisplacementMap in="SourceGraphic" in2="softNoise" scale="9" xChannelSelector="R" yChannelSelector="G" />
+    <filter id="orbit-glass-subtle" x="-5%" y="-5%" width="110%" height="110%" color-interpolation-filters="sRGB">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="0.08" />
     </filter>
   </defs></svg>
   <div class="orbit-app">
