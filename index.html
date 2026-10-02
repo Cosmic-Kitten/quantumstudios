@@ -735,9 +735,9 @@
     .orbit-glass-defs { position: absolute; width: 0; height: 0; overflow: hidden; }
 
     :root[data-platform="ios"] {
-      --glass-tint: #ffffff1f;
-      --glass-tint-strong: #ffffff2b;
-      --glass-rim: #ffffff5c;
+      --glass-tint: color-mix(in srgb, var(--orbit-lime) 7%, #ffffff12);
+      --glass-tint-strong: color-mix(in srgb, var(--orbit-lime) 12%, #ffffff1b);
+      --glass-rim: color-mix(in srgb, var(--orbit-lime) 28%, #ffffff45);
       --glass-rim-soft: #ffffff2e;
       --glass-inner: inset 0 1px 0 #ffffff4d, inset 0 -1px 0 #ffffff1a;
       --glass-blur: saturate(190%) blur(26px);
@@ -767,7 +767,7 @@
     :root[data-platform="ios"] .section-setting,
     :root[data-platform="ios"] .accent-control,
     :root[data-platform="ios"] dialog.orbit-dialog {
-      background: linear-gradient(150deg, var(--glass-tint-strong), var(--glass-tint) 46%, #ffffff12);
+      background: linear-gradient(150deg, var(--glass-tint-strong), var(--glass-tint) 46%, color-mix(in srgb, var(--orbit-lime) 3%, #ffffff0d));
       background-clip: padding-box;
       -webkit-backdrop-filter: var(--glass-blur);
       backdrop-filter: var(--glass-blur);
@@ -834,13 +834,13 @@
       box-shadow: var(--glass-inner);
     }
     :root[data-platform="ios"] .orbit-visual {
-      background: radial-gradient(circle at 50% 45%, #ffffff2e, #ffffff0f 70%);
+      background: radial-gradient(circle at 50% 45%, color-mix(in srgb, var(--orbit-lime) 18%, #ffffff20), color-mix(in srgb, var(--orbit-lime) 5%, #ffffff09) 70%);
       border: 1px solid var(--glass-rim-soft);
       box-shadow: var(--glass-inner);
     }
     :root[data-platform="ios"] .tile-mark,
     :root[data-platform="ios"] .quick-icon,
-    :root[data-platform="ios"] .launch-heading-mark { background: #ffffff24; border: 1px solid var(--glass-rim-soft); box-shadow: var(--glass-inner); }
+    :root[data-platform="ios"] .launch-heading-mark { background: color-mix(in srgb, var(--orbit-lime) 12%, #ffffff18); border: 1px solid var(--glass-rim-soft); box-shadow: var(--glass-inner); }
     :root[data-platform="ios"] .intel-stat,
     :root[data-platform="ios"] .intel-node,
     :root[data-platform="ios"] .gameplay-node,
