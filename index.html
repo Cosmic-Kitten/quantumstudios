@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#111713">
+  <meta name="theme-color" id="orbit-theme-color" content="#111713">
   <meta name="description" content="Orbit is a launcher-style dashboard for opening Roblox experiences through the official Roblox website.">
   <title>Orbit - Roblox Launcher</title>
-  <link rel="manifest" href="/manifest.webmanifest">
-  <link rel="icon" href="/icons/orbit.svg" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="/icons/orbit-192.png">
+  <link rel="manifest" id="orbit-manifest" href="/manifest.webmanifest">
+  <link rel="icon" id="orbit-favicon" href="/icons/orbit.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" id="orbit-apple-icon" href="/icons/orbit-192.png">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="Orbit">
@@ -1137,7 +1137,52 @@
       return 'linux';
     }
 
-    document.documentElement.dataset.platform = detectPlatform();
+    function updatePlatformIcon(platform) {
+      const icons = {
+        ios: { mark: '✦', label: 'iOS Liquid Glass' },
+        android: { mark: '◈', label: 'Android Orbit' },
+        windows: { mark: '▦', label: 'Windows Orbit' },
+        linux: { mark: '>_', label: 'Linux Orbit' },
+        chromebook: { mark: '▱', label: 'Chromebook Orbit' }
+      };
+      const icon = icons[platform] || icons.linux;
+      const colors = { ios: '#b9f36b', android: '#c9f36b', windows: '#78a9ff', linux: '#b9f36b', chromebook: '#8ab4f8' };
+      const color = colors[platform] || colors.linux;
+      const safeMark = icon.mark.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="16" fill="#151c17"/><circle cx="32" cy="32" r="20" fill="none" stroke="${color}" stroke-width="4"/><circle cx="48" cy="17" r="5" fill="${color}"/><text x="32" y="39" text-anchor="middle" font-family="Arial,sans-serif" font-size="18" font-weight="700" fill="${color}">${safeMark}</text></svg>`;
+      const iconUrl = `data:image/svg+xml,${encodeURIComponent(svg)}`;
+      const mark = document.querySelector('.orbit-mark');
+      if (mark) {
+        mark.textContent = icon.mark;
+        mark.title = icon.label;
+      }
+      const favicon = document.querySelector('#orbit-favicon');
+      const appleIcon = document.querySelector('#orbit-apple-icon');
+      if (favicon) favicon.href = iconUrl;
+      if (appleIcon) appleIcon.href = iconUrl;
+      const themeColor = document.querySelector('#orbit-theme-color');
+      if (themeColor) themeColor.content = color;
+
+      /* The manifest is replaced too, so the next PWA installation uses the
+         selected platform icon instead of the generic Orbit icon. */
+      const manifest = document.querySelector('#orbit-manifest');
+      if (manifest) {
+        const manifestIcon = { src: iconUrl, sizes: 'any', type: 'image/svg+xml', purpose: 'any maskable' };
+        const manifestJson = {
+          id: '/', name: 'Orbit - Roblox Launcher', short_name: 'Orbit',
+          description: 'A personal launcher dashboard for Roblox experiences.',
+          start_url: '/', scope: '/', display: 'standalone', background_color: '#111713', theme_color: color,
+          orientation: 'any', categories: ['games', 'utilities'], icons: [manifestIcon]
+        };
+        if (window.orbitManifestUrl) URL.revokeObjectURL(window.orbitManifestUrl);
+        window.orbitManifestUrl = URL.createObjectURL(new Blob([JSON.stringify(manifestJson)], { type: 'application/manifest+json' }));
+        manifest.href = window.orbitManifestUrl;
+      }
+    }
+
+    const detectedPlatform = detectPlatform();
+    document.documentElement.dataset.platform = detectedPlatform;
+    updatePlatformIcon(detectedPlatform);
 
     function loadJson(key, fallback) {
       try { return JSON.parse(localStorage.getItem(key) || 'null') ?? fallback; } catch { return fallback; }
@@ -1671,8 +1716,10 @@
     function applySettings() {
       const settings = loadSettings();
       const detectedPlatform = detectPlatform();
-      document.documentElement.dataset.platform = settings.platform === 'auto' ? detectedPlatform : settings.platform;
+      const activePlatform = settings.platform === 'auto' ? detectedPlatform : settings.platform;
+      document.documentElement.dataset.platform = activePlatform;
       document.documentElement.dataset.platformChoice = settings.platform;
+      updatePlatformIcon(activePlatform);
       document.documentElement.dataset.theme = settings.theme;
       document.documentElement.dataset.corners = settings.corners;
       document.documentElement.dataset.density = settings.density;
