@@ -722,6 +722,92 @@
     :root[data-platform="chromebook"] .orbit-launch-panel { border-radius: 12px; }
     :root[data-platform="chromebook"] .orbit-launch-panel { background: linear-gradient(135deg, #26372d, var(--orbit-panel)); }
 
+    /* Android: original Orbit skin, but with a bold mobile launcher layout. */
+    :root[data-platform="android"] body { background: #111713; }
+    :root[data-platform="android"] .orbit-main { padding: 0 28px 58px; }
+    :root[data-platform="android"] .orbit-topbar { background: #151c17; border-bottom: 2px solid var(--orbit-lime); }
+    :root[data-platform="android"] .orbit-breadcrumb { color: var(--orbit-lime); }
+    :root[data-platform="android"] .orbit-status { color: #7c897f; }
+    :root[data-platform="android"] .orbit-welcome { padding: 34px 0 26px; }
+    :root[data-platform="android"] .orbit-welcome h1 { font-size: clamp(36px, 9vw, 52px); letter-spacing: -.04em; }
+    :root[data-platform="android"] .orbit-launch-panel { border-left: 4px solid var(--orbit-lime); background: #19211c; }
+    :root[data-platform="android"] .launch-heading-mark { clip-path: none; }
+    :root[data-platform="android"] .launch-button,
+    :root[data-platform="android"] .orbit-button.primary { box-shadow: 0 5px 0 color-mix(in srgb, var(--orbit-lime) 45%, #172014); }
+    :root[data-platform="android"] .library-grid { grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 12px; }
+    :root[data-platform="android"] .game-tile { border-top-width: 4px; }
+    :root[data-platform="android"] .quick-link { border-left: 3px solid var(--orbit-blue); }
+    :root[data-platform="android"] .orbit-section-head h2 { font-size: 18px; text-transform: uppercase; letter-spacing: .04em; }
+
+    /* Windows: Fluent-like acrylic, command-bar hierarchy, blue selection chrome. */
+    :root[data-platform="windows"] { --orbit-blue: #78a9ff; }
+    :root[data-platform="windows"] body { background: radial-gradient(circle at 12% 0%, #78a9ff1c, transparent 24rem), #101713; }
+    :root[data-platform="windows"] .orbit-app { grid-template-columns: 264px minmax(0, 1fr); }
+    :root[data-platform="windows"] .orbit-sidebar { padding: 30px 20px 22px; background: #18221bcc; border-right-color: #ffffff18; }
+    :root[data-platform="windows"] .orbit-brand { padding-bottom: 38px; }
+    :root[data-platform="windows"] .orbit-brand-name { letter-spacing: .06em; }
+    :root[data-platform="windows"] .orbit-nav { gap: 3px; }
+    :root[data-platform="windows"] .orbit-nav a { min-height: 44px; border: 0; padding-inline: 16px; }
+    :root[data-platform="windows"] .orbit-nav a.active { background: #ffffff12; border-left: 3px solid var(--orbit-blue); color: white; }
+    :root[data-platform="windows"] .orbit-nav a.active .nav-icon { color: var(--orbit-blue); }
+    :root[data-platform="windows"] .orbit-topbar { min-height: 74px; border-bottom-color: #ffffff18; }
+    :root[data-platform="windows"] .orbit-breadcrumb strong { color: var(--orbit-blue); }
+    :root[data-platform="windows"] .orbit-welcome h1 { font-size: clamp(36px, 4vw, 56px); font-weight: 700; }
+    :root[data-platform="windows"] .orbit-launch-panel { border-color: #ffffff22; background: linear-gradient(135deg, #24352dcc, #19211c 65%); }
+    :root[data-platform="windows"] .orbit-visual { border-color: #78a9ff55; background: radial-gradient(circle, #78a9ff20, #18221c 72%); }
+    :root[data-platform="windows"] .orbit-button.primary { background: var(--orbit-blue); border-color: var(--orbit-blue); color: #101a2d; }
+    :root[data-platform="windows"] .quick-link:hover,
+    :root[data-platform="windows"] .game-tile:hover { border-color: var(--orbit-blue); }
+    :root[data-platform="windows"] .orbit-footer { color: #71849f; }
+
+    /* Linux: terminal/workspace character with mono labels and orange activity. */
+    :root[data-platform="linux"] { --orbit-orange: #ff9b55; --orbit-lime: #b9f36b; }
+    :root[data-platform="linux"] body { background: #0d1210; }
+    :root[data-platform="linux"] .orbit-sidebar { background: #101612; border-right: 1px solid #2a4935; }
+    :root[data-platform="linux"] .orbit-brand-name { font-family: var(--orbit-mono); letter-spacing: .08em; }
+    :root[data-platform="linux"] .orbit-nav-label,
+    :root[data-platform="linux"] .orbit-breadcrumb,
+    :root[data-platform="linux"] .orbit-kicker,
+    :root[data-platform="linux"] .orbit-status,
+    :root[data-platform="linux"] .orbit-footer { font-family: var(--orbit-mono); }
+    :root[data-platform="linux"] .orbit-nav a { font-family: var(--orbit-mono); font-size: 11px; }
+    :root[data-platform="linux"] .orbit-nav a.active { background: #17301f; border-color: #2a4935; box-shadow: inset 4px 0 0 var(--orbit-lime); }
+    :root[data-platform="linux"] .orbit-topbar { border-bottom: 1px dashed #2a4935; }
+    :root[data-platform="linux"] .orbit-welcome h1 { font-family: var(--orbit-mono); font-size: clamp(28px, 4vw, 46px); text-transform: lowercase; }
+    :root[data-platform="linux"] .orbit-welcome h1::before { content: "> "; color: var(--orbit-lime); }
+    :root[data-platform="linux"] .orbit-launch-panel { border: 1px solid #2a4935; border-left: 4px solid var(--orbit-lime); background: #101a13; box-shadow: 0 0 0 1px #172b1d, 0 15px 38px #0008; }
+    :root[data-platform="linux"] .launch-heading,
+    :root[data-platform="linux"] .orbit-section-head h2 { font-family: var(--orbit-mono); }
+    :root[data-platform="linux"] .launch-input { background: #080d09; border-color: #2a4935; font-family: var(--orbit-mono); }
+    :root[data-platform="linux"] .launch-button { font-family: var(--orbit-mono); text-transform: uppercase; }
+    :root[data-platform="linux"] .game-tile,
+    :root[data-platform="linux"] .quick-link,
+    :root[data-platform="linux"] .orbit-info-panel { background: #121a14; border-color: #294532; box-shadow: 0 8px 20px #0009; }
+    :root[data-platform="linux"] .game-tile:hover,
+    :root[data-platform="linux"] .quick-link:hover { border-color: var(--orbit-lime); }
+
+    /* Chromebook: airy ChromeOS dashboard with pill controls and blue-green accents. */
+    :root[data-platform="chromebook"] { --orbit-blue: #8ab4f8; --orbit-lime: #a8e6cf; }
+    :root[data-platform="chromebook"] body { background: linear-gradient(145deg, #18251f, #111713 58%); }
+    :root[data-platform="chromebook"] .orbit-app { grid-template-columns: 220px minmax(0, 1fr); }
+    :root[data-platform="chromebook"] .orbit-sidebar { padding: 22px 14px 18px; background: #1b2821; border-right: 0; }
+    :root[data-platform="chromebook"] .orbit-brand { padding-bottom: 26px; }
+    :root[data-platform="chromebook"] .orbit-nav a { min-height: 46px; border: 0; padding-inline: 17px; }
+    :root[data-platform="chromebook"] .orbit-nav a.active { background: #8ab4f81c; color: var(--orbit-blue); }
+    :root[data-platform="chromebook"] .orbit-nav a.active .nav-icon { color: var(--orbit-blue); }
+    :root[data-platform="chromebook"] .orbit-main { padding-inline: 38px; }
+    :root[data-platform="chromebook"] .orbit-topbar { min-height: 70px; border-bottom: 0; }
+    :root[data-platform="chromebook"] .orbit-welcome { padding: 44px 0 30px; }
+    :root[data-platform="chromebook"] .orbit-welcome h1 { font-size: clamp(38px, 5vw, 62px); letter-spacing: -.05em; }
+    :root[data-platform="chromebook"] .orbit-launch-panel { border: 0; background: linear-gradient(135deg, #2d493c, #1d2c24); box-shadow: 0 20px 50px #0005; }
+    :root[data-platform="chromebook"] .launch-button,
+    :root[data-platform="chromebook"] .orbit-button.primary { background: var(--orbit-blue); border-color: var(--orbit-blue); color: #142033; }
+    :root[data-platform="chromebook"] .orbit-section-head { margin-top: 42px; }
+    :root[data-platform="chromebook"] .quick-grid { gap: 16px; }
+    :root[data-platform="chromebook"] .quick-link { min-height: 122px; border: 0; background: #203229; box-shadow: 0 10px 24px #0004; }
+    :root[data-platform="chromebook"] .game-tile,
+    :root[data-platform="chromebook"] .orbit-info-panel { border: 0; background: #1d2c24; box-shadow: 0 10px 24px #0004; }
+
     /* Bottom nav bar on phones gets platform character */
     @media (max-width: 620px) {
       :root[data-platform="ios"] .orbit-sidebar { height: 68px; padding: 8px 16px calc(8px + env(safe-area-inset-bottom)); background: #1c241ee6; backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border-radius: 20px 20px 0 0; }
