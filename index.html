@@ -1164,14 +1164,14 @@
       games.unshift({ id });
       saveJson(storageKey, games.slice(0, 5));
       renderRecents();
-      const fallback = window.open(`https://www.roblox.com/games/${id}`, '_blank', 'noopener,noreferrer');
+      const fallback = window.open(`https://www.roblox.com/games/${id}?launch`, '_blank', 'noopener,noreferrer');
       const launchLink = document.createElement('a');
       launchLink.href = `roblox://experiences/start?placeId=${encodeURIComponent(id)}`;
       launchLink.rel = 'noopener';
       document.body.append(launchLink);
       launchLink.click();
       launchLink.remove();
-      if (!fallback) window.location.assign(`https://www.roblox.com/games/${id}`);
+      if (!fallback) window.location.assign(`https://www.roblox.com/games/${id}?launch`);
     }
 
     gameForm.addEventListener('submit', event => {
