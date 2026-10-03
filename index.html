@@ -1163,20 +1163,24 @@
       const themeColor = document.querySelector('#orbit-theme-color');
       if (themeColor) themeColor.content = color;
 
-      /* The manifest is replaced too, so the next PWA installation uses the
-         selected platform icon instead of the generic Orbit icon. */
+      /* Point at a real static manifest so installability survives. A blob:
+         manifest is rejected by browsers, which is why the install prompt
+         stopped appearing when this used a generated Blob URL. */
       const manifest = document.querySelector('#orbit-manifest');
+      const staticManifests = {
+        ios: '/manifest-ios.webmanifest',
+        android: '/manifest.webmanifest',
+        windows: '/manifest-windows.webmanifest',
+        linux: '/manifest-linux.webmanifest',
+        chromebook: '/manifest-chromebook.webmanifest'
+      };
       if (manifest) {
-        const manifestIcon = { src: iconUrl, sizes: 'any', type: 'image/svg+xml', purpose: 'any maskable' };
-        const manifestJson = {
-          id: '/', name: 'Orbit - Roblox Launcher', short_name: 'Orbit',
-          description: 'A personal launcher dashboard for Roblox experiences.',
-          start_url: '/', scope: '/', display: 'standalone', background_color: '#111713', theme_color: color,
-          orientation: 'any', categories: ['games', 'utilities'], icons: [manifestIcon]
-        };
-        if (window.orbitManifestUrl) URL.revokeObjectURL(window.orbitManifestUrl);
-        window.orbitManifestUrl = URL.createObjectURL(new Blob([JSON.stringify(manifestJson)], { type: 'application/manifest+json' }));
-        manifest.href = window.orbitManifestUrl;
+        const nextManifest = staticManifests[platform] || staticManifests.linux;
+        if (manifest.getAttribute('href') !== nextManifest) {
+          manifest.setAttribute('href', nextManifest);
+          if (window.orbitIconUrls) for (const url of window.orbitIconUrls) URL.revokeObjectURL(url);
+          window.orbitIconUrls = [];
+        }
       }
     }
 

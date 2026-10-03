@@ -1,0 +1,30 @@
+{
+  "id": "/",
+  "name": "Orbit - Roblox Launcher",
+  "short_name": "Orbit",
+  "description": "A personal launcher dashboard for Roblox experiences.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#111713",
+  "theme_color": "#111713",
+  "orientation": "any",
+  "categories": [
+    "games",
+    "utilities"
+  ],
+  "icons": [
+    {
+      "src": "/icons/orbit-windows-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/orbit-windows-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
