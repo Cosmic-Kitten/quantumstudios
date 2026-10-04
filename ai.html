@@ -784,9 +784,7 @@
           });
           const contentType = response.headers.get('content-type') || '';
           if (!contentType.toLowerCase().includes('application/json')) {
-            throw new Error(response.status === 404
-              ? 'In-app web research needs the Vercel API. Open the deployed app or run `vercel dev`.'
-              : 'Web search returned an unexpected response.');
+            throw new Error('Web research returned an unexpected response. Try again in a moment.');
           }
           let payload;
           try {

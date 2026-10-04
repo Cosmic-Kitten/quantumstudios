@@ -21,16 +21,25 @@ test('web research validates queries and normalizes guide sources', async () => 
     return {
       ok: true,
       text: async () => `
-        <div class="result">
-          <a class="result__a" href="//duckduckgo.com/l/?uddg=https%3A%2F%2Fguides.example%2Fgame%3Fref%3Dddg">Beginner &amp; controls guide</a>
-          <div class="result__snippet">Learn the <b>controls</b> and first quests.</div>
-        </div>
-        <div class="result">
-          <a class="result__a" href="https://community.example/how-to-play">How to play</a>
-          <a class="result__snippet">Tips for new players &amp; friends.</a>
-        </div>
-        <a class="result__a" href="javascript:alert(1)">Unsafe result</a>
-      `
+      <?xml version="1.0"?>
+      <rss><channel>
+        <item>
+          <title>Beginner &amp; controls guide</title>
+          <link>https://guides.example/game?ref=bing</link>
+          <description>Learn the &lt;b&gt;controls&lt;/b&gt; and first quests.</description>
+        </item>
+        <item>
+          <title><![CDATA[How to play]]></title>
+          <link>https://community.example/how-to-play</link>
+          <description>Tips for new players &amp; friends.</description>
+        </item>
+        <item>
+          <title>Unsafe result</title>
+          <link>javascript:alert(1)</link>
+          <description>Unsafe URLs must not be returned.</description>
+        </item>
+      </channel></rss>
+    `
     };
   };
 
@@ -43,10 +52,12 @@ test('web research validates queries and normalizes guide sources', async () => 
     const response = createResponse();
     await research({ method: 'GET', url: '/api/roblox/research?q=game%20how%20to%20play' }, response);
     assert.equal(response.statusCode, 200);
-    assert.equal(requestedUrl.hostname, 'html.duckduckgo.com');
+    assert.equal(requestedUrl.hostname, 'www.bing.com');
+    assert.equal(requestedUrl.pathname, '/search');
+    assert.equal(requestedUrl.searchParams.get('format'), 'rss');
     assert.equal(requestedUrl.searchParams.get('q'), 'game how to play');
     assert.deepEqual(response.body.results.map(result => result.url), [
-      'https://guides.example/game?ref=ddg',
+      'https://guides.example/game?ref=bing',
       'https://community.example/how-to-play'
     ]);
     assert.equal(response.body.results[0].title, 'Beginner & controls guide');
