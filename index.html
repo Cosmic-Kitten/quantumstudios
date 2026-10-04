@@ -210,6 +210,14 @@
     .orbit-button.primary:hover { background: #d8ff89; }
     .home-section[hidden] { display: none !important; }
     .library-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(205px, 1fr)); gap: 10px; }
+    .library-tools { margin: 0 0 12px; display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+    .library-tool-group { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .library-filter, .library-sort { min-height: 36px; padding: 0 10px; border: 1px solid var(--orbit-line); border-radius: var(--orbit-radius); outline: none; background: var(--orbit-panel); color: var(--orbit-text); font-size: 10px; }
+    .library-filter { width: min(250px, 100%); }
+    .library-filter:focus, .library-sort:focus { border-color: var(--orbit-lime); }
+    .library-sort option { background: var(--orbit-panel); color: var(--orbit-text); }
+    .library-feedback { min-height: 16px; margin: 8px 0 0; color: var(--orbit-muted); font-size: 9px; }
+    .library-count { color: var(--orbit-muted); font: 9px var(--orbit-mono); }
     .library-empty { grid-column: 1 / -1; min-height: 118px; padding: 22px; display: flex; align-items: center; justify-content: space-between; gap: 18px; border: 1px dashed #53634f; color: var(--orbit-muted); font-size: 11px; line-height: 1.6; }
     .game-tile { min-width: 0; min-height: 132px; padding: var(--orbit-card-padding); display: flex; flex-direction: column; justify-content: space-between; gap: 16px; border: 1px solid var(--orbit-line); border-top: 2px solid var(--tile-accent, var(--orbit-lime)); border-radius: var(--orbit-radius); background: linear-gradient(145deg, color-mix(in srgb, var(--orbit-panel) 95%, white), var(--orbit-panel)); box-shadow: 0 10px 26px #00000012; transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease; }
     .game-tile:hover { transform: translateY(-3px); border-color: color-mix(in srgb, var(--tile-accent, var(--orbit-lime)) 48%, var(--orbit-line)); box-shadow: 0 16px 34px #00000024; }
@@ -256,6 +264,7 @@
     .setting-choice:hover, .setting-choice[aria-pressed="true"] { border-color: var(--orbit-lime); color: var(--orbit-text); }
     .setting-choice[aria-pressed="true"] { background: color-mix(in srgb, var(--orbit-lime) 10%, var(--orbit-bg)); }
     .platform-options { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .appearance-options { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
     .platform-choice { min-height: 54px; padding: 8px 10px; display: grid; align-content: center; gap: 3px; border: 1px solid var(--orbit-line); border-radius: var(--orbit-radius); background: var(--orbit-bg); color: var(--orbit-muted); text-align: left; cursor: pointer; transition: border-color .18s ease, background .18s ease, color .18s ease, transform .16s ease; }
     .platform-choice strong { color: var(--orbit-text); font-size: 10px; }
     .platform-choice span { font-size: 8px; }
@@ -419,7 +428,7 @@
       .game-tile { min-height: 120px; padding: 10px; }
       .library-empty { align-items: flex-start; flex-direction: column; }
       .theme-options { grid-template-columns: 1fr; }
-      .platform-options { grid-template-columns: 1fr; }
+      .platform-options, .appearance-options { grid-template-columns: 1fr; }
       .intel-overview { grid-template-columns: 76px minmax(0, 1fr); gap: 10px; }
       .intel-cover { width: 76px; }
       .intel-title { font-size: 14px; }
@@ -438,6 +447,8 @@
       .orbit-section-head { margin-top: 26px; }
       .orbit-info-panel { min-height: auto; }
       .orbit-footer { flex-direction: column; }
+      .library-tools, .library-tool-group { width: 100%; }
+      .library-filter { flex: 1; }
     }
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
@@ -951,6 +962,46 @@
       :root[data-platform="ios"] .game-tile,
       :root[data-platform="ios"] .quick-link { -webkit-backdrop-filter: none; backdrop-filter: none; background: #1a221dcc; filter: none; }
     }
+    :root[data-background="aurora"] body {
+      background: radial-gradient(ellipse at 78% 4%, color-mix(in srgb, var(--orbit-lime) 19%, transparent), transparent 32rem),
+        radial-gradient(ellipse at 13% 45%, color-mix(in srgb, var(--orbit-blue) 17%, transparent), transparent 34rem),
+        radial-gradient(ellipse at 56% 95%, color-mix(in srgb, var(--orbit-lime) 8%, transparent), transparent 38rem), var(--orbit-bg);
+      background-attachment: fixed;
+    }
+    :root[data-background="glow"] body {
+      background: radial-gradient(ellipse at 86% -8%, color-mix(in srgb, var(--orbit-lime) 10%, transparent), transparent 33rem),
+        radial-gradient(ellipse at 0% 42%, color-mix(in srgb, var(--orbit-blue) 6%, transparent), transparent 34rem), var(--orbit-bg);
+      background-attachment: fixed;
+    }
+    :root[data-background="flat"] body { background: var(--orbit-bg); }
+    :root[data-library-columns="two"] .library-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    :root[data-library-columns="three"] .library-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    :root[data-library-view="list"][data-library-columns] .library-grid { grid-template-columns: minmax(0, 1fr); }
+    :root[data-library-view="list"][data-library-columns] .game-tile { min-height: 78px; display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 12px; }
+    :root[data-library-view="list"] .game-tile-top { min-width: 0; }
+    :root[data-library-view="list"] .game-tile-bottom { justify-content: flex-end; }
+    :root[data-content-width="wide"] .orbit-main { width: min(1760px, 100%); }
+    :root[data-interface-font="system"] body { --orbit-font: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    :root[data-interface-font="mono"] body { --orbit-font: "DM Mono", ui-monospace, monospace; }
+    @media (min-width: 901px) {
+      :root[data-sidebar="compact"] .orbit-app { grid-template-columns: 78px minmax(0, 1fr); }
+      :root[data-sidebar="compact"] .orbit-sidebar { padding-inline: 10px; align-items: center; }
+      :root[data-sidebar="compact"] .orbit-brand-name,
+      :root[data-sidebar="compact"] .orbit-nav-label,
+      :root[data-sidebar="compact"] .orbit-nav a span:not(.nav-icon),
+      :root[data-sidebar="compact"] .orbit-safety,
+      :root[data-sidebar="compact"] .orbit-profile-copy { display: none; }
+      :root[data-sidebar="compact"] .orbit-nav { width: 100%; }
+      :root[data-sidebar="compact"] .orbit-nav a { justify-content: center; padding-inline: 0; }
+      :root[data-sidebar="compact"] .orbit-profile { justify-content: center; width: 100%; padding-inline: 0; }
+    }
+    :root[data-motion="reduced"] *,
+    :root[data-motion="reduced"] *::before,
+    :root[data-motion="reduced"] *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .01ms !important; }
+    @media (max-width: 620px) {
+      :root[data-library-columns="two"] .library-grid,
+      :root[data-library-columns="three"] .library-grid { grid-template-columns: repeat(auto-fill, minmax(min(100%, 160px), 1fr)); }
+    }
   </style>
 </head>
 <body>
@@ -969,7 +1020,7 @@
   </defs></svg>
   <div class="orbit-app">
     <aside class="orbit-sidebar">
-      <a class="orbit-brand" href="#top" aria-label="Orbit dashboard"><span class="orbit-mark" aria-hidden="true">O</span><span class="orbit-brand-name">ORBIT<span>.</span></span></a>
+      <a class="orbit-brand" href="#top" aria-label="Orbit dashboard"><span class="orbit-mark" aria-hidden="true">O</span><span class="orbit-brand-name" id="workspace-brand">ORBIT<span>.</span></span></a>
       <div class="orbit-nav-label">Workspace</div>
       <nav class="orbit-nav" aria-label="Launcher navigation">
         <a class="active" href="#top"><span class="nav-icon" aria-hidden="true">⌂</span><span>Launch hub</span></a>
@@ -983,8 +1034,8 @@
       </div>
     </aside>
     <main class="orbit-main" id="top">
-      <header class="orbit-topbar"><div class="orbit-breadcrumb">Orbit <span aria-hidden="true">/</span> <strong>Launch hub</strong></div><div class="orbit-top-actions"><span class="orbit-status"><i aria-hidden="true"></i> Roblox web</span><button class="customize-button" id="customize-open" type="button" aria-label="Customize your Orbit home"><span aria-hidden="true">☷</span> Customize</button><div class="account-tools"><a class="account-link" id="account-link" href="/api/roblox/login">Connect Roblox</a><span class="account-name" id="account-name" hidden></span><button class="account-logout" id="account-logout" type="button" hidden>Sign out</button><span class="account-message" id="account-message" role="status" aria-live="polite"></span></div><button class="install-button" id="install-button" type="button"><span aria-hidden="true">↓</span> Install Orbit</button></div></header>
-      <section class="orbit-welcome"><div class="orbit-kicker">Your game library, one step away</div><h1>Where to today?</h1><p>Start with a Roblox experience link or place ID. Orbit will open the official Roblox game page.</p></section>
+      <header class="orbit-topbar"><div class="orbit-breadcrumb"><span id="workspace-breadcrumb">Orbit</span> <span aria-hidden="true">/</span> <strong>Launch hub</strong></div><div class="orbit-top-actions"><span class="orbit-status"><i aria-hidden="true"></i> Roblox web</span><button class="customize-button" id="customize-open" type="button" aria-label="Customize your Orbit home"><span aria-hidden="true">☷</span> Customize</button><div class="account-tools"><a class="account-link" id="account-link" href="/api/roblox/login">Connect Roblox</a><span class="account-name" id="account-name" hidden></span><button class="account-logout" id="account-logout" type="button" hidden>Sign out</button><span class="account-message" id="account-message" role="status" aria-live="polite"></span></div><button class="install-button" id="install-button" type="button"><span aria-hidden="true">↓</span> Install Orbit</button></div></header>
+      <section class="orbit-welcome"><div class="orbit-kicker">Your game library, one step away</div><h1 id="welcome-headline">Where to today?</h1><p>Start with a Roblox experience link or place ID. Orbit will open the official Roblox game page.</p></section>
       <div id="home-sections">
       <section class="orbit-launch-panel home-section" id="launch" data-home-section="launch" aria-labelledby="launch-title">
         <div class="launch-content">
@@ -1000,8 +1051,26 @@
         <div class="orbit-visual" aria-hidden="true"><div class="visual-grid"></div><div class="visual-ring ring-two"></div><div class="visual-ring"></div><div class="visual-core">O</div><i class="visual-orbit-dot"></i><span class="visual-label">Orbit connection / Ready</span></div>
       </section>
       <section class="home-section" id="library" data-home-section="library" aria-labelledby="library-title">
-        <div class="orbit-section-head"><h2 id="library-title">My games</h2><button class="orbit-button primary" id="add-game-open" type="button"><span aria-hidden="true">+</span> Add game</button></div>
+        <div class="orbit-section-head"><h2 id="library-title">My games</h2><div class="library-tool-group"><button class="orbit-button" id="random-game" type="button">Surprise me</button><button class="orbit-button primary" id="add-game-open" type="button"><span aria-hidden="true">+</span> Add game</button></div></div>
+        <div class="library-tools" aria-label="Game library tools">
+          <div class="library-tool-group">
+            <input class="library-filter" id="library-filter" type="search" placeholder="Filter by name or place ID" aria-label="Filter saved games">
+            <select class="library-sort" id="library-sort" aria-label="Sort saved games">
+              <option value="saved">Saved order</option>
+              <option value="name-asc">Name A–Z</option>
+              <option value="name-desc">Name Z–A</option>
+              <option value="recent">Recently played</option>
+            </select>
+          </div>
+          <div class="library-tool-group">
+            <button class="orbit-button" id="export-library" type="button">Export backup</button>
+            <button class="orbit-button" id="import-library-open" type="button">Import backup</button>
+            <input id="import-library-file" type="file" accept="application/json,.json" hidden>
+          </div>
+        </div>
+        <div class="library-count" id="library-count" aria-live="polite"></div>
         <div class="library-grid" id="library-grid"></div>
+        <p class="library-feedback" id="library-feedback" role="status" aria-live="polite"></p>
       </section>
       <section class="home-section" id="discover" data-home-section="discover" aria-labelledby="quick-title">
         <div class="orbit-section-head"><h2 id="quick-title">Quick access</h2><span>Official Roblox links</span></div>
@@ -1038,10 +1107,53 @@
       <label class="dialog-label" for="accent-color">Accent color</label>
       <div class="accent-control"><span>Make it yours</span><input class="accent-input" id="accent-color" type="color" value="#c9f36b" aria-label="Choose a custom accent color"></div>
       <p class="dialog-help"><button class="text-button" id="accent-reset" type="button">Use the selected theme color</button> · Saved on this device.</p>
+      <label class="dialog-label" for="workspace-name-input">Workspace name</label>
+      <input class="dialog-input" id="workspace-name-input" maxlength="24" placeholder="Orbit">
+      <label class="dialog-label" for="welcome-headline-input">Welcome headline</label>
+      <input class="dialog-input" id="welcome-headline-input" maxlength="48" placeholder="Where to today?">
+      <p class="dialog-help">Leave either field empty to use the default.</p>
       <span class="dialog-label">Corners</span>
       <div class="setting-options" id="corner-options"><button class="setting-choice" type="button" data-corners="sharp" aria-pressed="true">Sharp</button><button class="setting-choice" type="button" data-corners="soft" aria-pressed="false">Soft</button></div>
       <span class="dialog-label">Layout density</span>
       <div class="setting-options" id="density-options"><button class="setting-choice" type="button" data-density="roomy" aria-pressed="true">Roomy</button><button class="setting-choice" type="button" data-density="compact" aria-pressed="false">Compact</button></div>
+      <span class="dialog-label">Background</span>
+      <div class="appearance-options" id="background-options">
+        <button class="platform-choice" type="button" data-background-choice="glow" aria-pressed="true"><strong>Glow</strong><span>Subtle ambient color</span></button>
+        <button class="platform-choice" type="button" data-background-choice="aurora" aria-pressed="false"><strong>Aurora</strong><span>More colorful layers</span></button>
+        <button class="platform-choice" type="button" data-background-choice="flat" aria-pressed="false"><strong>Flat</strong><span>Clean solid backdrop</span></button>
+      </div>
+      <span class="dialog-label">Game tile columns</span>
+      <div class="setting-options" id="library-column-options">
+        <button class="setting-choice" type="button" data-library-columns="auto" aria-pressed="true">Auto</button>
+        <button class="setting-choice" type="button" data-library-columns="two" aria-pressed="false">2 columns</button>
+        <button class="setting-choice" type="button" data-library-columns="three" aria-pressed="false">3 columns</button>
+      </div>
+      <span class="dialog-label">Game library style</span>
+      <div class="setting-options" id="library-view-options">
+        <button class="setting-choice" type="button" data-library-view="grid" aria-pressed="true">Cards</button>
+        <button class="setting-choice" type="button" data-library-view="list" aria-pressed="false">List</button>
+      </div>
+      <span class="dialog-label">Sidebar</span>
+      <div class="setting-options" id="sidebar-options">
+        <button class="setting-choice" type="button" data-sidebar="full" aria-pressed="true">Full</button>
+        <button class="setting-choice" type="button" data-sidebar="compact" aria-pressed="false">Compact</button>
+      </div>
+      <span class="dialog-label">Page width</span>
+      <div class="setting-options" id="content-width-options">
+        <button class="setting-choice" type="button" data-content-width="standard" aria-pressed="true">Standard</button>
+        <button class="setting-choice" type="button" data-content-width="wide" aria-pressed="false">Wide</button>
+      </div>
+      <span class="dialog-label">Interface font</span>
+      <div class="setting-options" id="font-options">
+        <button class="setting-choice" type="button" data-font-choice="modern" aria-pressed="true">Modern</button>
+        <button class="setting-choice" type="button" data-font-choice="system" aria-pressed="false">System</button>
+        <button class="setting-choice" type="button" data-font-choice="mono" aria-pressed="false">Mono</button>
+      </div>
+      <span class="dialog-label">Motion</span>
+      <div class="setting-options" id="motion-options">
+        <button class="setting-choice" type="button" data-motion="standard" aria-pressed="true">Standard</button>
+        <button class="setting-choice" type="button" data-motion="reduced" aria-pressed="false">Reduced</button>
+      </div>
       <span class="dialog-label">Platform appearance</span>
       <div class="platform-options" id="platform-options">
         <button class="platform-choice" type="button" data-platform-choice="auto" aria-pressed="true"><strong>Auto</strong><span>Use this device</span></button>
@@ -1082,6 +1194,12 @@
     const recentList = document.querySelector('#recent-list');
     const installButton = document.querySelector('#install-button');
     const libraryGrid = document.querySelector('#library-grid');
+    const libraryFilter = document.querySelector('#library-filter');
+    const librarySort = document.querySelector('#library-sort');
+    const libraryCount = document.querySelector('#library-count');
+    const libraryFeedback = document.querySelector('#library-feedback');
+    const randomGameButton = document.querySelector('#random-game');
+    const importLibraryFile = document.querySelector('#import-library-file');
     const gameDialog = document.querySelector('#game-dialog');
     const gameFormEditor = document.querySelector('#game-form');
     const gameTitleInput = document.querySelector('#game-title-input');
@@ -1098,6 +1216,8 @@
     const customizeDialog = document.querySelector('#customize-dialog');
     const sectionSettings = document.querySelector('#section-settings');
     const accentColor = document.querySelector('#accent-color');
+    const workspaceNameInput = document.querySelector('#workspace-name-input');
+    const welcomeHeadlineInput = document.querySelector('#welcome-headline-input');
     const homeSections = document.querySelector('#home-sections');
     const personalNotes = document.querySelector('#personal-notes');
     const accountLink = document.querySelector('#account-link');
@@ -1111,6 +1231,7 @@
     const searchCacheKey = 'orbit-game-search-cache';
     const gameColors = { lime: '#c9f36b', blue: '#7c9cff', coral: '#ff926e', ice: '#7ce0db' };
     const themeAccents = { orbit: '#c9f36b', coral: '#ff926e', ice: '#7ce0db' };
+    const isGameColor = color => Object.prototype.hasOwnProperty.call(gameColors, color);
     const sectionDefinitions = [
       { id: 'launch', label: 'Launch game' },
       { id: 'library', label: 'My games' },
@@ -1226,17 +1347,36 @@
         .slice(0, 30)
         .map(game => ({
           ...game,
-          id: game.id,
+          id: String(game.id),
           title: game.title.slice(0, 48),
-          universeId: /^\d+$/.test(game.universeId || '') ? game.universeId : null,
-          color: gameColors[game.color] ? game.color : 'lime'
+          universeId: /^\d+$/.test(game.universeId || '') ? String(game.universeId) : null,
+          color: isGameColor(game.color) ? game.color : 'lime'
         }));
     }
 
+    function getVisibleLibraryGames() {
+      const query = libraryFilter.value.trim().toLocaleLowerCase();
+      const games = loadLibrary().filter(game =>
+        !query || game.title.toLocaleLowerCase().includes(query) || game.id.includes(query)
+      );
+      if (librarySort.value === 'name-asc') games.sort((a, b) => a.title.localeCompare(b.title));
+      if (librarySort.value === 'name-desc') games.sort((a, b) => b.title.localeCompare(a.title));
+      if (librarySort.value === 'recent') {
+        const recentOrder = new Map(loadRecents().map((game, index) => [game.id, index]));
+        games.sort((a, b) => (recentOrder.get(a.id) ?? Infinity) - (recentOrder.get(b.id) ?? Infinity));
+      }
+      return games;
+    }
+
     function renderLibrary() {
-      const games = loadLibrary();
+      const allGames = loadLibrary();
+      const games = getVisibleLibraryGames();
       libraryGrid.replaceChildren();
-      if (!games.length) {
+      libraryCount.textContent = allGames.length
+        ? (games.length === allGames.length ? `${allGames.length} game${allGames.length === 1 ? '' : 's'}` : `${games.length} of ${allGames.length} games`)
+        : '';
+      randomGameButton.disabled = games.length === 0;
+      if (!allGames.length) {
         const empty = document.createElement('div');
         empty.className = 'library-empty';
         const message = document.createElement('span');
@@ -1247,6 +1387,24 @@
         addButton.textContent = 'Add your first game';
         addButton.addEventListener('click', () => openGameSearch());
         empty.append(message, addButton);
+        libraryGrid.append(empty);
+        return;
+      }
+      if (!games.length) {
+        const empty = document.createElement('div');
+        empty.className = 'library-empty';
+        const message = document.createElement('span');
+        message.textContent = 'No saved games match that filter.';
+        const clearButton = document.createElement('button');
+        clearButton.className = 'orbit-button';
+        clearButton.type = 'button';
+        clearButton.textContent = 'Clear filter';
+        clearButton.addEventListener('click', () => {
+          libraryFilter.value = '';
+          renderLibrary();
+          libraryFilter.focus();
+        });
+        empty.append(message, clearButton);
         libraryGrid.append(empty);
         return;
       }
@@ -1301,6 +1459,81 @@
         tile.append(top, bottom);
         libraryGrid.append(tile);
       });
+    }
+
+    function exportLibraryBackup() {
+      const backup = {
+        format: 'orbit-library-backup',
+        version: 1,
+        exportedAt: new Date().toISOString(),
+        games: loadLibrary().map(({ id, title, universeId, color }) => ({ id, title, universeId, color }))
+      };
+      const url = URL.createObjectURL(new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' }));
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `orbit-library-${new Date().toISOString().slice(0, 10)}.json`;
+      document.body.append(link);
+      link.click();
+      link.remove();
+      window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+      libraryFeedback.textContent = `Exported ${backup.games.length} saved game${backup.games.length === 1 ? '' : 's'}.`;
+    }
+
+    async function importLibraryBackup(file) {
+      if (file.size > 256 * 1024) {
+        libraryFeedback.textContent = 'That backup file is too large to import.';
+        return;
+      }
+      try {
+        const backup = JSON.parse(await file.text());
+        if (backup?.format !== 'orbit-library-backup' || backup.version !== 1 || !Array.isArray(backup.games) || backup.games.length > 30) {
+          throw new Error('This is not a valid Orbit library backup.');
+        }
+        const ids = new Set();
+        const imported = backup.games.map(game => {
+          if (!game || typeof game.id !== 'string' || !/^\d+$/.test(game.id) ||
+              typeof game.title !== 'string' || !game.title.trim() || game.title.length > 48 ||
+              (game.universeId != null && (typeof game.universeId !== 'string' || !/^\d+$/.test(game.universeId))) ||
+              (game.color != null && !isGameColor(game.color)) || ids.has(game.id)) {
+            throw new Error('The backup contains invalid or duplicate game entries.');
+          }
+          ids.add(game.id);
+          return {
+            id: game.id,
+            title: game.title.trim(),
+            universeId: game.universeId || null,
+            color: game.color || 'lime'
+          };
+        });
+        const merged = loadLibrary();
+        let added = 0;
+        let updated = 0;
+        let skipped = 0;
+        imported.forEach(game => {
+          const index = merged.findIndex(existing => existing.id === game.id);
+          if (index >= 0) {
+            merged[index] = game;
+            updated += 1;
+          } else if (merged.length < 30) {
+            merged.push(game);
+            added += 1;
+          } else {
+            skipped += 1;
+          }
+        });
+        saveJson(libraryKey, merged);
+        const storedLibrary = loadLibrary().map(({ id, title, universeId, color }) => ({ id, title, universeId, color }));
+        const expectedLibrary = merged.map(({ id, title, universeId, color }) => ({ id, title, universeId, color }));
+        if (JSON.stringify(storedLibrary) !== JSON.stringify(expectedLibrary)) {
+          throw new Error('Could not save the imported library in this browser.');
+        }
+        renderLibrary();
+        libraryFeedback.textContent = `Backup merged: ${added} added, ${updated} updated${skipped ? `, ${skipped} skipped (30-game limit)` : ''}.`;
+      } catch (error) {
+        libraryFeedback.textContent = error instanceof SyntaxError
+          ? 'Could not read that JSON backup file.'
+          : error.message || 'Could not import the library backup.';
+      }
     }
 
     function renderRecents() {
@@ -1693,7 +1926,7 @@
     }
 
     function setGameColor(color) {
-      selectedGameColor = gameColors[color] ? color : 'lime';
+      selectedGameColor = isGameColor(color) ? color : 'lime';
       document.querySelectorAll('.color-choice').forEach(button => {
         button.setAttribute('aria-pressed', String(button.dataset.color === selectedGameColor));
       });
@@ -1712,6 +1945,15 @@
         corners: ['sharp', 'soft'].includes(saved.corners) ? saved.corners : 'sharp',
         density: ['roomy', 'compact'].includes(saved.density) ? saved.density : 'roomy',
         platform: ['auto', 'ios', 'android', 'windows', 'linux', 'chromebook'].includes(saved.platform) ? saved.platform : 'auto',
+        workspaceName: typeof saved.workspaceName === 'string' ? saved.workspaceName.trim().slice(0, 24) : '',
+        welcomeHeadline: typeof saved.welcomeHeadline === 'string' ? saved.welcomeHeadline.trim().slice(0, 48) : '',
+        background: ['glow', 'aurora', 'flat'].includes(saved.background) ? saved.background : 'glow',
+        libraryColumns: ['auto', 'two', 'three'].includes(saved.libraryColumns) ? saved.libraryColumns : 'auto',
+        libraryView: ['grid', 'list'].includes(saved.libraryView) ? saved.libraryView : 'grid',
+        sidebar: ['full', 'compact'].includes(saved.sidebar) ? saved.sidebar : 'full',
+        contentWidth: ['standard', 'wide'].includes(saved.contentWidth) ? saved.contentWidth : 'standard',
+        interfaceFont: ['modern', 'system', 'mono'].includes(saved.interfaceFont) ? saved.interfaceFont : 'modern',
+        motion: ['standard', 'reduced'].includes(saved.motion) ? saved.motion : 'standard',
         order,
         visible: Object.fromEntries(validIds.map(id => [id, visible[id] !== false]))
       };
@@ -1727,9 +1969,20 @@
       document.documentElement.dataset.theme = settings.theme;
       document.documentElement.dataset.corners = settings.corners;
       document.documentElement.dataset.density = settings.density;
+      document.documentElement.dataset.background = settings.background;
+      document.documentElement.dataset.libraryColumns = settings.libraryColumns;
+      document.documentElement.dataset.libraryView = settings.libraryView;
+      document.documentElement.dataset.sidebar = settings.sidebar;
+      document.documentElement.dataset.contentWidth = settings.contentWidth;
+      document.documentElement.dataset.interfaceFont = settings.interfaceFont;
+      document.documentElement.dataset.motion = settings.motion;
       if (settings.accent) document.documentElement.style.setProperty('--orbit-lime', settings.accent);
       else document.documentElement.style.removeProperty('--orbit-lime');
       accentColor.value = settings.accent || themeAccents[settings.theme];
+      workspaceNameInput.value = settings.workspaceName;
+      welcomeHeadlineInput.value = settings.welcomeHeadline;
+      applyWorkspaceName(settings.workspaceName);
+      document.querySelector('#welcome-headline').textContent = settings.welcomeHeadline || 'Where to today?';
       settings.order.forEach(id => {
         const section = homeSections.querySelector(`[data-home-section="${id}"]`);
         if (!section) return;
@@ -1748,7 +2001,38 @@
       document.querySelectorAll('[data-platform-choice]').forEach(button => {
         button.setAttribute('aria-pressed', String(button.dataset.platformChoice === settings.platform));
       });
+      document.querySelectorAll('button[data-background-choice]').forEach(button => {
+        button.setAttribute('aria-pressed', String(button.dataset.backgroundChoice === settings.background));
+      });
+      document.querySelectorAll('button[data-library-columns]').forEach(button => {
+        button.setAttribute('aria-pressed', String(button.dataset.libraryColumns === settings.libraryColumns));
+      });
+      document.querySelectorAll('button[data-library-view]').forEach(button => {
+        button.setAttribute('aria-pressed', String(button.dataset.libraryView === settings.libraryView));
+      });
+      document.querySelectorAll('button[data-sidebar]').forEach(button => {
+        button.setAttribute('aria-pressed', String(button.dataset.sidebar === settings.sidebar));
+      });
+      document.querySelectorAll('button[data-content-width]').forEach(button => {
+        button.setAttribute('aria-pressed', String(button.dataset.contentWidth === settings.contentWidth));
+      });
+      document.querySelectorAll('[data-font-choice]').forEach(button => {
+        button.setAttribute('aria-pressed', String(button.dataset.fontChoice === settings.interfaceFont));
+      });
+      document.querySelectorAll('button[data-motion]').forEach(button => {
+        button.setAttribute('aria-pressed', String(button.dataset.motion === settings.motion));
+      });
       renderSectionSettings(settings);
+    }
+
+    function applyWorkspaceName(name) {
+      const displayName = name || 'Orbit';
+      const brand = document.querySelector('#workspace-brand');
+      const dot = document.createElement('span');
+      dot.textContent = '.';
+      brand.replaceChildren(document.createTextNode(displayName.toUpperCase()), dot);
+      document.querySelector('#workspace-breadcrumb').textContent = displayName;
+      document.title = name ? `${displayName} — Orbit Launcher` : 'Orbit - Roblox Launcher';
     }
 
     function renderSectionSettings(settings = loadSettings()) {
@@ -1813,11 +2097,19 @@
       applySettings();
     }
 
+    function saveTextSetting(key, value, limit, updateDisplay) {
+      const settings = loadSettings();
+      settings[key] = value.trim().slice(0, limit);
+      saveJson(settingsKey, settings);
+      updateDisplay(settings[key]);
+    }
+
     function openPlace(id) {
       const games = loadRecents().filter(game => game.id !== id);
       games.unshift({ id });
       saveJson(storageKey, games.slice(0, 5));
       renderRecents();
+      if (librarySort.value === 'recent') renderLibrary();
       const fallback = window.open(`https://www.roblox.com/games/${id}?launch`, '_blank', 'noopener,noreferrer');
       const launchLink = document.createElement('a');
       launchLink.href = `roblox://experiences/start?placeId=${encodeURIComponent(id)}`;
@@ -1858,6 +2150,27 @@
     });
 
     document.querySelector('#add-game-open').addEventListener('click', () => openGameSearch());
+    libraryFilter.addEventListener('input', renderLibrary);
+    librarySort.addEventListener('change', renderLibrary);
+    randomGameButton.addEventListener('click', () => {
+      const games = getVisibleLibraryGames();
+      if (!games.length) {
+        libraryFeedback.textContent = 'Add a game or clear the filter to use Surprise me.';
+        return;
+      }
+      const game = games[Math.floor(Math.random() * games.length)];
+      libraryFeedback.textContent = `Surprise pick: ${game.title}. Opening it now...`;
+      openPlace(game.id);
+    });
+    document.querySelector('#export-library').addEventListener('click', exportLibraryBackup);
+    document.querySelector('#import-library-open').addEventListener('click', () => {
+      importLibraryFile.value = '';
+      importLibraryFile.click();
+    });
+    importLibraryFile.addEventListener('change', async () => {
+      const [file] = importLibraryFile.files || [];
+      if (file) await importLibraryBackup(file);
+    });
     searchForm.addEventListener('submit', searchRobloxGames);
     searchResults.addEventListener('click', event => {
       const option = event.target.closest('button[data-result-index]');
@@ -1919,6 +2232,42 @@
     document.querySelector('#platform-options').addEventListener('click', event => {
       const button = event.target.closest('button[data-platform-choice]');
       if (button) setAppearance('platform', button.dataset.platformChoice, ['auto', 'ios', 'android', 'windows', 'linux', 'chromebook']);
+    });
+    document.querySelector('#background-options').addEventListener('click', event => {
+      const button = event.target.closest('button[data-background-choice]');
+      if (button) setAppearance('background', button.dataset.backgroundChoice, ['glow', 'aurora', 'flat']);
+    });
+    document.querySelector('#library-column-options').addEventListener('click', event => {
+      const button = event.target.closest('button[data-library-columns]');
+      if (button) setAppearance('libraryColumns', button.dataset.libraryColumns, ['auto', 'two', 'three']);
+    });
+    document.querySelector('#library-view-options').addEventListener('click', event => {
+      const button = event.target.closest('button[data-library-view]');
+      if (button) setAppearance('libraryView', button.dataset.libraryView, ['grid', 'list']);
+    });
+    document.querySelector('#sidebar-options').addEventListener('click', event => {
+      const button = event.target.closest('button[data-sidebar]');
+      if (button) setAppearance('sidebar', button.dataset.sidebar, ['full', 'compact']);
+    });
+    document.querySelector('#content-width-options').addEventListener('click', event => {
+      const button = event.target.closest('button[data-content-width]');
+      if (button) setAppearance('contentWidth', button.dataset.contentWidth, ['standard', 'wide']);
+    });
+    document.querySelector('#font-options').addEventListener('click', event => {
+      const button = event.target.closest('button[data-font-choice]');
+      if (button) setAppearance('interfaceFont', button.dataset.fontChoice, ['modern', 'system', 'mono']);
+    });
+    document.querySelector('#motion-options').addEventListener('click', event => {
+      const button = event.target.closest('button[data-motion]');
+      if (button) setAppearance('motion', button.dataset.motion, ['standard', 'reduced']);
+    });
+    workspaceNameInput.addEventListener('input', () => {
+      saveTextSetting('workspaceName', workspaceNameInput.value, 24, applyWorkspaceName);
+    });
+    welcomeHeadlineInput.addEventListener('input', () => {
+      saveTextSetting('welcomeHeadline', welcomeHeadlineInput.value, 48, value => {
+        document.querySelector('#welcome-headline').textContent = value || 'Where to today?';
+      });
     });
 
     gameFormEditor.addEventListener('submit', event => {
