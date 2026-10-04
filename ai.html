@@ -24,6 +24,7 @@
       color: var(--ink);
     }
     * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
     body {
       min-width: 320px;
       min-height: 100vh;
@@ -98,12 +99,40 @@
     .action.small { min-height: 34px; padding: 0 10px; font-size: 12px; }
     .search-results { margin-top: 13px; display: grid; gap: 7px; }
     .search-results:empty { display: none; }
+    .search-toolbar { margin-top: 12px; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+    .search-sort { min-height: 35px; padding: 0 9px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel-raised); color: var(--ink); font-size: 12px; }
+    .search-page-status { color: var(--muted); font-size: 11px; }
     .search-result { min-width: 0; padding: 11px; display: flex; justify-content: space-between; align-items: center; gap: 12px; border: 1px solid var(--line); border-radius: 9px; background: #151a27; }
     .search-result-copy { min-width: 0; }
     .search-result-copy strong { display: block; overflow: hidden; font-size: 14px; text-overflow: ellipsis; white-space: nowrap; }
     .search-result-copy span { display: block; margin-top: 4px; color: var(--muted); font-size: 12px; }
+    .search-result-actions { display: flex; flex: 0 0 auto; gap: 6px; }
     .search-note, .status { color: var(--muted); font-size: 12px; line-height: 1.5; }
     .search-note { padding: 12px; border: 1px dashed var(--line); border-radius: 9px; }
+    .search-more { width: 100%; margin-top: 9px; }
+    .detail-dialog { width: min(680px, calc(100% - 24px)); max-height: min(82vh, 760px); overflow: auto; padding: 0; border: 1px solid var(--line); border-radius: 15px; background: var(--panel); color: var(--ink); box-shadow: 0 25px 90px #0009; }
+    .detail-dialog::backdrop { background: #080a10d9; backdrop-filter: blur(5px); }
+    .detail-head { padding: 17px 19px; display: flex; justify-content: space-between; align-items: start; gap: 14px; border-bottom: 1px solid var(--line); }
+    .detail-head-actions { display: flex; align-items: center; gap: 7px; }
+    .detail-head h2 { margin: 0; font-size: 21px; }
+    .detail-head p { margin: 5px 0 0; color: var(--muted); font-size: 12px; }
+    .detail-body { padding: 18px 19px; }
+    .detail-art { width: 100%; max-height: 230px; object-fit: cover; border: 1px solid var(--line); border-radius: 11px; background: var(--panel-raised); }
+    .detail-stats { margin: 13px 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 7px; }
+    .detail-stat { padding: 10px; border: 1px solid var(--line); border-radius: 9px; background: #141824; }
+    .detail-stat strong { display: block; font-size: 15px; }
+    .detail-stat span { display: block; margin-top: 4px; color: var(--muted); font-size: 10px; text-transform: uppercase; }
+    .detail-description { max-height: 125px; overflow: auto; color: #ccd1df; font-size: 13px; line-height: 1.65; white-space: pre-wrap; }
+    .detail-body h3 { margin: 20px 0 9px; font-size: 14px; }
+    .guide-actions { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 7px; }
+    .guide-note { margin: 9px 0 0; color: var(--muted); font-size: 11px; line-height: 1.5; }
+    .detail-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+    .detail-chip { padding: 5px 8px; border: 1px solid #a9baff42; border-radius: 99px; color: var(--blue); font-size: 11px; }
+    .detail-recommendations { display: grid; gap: 6px; }
+    .recommendation { padding: 9px 10px; display: flex; justify-content: space-between; align-items: center; gap: 10px; border: 1px solid var(--line); border-radius: 8px; }
+    .recommendation strong { display: block; font-size: 12px; }
+    .recommendation span { display: block; margin-top: 3px; color: var(--muted); font-size: 10px; }
+    .detail-empty { color: var(--muted); font-size: 12px; }
     .status { min-height: 19px; margin: 7px 0 0; }
     .status.error { color: var(--pink); }
     .queue-tools { padding: 11px 21px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: #141824; }
@@ -113,7 +142,8 @@
     .queue-item:last-child { border-bottom: 0; }
     .queue-position { width: 29px; height: 29px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 8px; color: var(--muted); font: 12px var(--mono); }
     .queue-place { min-width: 0; }
-    .queue-place strong { display: block; font-size: 14px; }
+    .queue-title { max-width: 100%; padding: 0; display: block; overflow: hidden; border: 0; background: none; color: var(--ink); font-size: 14px; font-weight: 800; text-align: left; text-overflow: ellipsis; white-space: nowrap; cursor: pointer; }
+    .queue-title:hover { color: var(--lime); }
     .queue-place span { display: block; margin-top: 4px; overflow: hidden; color: var(--muted); font: 11px var(--mono); text-overflow: ellipsis; }
     .row-actions { display: flex; gap: 5px; }
     .icon-action { width: 34px; height: 34px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 8px; background: #222838; color: var(--ink); font-size: 15px; cursor: pointer; }
@@ -192,11 +222,15 @@
       .queue-tools { padding: 10px 13px; }
       .queue-tools .spacer { display: none; }
       .queue-item { padding-inline: 1px; gap: 7px; grid-template-columns: 27px minmax(0, 1fr) auto; }
-      .queue-place strong { font-size: 13px; }
+      .queue-title { font-size: 13px; }
       .queue-place span { font-size: 10px; }
       .row-actions { gap: 3px; }
       .icon-action { width: 30px; height: 32px; }
       .queue-item > .action { min-height: 32px; }
+      .search-result { align-items: stretch; flex-direction: column; }
+      .search-result-actions { width: 100%; }
+      .search-result-actions .action { flex: 1; }
+      .detail-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .side-stack { grid-template-columns: 1fr; }
       .session-panel { padding: 18px; }
       .clock { margin: 20px 0 14px; }
@@ -234,7 +268,9 @@
               <label class="field-label" for="search-query">Find a game by name</label>
               <div class="entry-row"><input class="text-field" id="search-query" type="search" minlength="2" maxlength="80" autocomplete="off" placeholder="Search Roblox experiences…" aria-label="Search Roblox games"><button class="action primary" id="search-submit" type="submit">⌕ Search</button></div>
             </form>
+            <div class="search-toolbar"><label class="field-label" for="search-sort" style="margin:0">Sort matches</label><select class="search-sort" id="search-sort" aria-label="Sort game search results"><option value="relevance">Roblox relevance</option><option value="players">Most players</option><option value="name">Name A–Z</option></select><span class="search-page-status" id="search-page-status"></span></div>
             <div class="search-results" id="search-results" aria-live="polite"></div>
+            <button class="action search-more" id="search-more" type="button" hidden>Load more results</button>
             <p class="status" id="queue-status" role="status" aria-live="polite"></p>
           </div>
           <div class="queue-tools">
@@ -272,6 +308,10 @@
       <footer><span>ORBIT QUEUE · LAUNCHES OPEN ON ROBLOX</span><span><a href="/privacy.html">Privacy</a> · <a href="/terms.html">Terms</a> · <a href="/index.html">Classic launcher</a></span></footer>
     </main>
   </div>
+  <dialog class="detail-dialog" id="detail-dialog" aria-labelledby="detail-title">
+    <div class="detail-head"><div><h2 id="detail-title">Experience details</h2><p id="detail-creator"></p></div><div class="detail-head-actions"><a class="action small" id="detail-launch" href="#" target="_blank" rel="noopener noreferrer" hidden>Open on Roblox ↗</a><button class="icon-action" id="detail-close" type="button" aria-label="Close details">×</button></div></div>
+    <div class="detail-body" id="detail-body"><p class="detail-empty">Choose a game to inspect.</p></div>
+  </dialog>
   <script>
     (() => {
       const queueKey = 'orbit-run-queue-v2';
@@ -290,6 +330,12 @@
       let tickHandle = 0;
       let searchRequest = 0;
       let searchController = null;
+      let searchQuery = '';
+      let searchCursor = '';
+      let searchTotalShown = 0;
+      let searchResults = [];
+      let detailRequest = 0;
+      let detailController = null;
 
       function setStatus(message, isError = false) {
         queueStatus.textContent = message;
@@ -341,8 +387,12 @@
           position.textContent = String(index + 1).padStart(2, '0');
           const place = document.createElement('div');
           place.className = 'queue-place';
-          const title = document.createElement('strong');
+          const title = document.createElement('button');
+          title.type = 'button';
+          title.className = 'queue-title';
           title.textContent = `${index === 0 ? 'Up next · ' : ''}${game.name}`;
+          title.setAttribute('aria-label', `Inspect ${game.name}`);
+          title.addEventListener('click', () => inspectGame(game));
           const link = document.createElement('span');
           link.textContent = `${game.creator} · ${Number(game.playerCount || 0).toLocaleString()} playing`;
           place.append(title, link);
@@ -412,6 +462,8 @@
         note.textContent = message;
         if (isError) note.setAttribute('role', 'alert');
         document.querySelector('#search-results').replaceChildren(note);
+        document.querySelector('#search-more').hidden = true;
+        document.querySelector('#search-page-status').textContent = '';
       }
 
       function queueGame(game, button) {
@@ -431,6 +483,7 @@
         const queued = {
           id,
           name: game.name.trim().slice(0, 120),
+          universeId: /^\d+$/.test(String(game.universeId || '')) ? String(game.universeId) : '',
           creator: String(game.creator || 'Roblox creator').slice(0, 100),
           playerCount: Number.isFinite(Number(game.playerCount)) ? Number(game.playerCount) : 0
         };
@@ -438,14 +491,59 @@
         button.textContent = 'Queued';
         button.disabled = true;
         setStatus(`${queued.name} added to the run.`);
+        renderSearchResults();
       }
 
-      async function searchGames(event) {
-        event.preventDefault();
-        const query = document.querySelector('#search-query').value.trim().replace(/\s+/g, ' ');
+      function renderSearchResults() {
         const results = document.querySelector('#search-results');
+        results.replaceChildren();
+        const sort = document.querySelector('#search-sort').value;
+        const games = [...searchResults];
+        if (sort === 'players') games.sort((a, b) => Number(b.playerCount || 0) - Number(a.playerCount || 0));
+        if (sort === 'name') games.sort((a, b) => String(a.name || '').localeCompare(String(b.name || '')));
+        games.forEach(game => {
+          const row = document.createElement('div');
+          row.className = 'search-result';
+          const copy = document.createElement('div');
+          copy.className = 'search-result-copy';
+          const name = document.createElement('strong');
+          name.textContent = String(game.name || 'Untitled experience');
+          const details = document.createElement('span');
+          details.textContent = `By ${String(game.creator || 'Roblox creator')} · ${Number(game.playerCount || 0).toLocaleString()} playing${game.ageRating ? ` · ${game.ageRating}` : ''}`;
+          copy.append(name, details);
+          const id = String(game.placeId || '');
+          const isQueued = queue.some(item => item.id === id);
+          const actions = document.createElement('div');
+          actions.className = 'search-result-actions';
+          const inspect = document.createElement('button');
+          inspect.type = 'button';
+          inspect.className = 'action small';
+          inspect.textContent = 'Details';
+          inspect.setAttribute('aria-label', `View details for ${name.textContent}`);
+          inspect.addEventListener('click', () => inspectGame(game));
+          const add = document.createElement('button');
+          add.type = 'button';
+          add.className = 'action small';
+          add.textContent = isQueued ? 'Queued' : queue.length >= 12 ? 'Queue full' : '＋ Queue';
+          add.disabled = isQueued || queue.length >= 12;
+          add.setAttribute('aria-label', `${isQueued ? 'Already queued' : 'Queue'} ${name.textContent}`);
+          add.addEventListener('click', () => queueGame(game, add));
+          actions.append(inspect, add);
+          row.append(copy, actions);
+          results.append(row);
+        });
+        document.querySelector('#search-page-status').textContent =
+          `${searchTotalShown} result${searchTotalShown === 1 ? '' : 's'}${searchCursor ? ' · more available' : ''}`;
+        document.querySelector('#search-more').hidden = !searchCursor;
+      }
+
+      async function searchGames(event, append = false) {
+        event?.preventDefault();
+        const inputQuery = document.querySelector('#search-query').value.trim().replace(/\s+/g, ' ');
+        const query = append ? searchQuery : inputQuery;
         const submit = document.querySelector('#search-submit');
-        if (query.length < 2) {
+        const more = document.querySelector('#search-more');
+        if (!append && query.length < 2) {
           showSearchNote('Enter at least two letters to search Roblox.', true);
           document.querySelector('#search-query').focus();
           return;
@@ -454,10 +552,20 @@
         searchController?.abort();
         searchController = new AbortController();
         submit.disabled = true;
-        submit.textContent = 'Searching…';
-        showSearchNote(`Looking for “${query}”…`);
+        more.disabled = true;
+        if (append) more.textContent = 'Loading…';
+        else {
+          submit.textContent = 'Searching…';
+          searchQuery = query;
+          searchCursor = '';
+          searchResults = [];
+          searchTotalShown = 0;
+          showSearchNote(`Looking for “${query}”…`);
+        }
         try {
-          const response = await fetch(`/api/roblox/search?q=${encodeURIComponent(query)}`, {
+          const params = new URLSearchParams({ q: query });
+          if (append && searchCursor) params.set('cursor', searchCursor);
+          const response = await fetch(`/api/roblox/search?${params}`, {
             headers: { Accept: 'application/json' },
             signal: searchController.signal
           });
@@ -476,41 +584,192 @@
           if (requestId !== searchRequest) return;
           if (!response.ok) throw new Error(payload.error || 'Search is unavailable right now. Try again.');
           const games = Array.isArray(payload.results) ? payload.results : [];
-          if (!games.length) {
+          if (!games.length && !append) {
             showSearchNote('No game names matched. Try a different search.');
             return;
           }
-          results.replaceChildren();
-          games.slice(0, 12).forEach(game => {
-            const row = document.createElement('div');
-            row.className = 'search-result';
-            const copy = document.createElement('div');
-            copy.className = 'search-result-copy';
-            const name = document.createElement('strong');
-            name.textContent = String(game.name || 'Untitled experience');
-            const details = document.createElement('span');
-            details.textContent = `By ${String(game.creator || 'Roblox creator')} · ${Number(game.playerCount || 0).toLocaleString()} playing`;
-            copy.append(name, details);
+          searchCursor = typeof payload.nextPageToken === 'string' ? payload.nextPageToken : '';
+          const known = new Set(searchResults.map(game => String(game.placeId)));
+          const unique = games.filter(game => {
             const id = String(game.placeId || '');
-            const queued = queue.some(item => item.id === id);
-            const add = document.createElement('button');
-            add.type = 'button';
-            add.className = 'action small';
-            add.textContent = queued ? 'Queued' : '＋ Queue';
-            add.disabled = queued;
-            add.setAttribute('aria-label', `${queued ? 'Already queued' : 'Queue'} ${name.textContent}`);
-            add.addEventListener('click', () => queueGame(game, add));
-            row.append(copy, add);
-            results.append(row);
+            if (!/^\d+$/.test(id) || known.has(id)) return false;
+            known.add(id);
+            return true;
           });
+          searchResults.push(...unique);
+          searchTotalShown = searchResults.length;
+          if (!searchTotalShown) {
+            showSearchNote('No more unique matches were returned. Try another search.');
+            return;
+          }
+          renderSearchResults();
         } catch (error) {
           if (error.name === 'AbortError' || requestId !== searchRequest) return;
-          showSearchNote(error.message || 'Could not search Roblox right now.', true);
+          if (append && searchResults.length) {
+            setStatus(error.message || 'Could not load more Roblox results.', true);
+          } else {
+            showSearchNote(error.message || 'Could not search Roblox right now.', true);
+          }
         } finally {
           if (requestId === searchRequest) {
             submit.disabled = false;
             submit.textContent = '⌕ Search';
+            more.disabled = false;
+            more.textContent = 'Load more results';
           }
+        }
+      }
+
+      function formatCount(value) {
+        return Number(value || 0).toLocaleString();
+      }
+
+      function addDetailStat(container, value, label) {
+        const stat = document.createElement('div');
+        stat.className = 'detail-stat';
+        const strong = document.createElement('strong');
+        strong.textContent = value;
+        const caption = document.createElement('span');
+        caption.textContent = label;
+        stat.append(strong, caption);
+        container.append(stat);
+      }
+
+      async function inspectGame(result) {
+        const dialog = document.querySelector('#detail-dialog');
+        const body = document.querySelector('#detail-body');
+        const title = document.querySelector('#detail-title');
+        const creator = document.querySelector('#detail-creator');
+        const requestId = ++detailRequest;
+        detailController?.abort();
+        detailController = new AbortController();
+        title.textContent = String(result.name || 'Experience details');
+        creator.textContent = `By ${String(result.creator || 'Roblox creator')} · loading public details…`;
+        document.querySelector('#detail-launch').hidden = true;
+        body.replaceChildren();
+        const loading = document.createElement('p');
+        loading.className = 'detail-empty';
+        loading.textContent = 'Loading details and similar experiences…';
+        body.append(loading);
+        if (!dialog.open) dialog.showModal();
+        const universeId = String(result.universeId || '');
+        if (!/^\d+$/.test(universeId)) {
+          loading.textContent = 'Roblox did not provide an experience ID for this result.';
+          return;
+        }
+        try {
+          const response = await fetch(`/api/roblox/game?universeId=${encodeURIComponent(universeId)}`, {
+            headers: { Accept: 'application/json' },
+            signal: detailController.signal
+          });
+          const contentType = response.headers.get('content-type') || '';
+          if (!contentType.toLowerCase().includes('application/json')) {
+            throw new Error(response.status === 404
+              ? 'Game details need the Vercel API. Open this on the deployed site or run `vercel dev`.'
+              : 'Game details returned an unexpected response.');
+          }
+          let payload;
+          try {
+            payload = await response.json();
+          } catch {
+            throw new Error('Game details returned invalid data. Try again later.');
+          }
+          if (requestId !== detailRequest) return;
+          if (!response.ok) throw new Error(payload.error || 'Could not load experience details.');
+          const game = payload.game;
+          if (!game) throw new Error('Roblox returned no public experience details.');
+          const launchLink = document.querySelector('#detail-launch');
+          launchLink.href = `https://www.roblox.com/games/${encodeURIComponent(String(game.placeId))}?launch`;
+          launchLink.hidden = false;
+          creator.textContent = `By ${game.creator?.name || result.creator || 'Roblox creator'}${game.creator?.verified ? ' · Verified' : ''} · ${game.genre || 'Genre not listed'}`;
+          body.replaceChildren();
+          if (game.thumbnail) {
+            const image = document.createElement('img');
+            image.className = 'detail-art';
+            image.src = game.thumbnail;
+            image.alt = `${game.name} game icon`;
+            image.loading = 'lazy';
+            body.append(image);
+          }
+          const stats = document.createElement('div');
+          stats.className = 'detail-stats';
+          addDetailStat(stats, formatCount(game.playing), 'Playing');
+          addDetailStat(stats, formatCount(game.visits), 'Visits');
+          addDetailStat(stats, formatCount(game.favorites), 'Favorites');
+          addDetailStat(stats, game.maxPlayers ? formatCount(game.maxPlayers) : '—', 'Max server');
+          body.append(stats);
+          const description = document.createElement('p');
+          description.className = 'detail-description';
+          description.textContent = game.description || 'No public description was provided.';
+          body.append(description);
+          const guideActions = document.createElement('div');
+          guideActions.className = 'guide-actions';
+          const guideSearch = document.createElement('a');
+          guideSearch.className = 'action';
+          guideSearch.target = '_blank';
+          guideSearch.rel = 'noopener noreferrer';
+          guideSearch.href = `https://www.google.com/search?q=${encodeURIComponent(`${game.name} Roblox how to play guide tips`)}`;
+          guideSearch.textContent = 'Google how to play ↗';
+          guideActions.append(guideSearch);
+          body.append(guideActions);
+          const guideNote = document.createElement('p');
+          guideNote.className = 'guide-note';
+          guideNote.textContent = 'Roblox stats and description above are public game data. Google opens independent web guides; check the source and date before following advice.';
+          body.append(guideNote);
+          if (Array.isArray(game.gameplay) && game.gameplay.length) {
+            const heading = document.createElement('h3');
+            heading.textContent = 'Gameplay signals in the description';
+            const chips = document.createElement('div');
+            chips.className = 'detail-chips';
+            game.gameplay.forEach(system => {
+              const chip = document.createElement('span');
+              chip.className = 'detail-chip';
+              chip.textContent = `${system.label}: ${system.evidence.join(', ')}`;
+              chips.append(chip);
+            });
+            body.append(heading, chips);
+          }
+          const recommendations = Array.isArray(payload.connections) ? payload.connections : [];
+          const heading = document.createElement('h3');
+          heading.textContent = 'Similar experiences';
+          body.append(heading);
+          if (!recommendations.length) {
+            const empty = document.createElement('p');
+            empty.className = 'detail-empty';
+            empty.textContent = 'No similar games were returned.';
+            body.append(empty);
+            return;
+          }
+          const list = document.createElement('div');
+          list.className = 'detail-recommendations';
+          recommendations.forEach(recommendation => {
+            const row = document.createElement('div');
+            row.className = 'recommendation';
+            const copy = document.createElement('div');
+            const name = document.createElement('strong');
+            name.textContent = recommendation.name;
+            const meta = document.createElement('span');
+            meta.textContent = `By ${recommendation.creator} · ${formatCount(recommendation.playerCount)} playing`;
+            copy.append(name, meta);
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.className = 'action small';
+            const alreadyQueued = queue.some(item => item.id === String(recommendation.placeId));
+            button.textContent = alreadyQueued ? 'Queued' : '＋ Queue';
+            button.disabled = alreadyQueued || queue.length >= 12;
+            button.addEventListener('click', () => queueGame(recommendation, button));
+            row.append(copy, button);
+            list.append(row);
+          });
+          body.append(list);
+        } catch (error) {
+          if (error.name === 'AbortError' || requestId !== detailRequest) return;
+          body.replaceChildren();
+          const message = document.createElement('p');
+          message.className = 'detail-empty';
+          message.setAttribute('role', 'alert');
+          message.textContent = error.message || 'Could not load experience details.';
+          body.append(message);
         }
       }
 
@@ -526,6 +785,7 @@
               clean.push({
                 id,
                 name: item.name.slice(0, 120),
+                universeId: /^\d+$/.test(String(item.universeId || '')) ? String(item.universeId) : '',
                 creator: String(item.creator || 'Roblox creator').slice(0, 100),
                 playerCount: Number.isFinite(Number(item.playerCount)) ? Number(item.playerCount) : 0
               });
@@ -662,6 +922,18 @@
       }
 
       document.querySelector('#search-form').addEventListener('submit', searchGames);
+      document.querySelector('#search-more').addEventListener('click', event => {
+        if (searchCursor) searchGames(null, true);
+      });
+      document.querySelector('#search-sort').addEventListener('change', renderSearchResults);
+      document.querySelector('#detail-close').addEventListener('click', () => {
+        detailRequest += 1;
+        detailController?.abort();
+        document.querySelector('#detail-dialog').close();
+      });
+      document.querySelector('#detail-dialog').addEventListener('click', event => {
+        if (event.target === event.currentTarget) event.currentTarget.close();
+      });
       document.querySelector('#launch-next').addEventListener('click', launchNext);
       document.querySelector('#shuffle-queue').addEventListener('click', () => {
         const shuffled = [...queue];

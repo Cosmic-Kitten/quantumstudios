@@ -289,6 +289,8 @@
     .intel-title { margin: 0 0 5px; font-size: 18px; line-height: 1.25; }
     .intel-creator { color: var(--orbit-muted); font-size: 10px; }
     .intel-description { max-height: 110px; overflow: auto; margin: 10px 0 0; color: #c2cbc2; font-size: 10px; line-height: 1.7; white-space: pre-wrap; }
+    .intel-guide-link { display: inline-flex; margin-top: 10px; padding: 7px 9px; border: 1px solid var(--orbit-line); color: var(--orbit-lime); font-size: 9px; font-weight: 800; text-decoration: none; }
+    .intel-guide-link:hover { border-color: var(--orbit-lime); }
     .intel-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 7px; }
     .intel-stat { padding: 9px; border: 1px solid var(--orbit-line); background: var(--orbit-bg); }
     .intel-stat strong { display: block; font-size: 11px; }
@@ -1798,6 +1800,11 @@
       creator.rel = 'noopener noreferrer';
       intro.append(creator);
       intro.append(makeIntelElement('p', 'intel-description', game.description || 'The creator has not provided a public description.'));
+      const guideSearch = makeIntelElement('a', 'intel-guide-link', 'Google web guides & how to play ↗');
+      guideSearch.href = `https://www.google.com/search?q=${encodeURIComponent(`${game.name} Roblox how to play guide tips`)}`;
+      guideSearch.target = '_blank';
+      guideSearch.rel = 'noopener noreferrer';
+      intro.append(guideSearch);
       overview.append(cover, intro);
       intelContent.append(overview);
 
