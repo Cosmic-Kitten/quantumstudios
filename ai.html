@@ -124,8 +124,32 @@
     .detail-stat span { display: block; margin-top: 4px; color: var(--muted); font-size: 10px; text-transform: uppercase; }
     .detail-description { max-height: 125px; overflow: auto; color: #ccd1df; font-size: 13px; line-height: 1.65; white-space: pre-wrap; }
     .detail-body h3 { margin: 20px 0 9px; font-size: 14px; }
-    .guide-actions { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 7px; }
-    .guide-note { margin: 9px 0 0; color: var(--muted); font-size: 11px; line-height: 1.5; }
+    .research-panel { margin-top: 20px; padding-top: 18px; border-top: 1px solid var(--line); }
+    .research-panel h3 { margin: 0 0 6px; }
+    .research-copy, .research-note { color: var(--muted); font-size: 11px; line-height: 1.55; }
+    .research-copy { margin: 0 0 11px; }
+    .research-form { display: flex; gap: 7px; }
+    .research-query { min-width: 0; min-height: 39px; flex: 1; padding: 0 10px; border: 1px solid var(--line); border-radius: 8px; background: #111520; color: var(--ink); font-size: 12px; }
+    .research-graph-wrap { margin-top: 13px; overflow: auto; border: 1px solid var(--line); border-radius: 10px; background: #131724; }
+    .research-graph { width: 100%; min-width: 680px; height: auto; display: block; }
+    .graph-edge { stroke: #5b6684; stroke-width: 1.5; }
+    .graph-edge.topic-edge { stroke: #c7f36a8a; }
+    .graph-edge.research-edge { stroke: #a9baff65; stroke-dasharray: 5 5; }
+    .graph-node rect { fill: #222839; stroke: #46506a; stroke-width: 1.5; rx: 12; }
+    .graph-node text { fill: var(--ink); font: 13px Inter, "Segoe UI", sans-serif; text-anchor: middle; }
+    .graph-node .graph-kind { fill: var(--muted); font: 9px var(--mono); letter-spacing: 1px; }
+    .graph-node.game-node rect { fill: #c7f36a; stroke: #c7f36a; }
+    .graph-node.game-node text { fill: #141821; font-weight: 800; }
+    .graph-node.topic-node rect { stroke: #c7f36a88; }
+    .graph-node.web-node rect { fill: #222a40; stroke: #a9baff91; }
+    .graph-link { cursor: pointer; text-decoration: none; }
+    .graph-link:hover rect, .graph-link:focus rect { stroke: var(--lime); stroke-width: 3; }
+    .research-sources { margin-top: 10px; display: grid; gap: 7px; }
+    .research-source { padding: 10px 11px; border: 1px solid var(--line); border-radius: 8px; background: #151a27; text-decoration: none; }
+    .research-source:hover { border-color: var(--blue); }
+    .research-source strong { display: block; font-size: 12px; }
+    .research-source span { display: block; margin-top: 4px; color: var(--muted); font-size: 10px; line-height: 1.5; }
+    .research-note { margin: 9px 0 0; }
     .detail-chips { display: flex; flex-wrap: wrap; gap: 6px; }
     .detail-chip { padding: 5px 8px; border: 1px solid #a9baff42; border-radius: 99px; color: var(--blue); font-size: 11px; }
     .detail-recommendations { display: grid; gap: 6px; }
@@ -336,6 +360,8 @@
       let searchResults = [];
       let detailRequest = 0;
       let detailController = null;
+      let researchRequest = 0;
+      let researchController = null;
 
       function setStatus(message, isError = false) {
         queueStatus.textContent = message;
@@ -635,6 +661,155 @@
         container.append(stat);
       }
 
+      function appendSvgText(parent, x, y, className, text) {
+        const element = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        element.setAttribute('x', String(x));
+        element.setAttribute('y', String(y));
+        element.setAttribute('class', className);
+        element.textContent = text;
+        parent.append(element);
+      }
+
+      function renderResearchGraph(svg, game, researchResults) {
+        const topics = [
+          { label: game.genre || 'Experience', detail: game.subgenre || 'Roblox category' },
+          ...(Array.isArray(game.gameplay) ? game.gameplay.map(system => ({
+            label: system.label,
+            detail: system.evidence.join(', ')
+          })) : [])
+        ].slice(0, 5);
+        const results = researchResults.slice(0, 6);
+        const rowCount = Math.max(topics.length, results.length, 1);
+        const height = Math.max(270, rowCount * 76 + 72);
+        const centerY = Math.round(height / 2);
+        const topicYs = topics.map((_, index) => Math.round(height * (index + 1) / (topics.length + 1)));
+        const resultYs = results.map((_, index) => Math.round(height * (index + 1) / (results.length + 1)));
+        svg.setAttribute('viewBox', `0 0 1000 ${height}`);
+        svg.setAttribute('height', String(height));
+        svg.replaceChildren();
+
+        function edge(x1, y1, x2, y2, className) {
+          const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+          line.setAttribute('x1', String(x1));
+          line.setAttribute('y1', String(y1));
+          line.setAttribute('x2', String(x2));
+          line.setAttribute('y2', String(y2));
+          line.setAttribute('class', `graph-edge ${className}`);
+          svg.append(line);
+        }
+
+        topics.forEach((topic, index) => edge(375, centerY, 280, topicYs[index], 'topic-edge'));
+        results.forEach((result, index) => {
+          edge(625, centerY, 720, resultYs[index], 'research-edge');
+          const text = `${result.title} ${result.snippet}`.toLocaleLowerCase();
+          topics.forEach((topic, topicIndex) => {
+            const terms = `${topic.label} ${topic.detail}`.split(/[^a-z0-9]+/i).filter(term => term.length > 3);
+            if (terms.some(term => new RegExp(`\\b${term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'i').test(text))) {
+              edge(280, topicYs[topicIndex], 720, resultYs[index], 'research-edge');
+            }
+          });
+        });
+
+        function node(x, y, kind, title, detail, href = '') {
+          const group = document.createElementNS('http://www.w3.org/2000/svg', href ? 'a' : 'g');
+          group.setAttribute('class', `graph-node ${kind}`);
+          if (href) {
+            group.setAttribute('href', href);
+            group.setAttribute('target', '_blank');
+            group.setAttribute('rel', 'noopener noreferrer');
+            group.setAttribute('aria-label', `${title}: ${detail}`);
+            group.setAttribute('tabindex', '0');
+            group.classList.add('graph-link');
+          }
+          const boxWidth = kind === 'game-node' ? 250 : 250;
+          const boxHeight = kind === 'game-node' ? 82 : 64;
+          const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+          rect.setAttribute('x', String(x - boxWidth / 2));
+          rect.setAttribute('y', String(y - boxHeight / 2));
+          rect.setAttribute('width', String(boxWidth));
+          rect.setAttribute('height', String(boxHeight));
+          group.append(rect);
+          const titleElement = document.createElementNS('http://www.w3.org/2000/svg', 'title');
+          titleElement.textContent = `${title} — ${detail}`;
+          group.append(titleElement);
+          appendSvgText(group, x, y - 7, 'graph-kind', kind === 'game-node' ? 'SELECTED GAME' : kind === 'topic-node' ? 'GAMEPLAY TOPIC' : 'WEB GUIDE');
+          appendSvgText(group, x, y + 14, '', title.length > 34 ? `${title.slice(0, 31)}…` : title);
+          svg.append(group);
+        }
+
+        topics.forEach((topic, index) => node(155, topicYs[index], 'topic-node', topic.label, topic.detail));
+        node(500, centerY, 'game-node', game.name || 'Selected experience', `${game.creator?.name || 'Roblox creator'} · ${game.genre || 'Roblox game'}`);
+        results.forEach((result, index) => node(845, resultYs[index], 'web-node', result.title, result.host, result.url));
+      }
+
+      function renderResearchResults(panel, game, data) {
+        const results = Array.isArray(data.results) ? data.results : [];
+        const graph = panel.querySelector('.research-graph');
+        const sources = panel.querySelector('.research-sources');
+        const note = panel.querySelector('.research-note');
+        sources.replaceChildren();
+        renderResearchGraph(graph, game, results);
+        if (!results.length) {
+          note.textContent = `No web guides matched “${data.query}”. Try a different phrase, such as “beginner guide” or “controls”.`;
+          return;
+        }
+        note.textContent = 'Guide titles and snippets are web search results, not verified game instructions. Open a source to read and check it.';
+        results.forEach(result => {
+          const link = document.createElement('a');
+          link.className = 'research-source';
+          link.href = result.url;
+          link.target = '_blank';
+          link.rel = 'noopener noreferrer';
+          const title = document.createElement('strong');
+          title.textContent = result.title;
+          const description = document.createElement('span');
+          description.textContent = `${result.host}${result.snippet ? ` · ${result.snippet}` : ''}`;
+          link.append(title, description);
+          sources.append(link);
+        });
+      }
+
+      async function searchGameWeb(game, query, panel, button) {
+        const requestId = ++researchRequest;
+        researchController?.abort();
+        researchController = new AbortController();
+        button.disabled = true;
+        button.textContent = 'Searching…';
+        const note = panel.querySelector('.research-note');
+        note.textContent = `Searching the web for “${query}”…`;
+        try {
+          const response = await fetch(`/api/roblox/research?q=${encodeURIComponent(query)}`, {
+            headers: { Accept: 'application/json' },
+            signal: researchController.signal
+          });
+          const contentType = response.headers.get('content-type') || '';
+          if (!contentType.toLowerCase().includes('application/json')) {
+            throw new Error(response.status === 404
+              ? 'In-app web research needs the Vercel API. Open the deployed app or run `vercel dev`.'
+              : 'Web search returned an unexpected response.');
+          }
+          let payload;
+          try {
+            payload = await response.json();
+          } catch {
+            throw new Error('Web search returned invalid data. Try again.');
+          }
+          if (requestId !== researchRequest) return;
+          if (!response.ok) throw new Error(payload.error || 'Web search is unavailable right now.');
+          renderResearchResults(panel, game, payload);
+        } catch (error) {
+          if (error.name === 'AbortError' || requestId !== researchRequest) return;
+          panel.querySelector('.research-sources').replaceChildren();
+          panel.querySelector('.research-note').textContent = error.message || 'Could not search the web.';
+          panel.querySelector('.research-note').setAttribute('role', 'alert');
+        } finally {
+          if (requestId === researchRequest) {
+            button.disabled = false;
+            button.textContent = 'Search web';
+          }
+        }
+      }
+
       async function inspectGame(result) {
         const dialog = document.querySelector('#detail-dialog');
         const body = document.querySelector('#detail-body');
@@ -702,20 +877,56 @@
           description.className = 'detail-description';
           description.textContent = game.description || 'No public description was provided.';
           body.append(description);
-          const guideActions = document.createElement('div');
-          guideActions.className = 'guide-actions';
-          const guideSearch = document.createElement('a');
-          guideSearch.className = 'action';
-          guideSearch.target = '_blank';
-          guideSearch.rel = 'noopener noreferrer';
-          guideSearch.href = `https://www.google.com/search?q=${encodeURIComponent(`${game.name} Roblox how to play guide tips`)}`;
-          guideSearch.textContent = 'Google how to play ↗';
-          guideActions.append(guideSearch);
-          body.append(guideActions);
-          const guideNote = document.createElement('p');
-          guideNote.className = 'guide-note';
-          guideNote.textContent = 'Roblox stats and description above are public game data. Google opens independent web guides; check the source and date before following advice.';
-          body.append(guideNote);
+          const researchPanel = document.createElement('section');
+          researchPanel.className = 'research-panel';
+          const researchTitle = document.createElement('h3');
+          researchTitle.textContent = 'Game guide graph';
+          const researchCopy = document.createElement('p');
+          researchCopy.className = 'research-copy';
+          researchCopy.textContent = 'Search the web for how-to guides and see how sources connect to the game and its described topics.';
+          const researchForm = document.createElement('form');
+          researchForm.className = 'research-form';
+          const researchQuery = document.createElement('input');
+          researchQuery.className = 'research-query';
+          researchQuery.type = 'search';
+          researchQuery.maxLength = 160;
+          researchQuery.value = `${game.name} Roblox how to play guide tips`.slice(0, 160);
+          researchQuery.setAttribute('aria-label', 'Search web for game guides');
+          const researchButton = document.createElement('button');
+          researchButton.type = 'submit';
+          researchButton.className = 'action small';
+          researchButton.textContent = 'Search web';
+          researchForm.append(researchQuery, researchButton);
+          const graphWrap = document.createElement('div');
+          graphWrap.className = 'research-graph-wrap';
+          graphWrap.setAttribute('role', 'region');
+          graphWrap.setAttribute('aria-label', 'Interactive graph connecting this Roblox game, its described gameplay topics, and web guide results');
+          const graph = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+          graph.classList.add('research-graph');
+          graph.setAttribute('role', 'img');
+          graph.setAttribute('aria-label', 'Game research graph');
+          graphWrap.append(graph);
+          const sources = document.createElement('div');
+          sources.className = 'research-sources';
+          const researchNote = document.createElement('p');
+          researchNote.className = 'research-note';
+          researchNote.setAttribute('role', 'status');
+          researchNote.textContent = 'Searching for web guides…';
+          researchPanel.append(researchTitle, researchCopy, researchForm, graphWrap, sources, researchNote);
+          body.append(researchPanel);
+          researchForm.addEventListener('submit', event => {
+            event.preventDefault();
+            const query = researchQuery.value.trim().replace(/\s+/g, ' ');
+            if (query.length < 3) {
+              researchNote.textContent = 'Enter at least three characters to search the web.';
+              researchNote.setAttribute('role', 'alert');
+              researchQuery.focus();
+              return;
+            }
+            searchGameWeb(game, query, researchPanel, researchButton);
+          });
+          renderResearchGraph(graph, game, []);
+          searchGameWeb(game, researchQuery.value, researchPanel, researchButton);
           if (Array.isArray(game.gameplay) && game.gameplay.length) {
             const heading = document.createElement('h3');
             heading.textContent = 'Gameplay signals in the description';

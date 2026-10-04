@@ -289,8 +289,24 @@
     .intel-title { margin: 0 0 5px; font-size: 18px; line-height: 1.25; }
     .intel-creator { color: var(--orbit-muted); font-size: 10px; }
     .intel-description { max-height: 110px; overflow: auto; margin: 10px 0 0; color: #c2cbc2; font-size: 10px; line-height: 1.7; white-space: pre-wrap; }
-    .intel-guide-link { display: inline-flex; margin-top: 10px; padding: 7px 9px; border: 1px solid var(--orbit-line); color: var(--orbit-lime); font-size: 9px; font-weight: 800; text-decoration: none; }
-    .intel-guide-link:hover { border-color: var(--orbit-lime); }
+    .intel-research { display: grid; gap: 9px; }
+    .intel-research-copy, .intel-research-status { margin: 0; color: var(--orbit-muted); font-size: 9px; line-height: 1.6; }
+    .intel-research-form { display: flex; gap: 7px; }
+    .intel-research-input { min-width: 0; min-height: 37px; flex: 1; padding: 0 10px; border: 1px solid var(--orbit-line); background: var(--orbit-bg); color: var(--orbit-text); font-size: 10px; }
+    .intel-research-graph-wrap { overflow: auto; border: 1px solid var(--orbit-line); background: var(--orbit-bg); }
+    .intel-research-graph { width: 100%; min-width: 620px; height: auto; display: block; }
+    .intel-research-edge { stroke: #7c9cff85; stroke-width: 1.5; stroke-dasharray: 5 4; }
+    .intel-research-node rect { fill: var(--orbit-panel-2); stroke: var(--orbit-line); stroke-width: 1.5; }
+    .intel-research-node.game rect { fill: var(--orbit-lime); stroke: var(--orbit-lime); }
+    .intel-research-node.source rect { stroke: var(--orbit-blue); }
+    .intel-research-node text { fill: var(--orbit-text); font: 12px "Segoe UI", sans-serif; text-anchor: middle; }
+    .intel-research-node.game text { fill: var(--orbit-bg); font-weight: 800; }
+    .intel-research-node .kind { fill: var(--orbit-muted); font: 8px var(--orbit-mono); letter-spacing: 1px; }
+    .intel-research-node.game .kind { fill: #324027; }
+    .intel-research-source { display: grid; gap: 5px; padding: 9px; border: 1px solid var(--orbit-line); background: var(--orbit-bg); color: var(--orbit-text); text-decoration: none; }
+    .intel-research-source:hover { border-color: var(--orbit-lime); }
+    .intel-research-source strong { font-size: 9px; }
+    .intel-research-source span { color: var(--orbit-muted); font-size: 8px; line-height: 1.5; }
     .intel-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 7px; }
     .intel-stat { padding: 9px; border: 1px solid var(--orbit-line); background: var(--orbit-bg); }
     .intel-stat strong { display: block; font-size: 11px; }
@@ -1215,6 +1231,8 @@
     const pinSelectedButton = document.querySelector('#pin-selected');
     const intelDialog = document.querySelector('#intel-dialog');
     const intelContent = document.querySelector('#intel-content');
+    let intelRequestId = 0;
+    let intelResearchController = null;
     const customizeDialog = document.querySelector('#customize-dialog');
     const sectionSettings = document.querySelector('#section-settings');
     const accentColor = document.querySelector('#accent-color');
@@ -1780,7 +1798,181 @@
       container.append(item);
     }
 
-    function renderGameIntel(payload) {
+    function renderIntelResearchGraph(svg, game, results) {
+      const topics = [
+        { label: game.genre || 'Roblox game', detail: game.subgenre || 'Category' },
+        ...(Array.isArray(game.gameplay) ? game.gameplay.map(system => ({
+          label: system.label,
+          detail: system.evidence.join(', ')
+        })) : [])
+      ].slice(0, 5);
+      const sources = results.slice(0, 6);
+      const rowCount = Math.max(topics.length, sources.length, 1);
+      const height = Math.max(250, rowCount * 68 + 60);
+      const centerY = Math.round(height / 2);
+      const topicYs = topics.map((_, index) => Math.round(height * (index + 1) / (topics.length + 1)));
+      const sourceYs = sources.map((_, index) => Math.round(height * (index + 1) / (sources.length + 1)));
+      svg.setAttribute('viewBox', `0 0 900 ${height}`);
+      svg.setAttribute('height', String(height));
+      svg.replaceChildren();
+
+      function line(x1, y1, x2, y2) {
+        const edge = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        edge.setAttribute('x1', String(x1));
+        edge.setAttribute('y1', String(y1));
+        edge.setAttribute('x2', String(x2));
+        edge.setAttribute('y2', String(y2));
+        edge.setAttribute('class', 'intel-research-edge');
+        svg.append(edge);
+      }
+
+      topics.forEach((_, index) => line(345, centerY, 275, topicYs[index]));
+      sources.forEach((source, index) => {
+        line(555, centerY, 625, sourceYs[index]);
+        const resultText = `${source.title} ${source.snippet}`.toLocaleLowerCase();
+        topics.forEach((topic, topicIndex) => {
+          const terms = `${topic.label} ${topic.detail}`.split(/[^a-z0-9]+/i).filter(term => term.length > 3);
+          if (terms.some(term => resultText.includes(term.toLocaleLowerCase()))) {
+            line(275, topicYs[topicIndex], 625, sourceYs[index]);
+          }
+        });
+      });
+
+      function addNode(x, y, kind, title, detail, href = '') {
+        const group = document.createElementNS('http://www.w3.org/2000/svg', href ? 'a' : 'g');
+        group.setAttribute('class', `intel-research-node ${kind}`);
+        if (href) {
+          group.setAttribute('href', href);
+          group.setAttribute('target', '_blank');
+          group.setAttribute('rel', 'noopener noreferrer');
+          group.setAttribute('aria-label', `${title}: ${detail}`);
+          group.setAttribute('tabindex', '0');
+        }
+        const width = kind === 'game' ? 210 : 235;
+        const height = kind === 'game' ? 70 : 56;
+        const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        rect.setAttribute('x', String(x - width / 2));
+        rect.setAttribute('y', String(y - height / 2));
+        rect.setAttribute('width', String(width));
+        rect.setAttribute('height', String(height));
+        rect.setAttribute('rx', '8');
+        group.append(rect);
+        const titleTag = document.createElementNS('http://www.w3.org/2000/svg', 'title');
+        titleTag.textContent = `${title} — ${detail}`;
+        group.append(titleTag);
+        for (const [offset, className, text] of [
+          [-6, 'kind', kind === 'game' ? 'SELECTED EXPERIENCE' : kind === 'topic' ? 'GAMEPLAY TOPIC' : 'WEB GUIDE'],
+          [13, '', title.length > 30 ? `${title.slice(0, 27)}…` : title]
+        ]) {
+          const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+          label.setAttribute('x', String(x));
+          label.setAttribute('y', String(y + offset));
+          if (className) label.setAttribute('class', className);
+          label.textContent = text;
+          group.append(label);
+        }
+        svg.append(group);
+      }
+
+      topics.forEach((topic, index) => addNode(155, topicYs[index], 'topic', topic.label, topic.detail));
+      addNode(450, centerY, 'game', game.name, `${game.creator.name} · ${game.genre}`);
+      sources.forEach((source, index) => addNode(745, sourceYs[index], 'source', source.title, source.host, source.url));
+    }
+
+    function renderIntelResearchResults(panel, game, payload) {
+      const results = Array.isArray(payload.results) ? payload.results : [];
+      renderIntelResearchGraph(panel.querySelector('.intel-research-graph'), game, results);
+      const list = panel.querySelector('.intel-research-results');
+      list.replaceChildren();
+      if (!results.length) {
+        panel.querySelector('.intel-research-status').textContent = `No web results found for “${payload.query}”. Try “beginner guide” or “controls”.`;
+        return;
+      }
+      panel.querySelector('.intel-research-status').textContent = 'Search results are independent web sources. Check the source and date before relying on gameplay advice.';
+      results.forEach(result => {
+        const link = makeIntelElement('a', 'intel-research-source');
+        link.href = result.url;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        link.append(
+          makeIntelElement('strong', '', result.title),
+          makeIntelElement('span', '', `${result.host}${result.snippet ? ` · ${result.snippet}` : ''}`)
+        );
+        list.append(link);
+      });
+    }
+
+    async function searchIntelWeb(game, query, panel, requestId) {
+      intelResearchController?.abort();
+      intelResearchController = new AbortController();
+      const button = panel.querySelector('.intel-research-submit');
+      const status = panel.querySelector('.intel-research-status');
+      button.disabled = true;
+      button.textContent = 'Searching…';
+      status.textContent = `Searching the web for “${query}”…`;
+      try {
+        const response = await fetch(`/api/roblox/research?q=${encodeURIComponent(query)}`, {
+          headers: { Accept: 'application/json' },
+          signal: intelResearchController.signal
+        });
+        const payload = await readApiResponse(response, 'Web research');
+        if (requestId !== intelRequestId) return;
+        renderIntelResearchResults(panel, game, payload);
+      } catch (error) {
+        if (error.name === 'AbortError' || requestId !== intelRequestId) return;
+        status.textContent = error.message || 'Could not search the web right now.';
+        status.setAttribute('role', 'alert');
+      } finally {
+        if (requestId === intelRequestId) {
+          button.disabled = false;
+          button.textContent = 'Search web';
+        }
+      }
+    }
+
+    function addIntelResearch(game, requestId) {
+      const panel = makeIntelElement('section', 'intel-research');
+      panel.append(
+        makeIntelElement('h3', 'intel-subhead', 'Web research graph'),
+        makeIntelElement('p', 'intel-research-copy', 'Search web guides inside Orbit. The graph connects this experience, its described gameplay topics, and guide sources.')
+      );
+      const form = makeIntelElement('form', 'intel-research-form');
+      const input = makeIntelElement('input', 'intel-research-input');
+      input.type = 'search';
+      input.maxLength = 160;
+      input.setAttribute('aria-label', 'Search the web for this game');
+      input.value = `${game.name} Roblox how to play guide tips`.slice(0, 160);
+      const button = makeIntelElement('button', 'orbit-button primary intel-research-submit', 'Search web');
+      button.type = 'submit';
+      form.append(input, button);
+      form.addEventListener('submit', event => {
+        event.preventDefault();
+        const query = input.value.trim().replace(/\s+/g, ' ');
+        if (query.length < 3) {
+          panel.querySelector('.intel-research-status').textContent = 'Enter at least three characters to search.';
+          input.focus();
+          return;
+        }
+        searchIntelWeb(game, query, panel, requestId);
+      });
+      const graphWrap = makeIntelElement('div', 'intel-research-graph-wrap');
+      graphWrap.setAttribute('role', 'region');
+      graphWrap.setAttribute('aria-label', 'Graph connecting this experience to gameplay topics and web research sources');
+      const graph = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      graph.classList.add('intel-research-graph');
+      graph.setAttribute('role', 'img');
+      graph.setAttribute('aria-label', 'Web research relationship graph');
+      graphWrap.append(graph);
+      const results = makeIntelElement('div', 'intel-research-results');
+      const status = makeIntelElement('p', 'intel-research-status', 'Searching for guides…');
+      status.setAttribute('role', 'status');
+      panel.append(form, graphWrap, results, status);
+      renderIntelResearchGraph(graph, game, []);
+      searchIntelWeb(game, input.value, panel, requestId);
+      return panel;
+    }
+
+    function renderGameIntel(payload, requestId) {
       const game = payload.game;
       document.querySelector('#intel-dialog-title').textContent = game.name;
       intelContent.replaceChildren();
@@ -1800,11 +1992,6 @@
       creator.rel = 'noopener noreferrer';
       intro.append(creator);
       intro.append(makeIntelElement('p', 'intel-description', game.description || 'The creator has not provided a public description.'));
-      const guideSearch = makeIntelElement('a', 'intel-guide-link', 'Google web guides & how to play ↗');
-      guideSearch.href = `https://www.google.com/search?q=${encodeURIComponent(`${game.name} Roblox how to play guide tips`)}`;
-      guideSearch.target = '_blank';
-      guideSearch.rel = 'noopener noreferrer';
-      intro.append(guideSearch);
       overview.append(cover, intro);
       intelContent.append(overview);
 
@@ -1888,6 +2075,8 @@
       map.append(nodes);
       intelContent.append(map);
 
+      intelContent.append(addIntelResearch(game, requestId));
+
       const related = makeIntelElement('section', '');
       related.append(makeIntelElement('h3', 'intel-subhead', 'Related experiences on Roblox'));
       const relatedGrid = makeIntelElement('div', 'intel-related');
@@ -1916,6 +2105,8 @@
     }
 
     async function showGameIntel(game) {
+      const requestId = ++intelRequestId;
+      intelResearchController?.abort();
       if (!intelDialog.open) intelDialog.showModal();
       intelContent.replaceChildren(makeIntelElement('div', 'search-status', 'Loading public Roblox information...'));
       if (!game.universeId || !/^\d+$/.test(game.universeId)) {
@@ -1926,8 +2117,10 @@
       try {
         const response = await fetch(`/api/roblox/game?universeId=${encodeURIComponent(game.universeId)}`, { cache: 'no-store' });
         const payload = await readApiResponse(response, 'Roblox game details');
-        renderGameIntel(payload);
+        if (requestId !== intelRequestId) return;
+        renderGameIntel(payload, requestId);
       } catch (error) {
+        if (requestId !== intelRequestId) return;
         intelContent.replaceChildren(makeIntelElement('div', 'search-status', error.message || 'Could not load public game details.'));
       }
     }
