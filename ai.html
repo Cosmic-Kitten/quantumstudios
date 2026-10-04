@@ -1,0 +1,697 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#10131d">
+  <meta name="description" content="Orbit Queue — build a Roblox game run and launch the next experience.">
+  <title>Orbit Queue — Roblox Launcher</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #10131d;
+      --panel: #191d2a;
+      --panel-raised: #202536;
+      --line: #343b50;
+      --ink: #f4f5fa;
+      --muted: #a0a8ba;
+      --lime: #c7f36a;
+      --blue: #a9baff;
+      --pink: #ff91b4;
+      --mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      font-family: Inter, "Segoe UI", ui-sans-serif, system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+    }
+    * { box-sizing: border-box; }
+    body {
+      min-width: 320px;
+      min-height: 100vh;
+      margin: 0;
+      background:
+        radial-gradient(ellipse at 88% 0%, #283050 0, transparent 35rem),
+        var(--bg);
+    }
+    button, input, textarea { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    :where(a, button, input, textarea):focus-visible { outline: 3px solid var(--lime); outline-offset: 3px; }
+    a { color: inherit; }
+    .shell { width: min(1260px, 100%); margin: auto; padding: 0 38px 44px; }
+    .topbar { min-height: 78px; display: flex; justify-content: space-between; align-items: center; gap: 20px; border-bottom: 1px solid var(--line); }
+    .brand { display: inline-flex; align-items: center; gap: 11px; font-size: 15px; font-weight: 900; letter-spacing: .12em; text-decoration: none; }
+    .brand-mark { width: 34px; height: 34px; display: grid; place-items: center; border-radius: 11px; background: var(--lime); color: #151923; font-size: 18px; transform: rotate(-6deg); }
+    .brand small { margin-left: 3px; color: var(--muted); font: 11px var(--mono); letter-spacing: .04em; }
+    .topbar-right { display: flex; align-items: center; gap: 12px; }
+    .offline-tag, .eyebrow { color: var(--muted); font: 11px var(--mono); letter-spacing: .12em; text-transform: uppercase; }
+    .switch-link { padding: 10px 13px; border: 1px solid var(--line); border-radius: 9px; color: var(--ink); font-size: 13px; font-weight: 750; text-decoration: none; }
+    .switch-link:hover { border-color: var(--lime); color: var(--lime); }
+    .intro { padding: 48px 0 25px; display: flex; align-items: end; justify-content: space-between; gap: 24px; }
+    .intro-copy { max-width: 640px; }
+    .eyebrow { color: var(--lime); }
+    h1 { margin: 12px 0 12px; font-size: clamp(38px, 6vw, 70px); line-height: .99; letter-spacing: -.065em; }
+    .intro p { max-width: 530px; margin: 0; color: var(--muted); font-size: 16px; line-height: 1.65; }
+    .orbit-mark { width: 126px; height: 126px; position: relative; flex: 0 0 auto; display: grid; place-items: center; border: 1px solid #a9baff5a; border-radius: 50%; }
+    .orbit-mark::before, .orbit-mark::after { content: ""; position: absolute; width: 155px; height: 54px; border: 1px solid #a9baff83; border-radius: 50%; transform: rotate(-37deg); }
+    .orbit-mark::after { border-color: #c7f36a6b; transform: rotate(36deg); }
+    .orbit-core { z-index: 1; width: 42px; height: 42px; display: grid; place-items: center; border-radius: 13px; background: var(--lime); color: #141821; font-size: 20px; font-weight: 950; transform: rotate(45deg); }
+    .orbit-core span { transform: rotate(-45deg); }
+    .board { display: grid; grid-template-columns: minmax(0, 1.28fr) minmax(300px, .72fr); gap: 17px; align-items: start; }
+    .panel { min-width: 0; border: 1px solid var(--line); border-radius: 15px; background: color-mix(in srgb, var(--panel) 96%, transparent); }
+    .queue-panel { overflow: hidden; }
+    .panel-head { padding: 20px 21px; display: flex; align-items: center; justify-content: space-between; gap: 18px; border-bottom: 1px solid var(--line); }
+    .panel-head h2 { margin: 0; font-size: 20px; letter-spacing: -.035em; }
+    .panel-head p { margin: 5px 0 0; color: var(--muted); font-size: 13px; }
+    .count { min-width: 39px; padding: 7px 9px; border: 1px solid #c7f36a4a; border-radius: 8px; color: var(--lime); font: 13px var(--mono); text-align: center; }
+    .queue-add { padding: 19px 21px 15px; }
+    .field-label { display: block; margin-bottom: 8px; color: #d8dbea; font-size: 13px; font-weight: 750; }
+    .entry-row { display: flex; gap: 8px; }
+    .text-field {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      background: #111520;
+      color: var(--ink);
+      font-size: 14px;
+    }
+    .text-field { min-width: 0; min-height: 44px; padding: 0 13px; }
+    .text-field::placeholder { color: #798195; }
+    .action {
+      min-height: 42px;
+      padding: 0 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      background: var(--panel-raised);
+      color: var(--ink);
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform .15s ease, border-color .15s ease, background .15s ease;
+    }
+    .action:hover:not(:disabled) { transform: translateY(-1px); border-color: #7b849e; }
+    .action:disabled { opacity: .45; cursor: not-allowed; }
+    .action.primary { border-color: var(--lime); background: var(--lime); color: #171b20; }
+    .action.primary:hover:not(:disabled) { background: #dcff91; }
+    .action.small { min-height: 34px; padding: 0 10px; font-size: 12px; }
+    .search-results { margin-top: 13px; display: grid; gap: 7px; }
+    .search-results:empty { display: none; }
+    .search-result { min-width: 0; padding: 11px; display: flex; justify-content: space-between; align-items: center; gap: 12px; border: 1px solid var(--line); border-radius: 9px; background: #151a27; }
+    .search-result-copy { min-width: 0; }
+    .search-result-copy strong { display: block; overflow: hidden; font-size: 14px; text-overflow: ellipsis; white-space: nowrap; }
+    .search-result-copy span { display: block; margin-top: 4px; color: var(--muted); font-size: 12px; }
+    .search-note, .status { color: var(--muted); font-size: 12px; line-height: 1.5; }
+    .search-note { padding: 12px; border: 1px dashed var(--line); border-radius: 9px; }
+    .status { min-height: 19px; margin: 7px 0 0; }
+    .status.error { color: var(--pink); }
+    .queue-tools { padding: 11px 21px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: #141824; }
+    .queue-tools .spacer { flex: 1; }
+    .queue-list { margin: 0; padding: 7px 14px 15px; list-style: none; }
+    .queue-item { min-height: 68px; padding: 9px 7px; display: grid; grid-template-columns: 33px minmax(0, 1fr) auto auto; align-items: center; gap: 10px; border-bottom: 1px solid #ffffff10; }
+    .queue-item:last-child { border-bottom: 0; }
+    .queue-position { width: 29px; height: 29px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 8px; color: var(--muted); font: 12px var(--mono); }
+    .queue-place { min-width: 0; }
+    .queue-place strong { display: block; font-size: 14px; }
+    .queue-place span { display: block; margin-top: 4px; overflow: hidden; color: var(--muted); font: 11px var(--mono); text-overflow: ellipsis; }
+    .row-actions { display: flex; gap: 5px; }
+    .icon-action { width: 34px; height: 34px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 8px; background: #222838; color: var(--ink); font-size: 15px; cursor: pointer; }
+    .icon-action:hover:not(:disabled) { border-color: var(--blue); color: var(--blue); }
+    .icon-action:disabled { opacity: .35; cursor: not-allowed; }
+    .empty-queue { padding: 35px 22px 40px; color: var(--muted); font-size: 14px; line-height: 1.7; text-align: center; }
+    .empty-glyph { width: 48px; height: 48px; margin: 0 auto 12px; display: grid; place-items: center; border: 1px solid #a9baff61; border-radius: 14px; color: var(--blue); font-size: 21px; transform: rotate(-6deg); }
+    .empty-queue strong { display: block; margin-bottom: 3px; color: var(--ink); font-size: 16px; }
+    .side-stack { display: grid; gap: 17px; }
+    .session-panel { padding: 20px; overflow: hidden; position: relative; }
+    .session-panel::after { content: ""; position: absolute; width: 180px; height: 180px; top: -116px; right: -93px; border: 1px solid #c7f36a30; border-radius: 50%; box-shadow: 0 0 0 20px #c7f36a09, 0 0 0 40px #c7f36a08; pointer-events: none; }
+    .session-top { position: relative; z-index: 1; display: flex; justify-content: space-between; align-items: start; gap: 10px; }
+    .session-top h2 { margin: 0; font-size: 19px; letter-spacing: -.035em; }
+    .session-top p { margin: 5px 0 0; color: var(--muted); font-size: 13px; }
+    .live-indicator { padding: 5px 7px; border: 1px solid var(--line); border-radius: 6px; color: var(--muted); font: 10px var(--mono); letter-spacing: .08em; }
+    .live-indicator.active { border-color: #c7f36a75; color: var(--lime); }
+    .clock { margin: 25px 0 17px; font: 700 clamp(47px, 6vw, 68px)/1 var(--mono); letter-spacing: -.08em; font-variant-numeric: tabular-nums; }
+    .progress-track { height: 5px; overflow: hidden; border-radius: 9px; background: #343b50; }
+    .progress-fill { width: 0; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--lime), var(--blue)); transition: width .3s linear; }
+    .presets { margin-top: 18px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; }
+    .preset { min-height: 37px; border: 1px solid var(--line); border-radius: 8px; background: transparent; color: var(--muted); font-size: 12px; font-weight: 750; cursor: pointer; }
+    .preset[aria-pressed="true"] { border-color: #c7f36a89; background: #c7f36a12; color: var(--lime); }
+    .session-actions { margin-top: 10px; display: grid; grid-template-columns: 1fr auto; gap: 7px; }
+    .session-actions .action { min-height: 42px; }
+    .session-caption { min-height: 36px; margin: 11px 0 0; color: var(--muted); font-size: 12px; line-height: 1.5; }
+    .how-panel { padding: 19px 20px; }
+    .how-panel h2 { margin: 0; font-size: 15px; }
+    .how-panel ol { margin: 13px 0 0; padding-left: 20px; color: var(--muted); font-size: 13px; line-height: 1.8; }
+    .safety { margin-top: 17px; padding: 13px 14px; border: 1px solid #a9baff32; border-radius: 10px; color: #b9c2d3; font-size: 12px; line-height: 1.6; }
+    .safety strong { color: var(--blue); }
+    footer { padding-top: 23px; display: flex; justify-content: space-between; gap: 14px; color: var(--muted); font-size: 12px; }
+    footer a { text-decoration: none; }
+    footer a:hover { color: var(--lime); }
+    @media (max-width: 880px) {
+      .shell { padding-inline: 24px; }
+      .board { grid-template-columns: minmax(0, 1fr) minmax(270px, .78fr); gap: 12px; }
+      .panel-head, .queue-add { padding-inline: 17px; }
+      .queue-tools { padding-inline: 17px; }
+      .queue-item { grid-template-columns: 30px minmax(0, 1fr) auto; }
+      .queue-item > .action { grid-column: 2; justify-self: start; }
+      .queue-item .row-actions { grid-column: 3; grid-row: 1 / span 2; }
+    }
+    @media (max-width: 680px) {
+      .shell { padding: 0 15px 32px; }
+      .topbar { min-height: 66px; }
+      .brand { font-size: 13px; }
+      .brand small, .offline-tag { display: none; }
+      .intro { padding: 33px 0 21px; }
+      .intro p { font-size: 14px; }
+      .orbit-mark { width: 78px; height: 78px; margin: 0 8px 7px 0; }
+      .orbit-mark::before, .orbit-mark::after { width: 94px; height: 37px; }
+      .orbit-core { width: 32px; height: 32px; border-radius: 10px; font-size: 15px; }
+      .board { grid-template-columns: 1fr; }
+      .side-stack { grid-template-columns: 1fr 1fr; align-items: start; }
+      .session-panel, .how-panel { padding: 17px; }
+      .clock { font-size: clamp(46px, 12vw, 64px); }
+      .session-top h2 { font-size: 17px; }
+      footer { flex-direction: column; }
+    }
+    @media (max-width: 460px) {
+      .shell { padding-inline: 11px; }
+      .topbar-right { gap: 7px; }
+      .switch-link { padding: 9px; font-size: 12px; }
+      .intro { align-items: center; gap: 8px; }
+      h1 { font-size: clamp(35px, 10vw, 48px); }
+      .intro p { font-size: 13px; }
+      .orbit-mark { width: 58px; height: 58px; margin: 0 8px 0 0; }
+      .orbit-mark::before, .orbit-mark::after { width: 74px; height: 28px; }
+      .orbit-core { width: 27px; height: 27px; border-radius: 8px; font-size: 13px; }
+      .panel-head { padding: 16px 13px; }
+      .panel-head h2 { font-size: 18px; }
+      .panel-head p { font-size: 12px; }
+      .queue-add { padding: 15px 13px 12px; }
+      .entry-row { flex-direction: column; }
+      .entry-row .action { width: 100%; }
+      .queue-tools { padding: 10px 13px; }
+      .queue-tools .spacer { display: none; }
+      .queue-item { padding-inline: 1px; gap: 7px; grid-template-columns: 27px minmax(0, 1fr) auto; }
+      .queue-place strong { font-size: 13px; }
+      .queue-place span { font-size: 10px; }
+      .row-actions { gap: 3px; }
+      .icon-action { width: 30px; height: 32px; }
+      .queue-item > .action { min-height: 32px; }
+      .side-stack { grid-template-columns: 1fr; }
+      .session-panel { padding: 18px; }
+      .clock { margin: 20px 0 14px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <a class="brand" href="#home" aria-label="Orbit Queue home"><span class="brand-mark" aria-hidden="true">O</span><span>ORBIT<small>// QUEUE</small></span></a>
+      <div class="topbar-right"><span class="offline-tag">A session-first launcher</span><a class="switch-link" href="/index.html">Classic Orbit ↗</a></div>
+    </header>
+
+    <main id="home">
+      <section class="intro" aria-labelledby="page-title">
+        <div class="intro-copy">
+          <div class="eyebrow">YOUR NEXT RUN STARTS HERE</div>
+          <h1 id="page-title">Build a run.<br>Start the next.</h1>
+          <p>Stack up the places you want to visit, set a session clock, and move through your lineup one launch at a time.</p>
+        </div>
+        <div class="orbit-mark" aria-hidden="true"><span class="orbit-core"><span>O</span></span></div>
+      </section>
+
+      <div class="board">
+        <section class="panel queue-panel" aria-labelledby="queue-title">
+          <div class="panel-head">
+            <div><h2 id="queue-title">Tonight's queue</h2><p id="queue-caption">Your next places, in order.</p></div>
+            <span class="count" id="queue-count" aria-label="Places in queue">0</span>
+          </div>
+          <div class="queue-add">
+            <form id="search-form" novalidate>
+              <label class="field-label" for="search-query">Find a game by name</label>
+              <div class="entry-row"><input class="text-field" id="search-query" type="search" minlength="2" maxlength="80" autocomplete="off" placeholder="Search Roblox experiences…" aria-label="Search Roblox games"><button class="action primary" id="search-submit" type="submit">⌕ Search</button></div>
+            </form>
+            <div class="search-results" id="search-results" aria-live="polite"></div>
+            <p class="status" id="queue-status" role="status" aria-live="polite"></p>
+          </div>
+          <div class="queue-tools">
+            <button class="action small" id="launch-next" type="button" disabled>↗ Launch next</button>
+            <button class="action small" id="shuffle-queue" type="button" disabled>⤨ Shuffle lineup</button>
+            <span class="spacer"></span>
+            <button class="action small" id="clear-queue" type="button" disabled>Clear queue</button>
+          </div>
+          <ol class="queue-list" id="queue-list" aria-label="Queued Roblox places"></ol>
+        </section>
+
+        <div class="side-stack">
+          <section class="panel session-panel" aria-labelledby="session-title">
+            <div class="session-top">
+              <div><h2 id="session-title">Session clock</h2><p>Give your run a finish line.</p></div>
+              <span class="live-indicator" id="session-indicator">READY</span>
+            </div>
+            <div class="clock" id="clock" role="timer" aria-label="15 minutes remaining">15:00</div>
+            <div class="progress-track" id="progress-track" role="progressbar" aria-label="Session time elapsed" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="progress-fill" id="progress-fill"></div></div>
+            <div class="presets" role="group" aria-label="Session length">
+              <button class="preset" type="button" data-minutes="15" aria-pressed="true">15 min</button>
+              <button class="preset" type="button" data-minutes="30" aria-pressed="false">30 min</button>
+              <button class="preset" type="button" data-minutes="45" aria-pressed="false">45 min</button>
+            </div>
+            <div class="session-actions"><button class="action primary" id="run-start" type="button">Start run</button><button class="action" id="timer-toggle" type="button">Pause</button></div>
+            <p class="session-caption" id="session-caption" role="status" aria-live="polite">Starting a run opens its first place and starts the clock.</p>
+          </section>
+          <section class="panel how-panel" aria-labelledby="how-title">
+            <h2 id="how-title">How this run works</h2>
+            <ol><li>Search Roblox by game name.</li><li>Queue the matching experiences.</li><li>Start a timed run or launch the next place.</li></ol>
+            <div class="safety"><strong>Just your launch queue.</strong> This edition keeps a temporary lineup and session timer in this browser. Roblox handles account access and gameplay.</div>
+          </section>
+        </div>
+      </div>
+      <footer><span>ORBIT QUEUE · LAUNCHES OPEN ON ROBLOX</span><span><a href="/privacy.html">Privacy</a> · <a href="/terms.html">Terms</a> · <a href="/index.html">Classic launcher</a></span></footer>
+    </main>
+  </div>
+  <script>
+    (() => {
+      const queueKey = 'orbit-run-queue-v2';
+      const timerKey = 'orbit-queue-session-v1';
+      const queueList = document.querySelector('#queue-list');
+      const queueStatus = document.querySelector('#queue-status');
+      const sessionCaption = document.querySelector('#session-caption');
+      const queueCount = document.querySelector('#queue-count');
+      const queue = [];
+      const allowedMinutes = [15, 30, 45];
+      let durationSeconds = 15 * 60;
+      let remainingSeconds = durationSeconds;
+      let deadline = 0;
+      let timerFinished = false;
+      let timerPaused = false;
+      let tickHandle = 0;
+      let searchRequest = 0;
+      let searchController = null;
+
+      function setStatus(message, isError = false) {
+        queueStatus.textContent = message;
+        queueStatus.classList.toggle('error', isError);
+      }
+
+      function saveQueue(next) {
+        try {
+          localStorage.setItem(queueKey, JSON.stringify(next));
+          return true;
+        } catch {
+          setStatus('Could not save the lineup in this browser. Check available storage.', true);
+          return false;
+        }
+      }
+
+      function replaceQueue(next, message = '') {
+        if (!saveQueue(next)) return false;
+        queue.splice(0, queue.length, ...next);
+        renderQueue();
+        if (message) setStatus(message);
+        return true;
+      }
+
+      function renderQueue() {
+        queueList.replaceChildren();
+        queueCount.textContent = String(queue.length);
+        queueCount.setAttribute('aria-label', `${queue.length} ${queue.length === 1 ? 'place' : 'places'} in queue`);
+        document.querySelector('#queue-caption').textContent = queue.length
+          ? `${queue.length} ${queue.length === 1 ? 'place' : 'places'} · first one is up next.`
+          : 'Your next places, in order.';
+        document.querySelector('#launch-next').disabled = queue.length === 0;
+        document.querySelector('#shuffle-queue').disabled = queue.length < 2;
+        document.querySelector('#clear-queue').disabled = queue.length === 0;
+
+        if (!queue.length) {
+          const empty = document.createElement('li');
+          empty.className = 'empty-queue';
+          empty.innerHTML = '<span class="empty-glyph" aria-hidden="true">⌕</span><strong>Your lineup is clear.</strong>Search Roblox by name to add your first experience.';
+          queueList.append(empty);
+          return;
+        }
+
+        queue.forEach((game, index) => {
+          const item = document.createElement('li');
+          item.className = 'queue-item';
+          const position = document.createElement('span');
+          position.className = 'queue-position';
+          position.textContent = String(index + 1).padStart(2, '0');
+          const place = document.createElement('div');
+          place.className = 'queue-place';
+          const title = document.createElement('strong');
+          title.textContent = `${index === 0 ? 'Up next · ' : ''}${game.name}`;
+          const link = document.createElement('span');
+          link.textContent = `${game.creator} · ${Number(game.playerCount || 0).toLocaleString()} playing`;
+          place.append(title, link);
+          const open = document.createElement('button');
+          open.type = 'button';
+          open.className = 'action small';
+          open.textContent = 'Open ↗';
+          open.setAttribute('aria-label', `Open ${game.name} on Roblox`);
+          open.addEventListener('click', () => openPlace(game.id));
+          const controls = document.createElement('div');
+          controls.className = 'row-actions';
+          const up = makeIconButton('↑', `Move ${game.name} up`, () => movePlace(index, -1));
+          up.disabled = index === 0;
+          const down = makeIconButton('↓', `Move ${game.name} down`, () => movePlace(index, 1));
+          down.disabled = index === queue.length - 1;
+          const remove = makeIconButton('×', `Remove ${game.name}`, () => {
+            const next = queue.filter((_, positionIndex) => positionIndex !== index);
+            replaceQueue(next, `${game.name} removed from the run.`);
+          });
+          controls.append(up, down, remove);
+          item.append(position, place, open, controls);
+          queueList.append(item);
+        });
+      }
+
+      function makeIconButton(symbol, label, action) {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'icon-action';
+        button.textContent = symbol;
+        button.setAttribute('aria-label', label);
+        button.addEventListener('click', action);
+        return button;
+      }
+
+      function movePlace(index, offset) {
+        const destination = index + offset;
+        if (destination < 0 || destination >= queue.length) return;
+        const next = [...queue];
+        [next[index], next[destination]] = [next[destination], next[index]];
+        replaceQueue(next, 'Lineup order updated.');
+      }
+
+      function openPlace(id) {
+        const link = document.createElement('a');
+        link.href = `https://www.roblox.com/games/${encodeURIComponent(id)}?launch`;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        link.hidden = true;
+        document.body.append(link);
+        link.click();
+        link.remove();
+      }
+
+      function launchNext() {
+        if (!queue.length) return false;
+        const [game, ...rest] = queue;
+        if (!replaceQueue(rest)) return false;
+        openPlace(game.id);
+        setStatus(`${game.name} opened. ${rest.length ? `${rest.length} left in the lineup.` : 'That was the last place in the lineup.'}`);
+        return true;
+      }
+
+      function showSearchNote(message, isError = false) {
+        const note = document.createElement('div');
+        note.className = 'search-note';
+        note.textContent = message;
+        if (isError) note.setAttribute('role', 'alert');
+        document.querySelector('#search-results').replaceChildren(note);
+      }
+
+      function queueGame(game, button) {
+        const id = String(game.placeId || '');
+        if (!/^\d+$/.test(id) || typeof game.name !== 'string' || !game.name.trim()) {
+          setStatus('That search result did not contain a valid Roblox game.', true);
+          return;
+        }
+        if (queue.some(item => item.id === id)) {
+          setStatus(`${game.name} is already in this run.`, true);
+          return;
+        }
+        if (queue.length >= 12) {
+          setStatus('This run is full (12 places). Remove one before adding another.', true);
+          return;
+        }
+        const queued = {
+          id,
+          name: game.name.trim().slice(0, 120),
+          creator: String(game.creator || 'Roblox creator').slice(0, 100),
+          playerCount: Number.isFinite(Number(game.playerCount)) ? Number(game.playerCount) : 0
+        };
+        if (!replaceQueue([...queue, queued])) return;
+        button.textContent = 'Queued';
+        button.disabled = true;
+        setStatus(`${queued.name} added to the run.`);
+      }
+
+      async function searchGames(event) {
+        event.preventDefault();
+        const query = document.querySelector('#search-query').value.trim().replace(/\s+/g, ' ');
+        const results = document.querySelector('#search-results');
+        const submit = document.querySelector('#search-submit');
+        if (query.length < 2) {
+          showSearchNote('Enter at least two letters to search Roblox.', true);
+          document.querySelector('#search-query').focus();
+          return;
+        }
+        const requestId = ++searchRequest;
+        searchController?.abort();
+        searchController = new AbortController();
+        submit.disabled = true;
+        submit.textContent = 'Searching…';
+        showSearchNote(`Looking for “${query}”…`);
+        try {
+          const response = await fetch(`/api/roblox/search?q=${encodeURIComponent(query)}`, {
+            headers: { Accept: 'application/json' },
+            signal: searchController.signal
+          });
+          const contentType = response.headers.get('content-type') || '';
+          if (!contentType.toLowerCase().includes('application/json')) {
+            throw new Error(response.status === 404
+              ? 'Game search is unavailable on this static preview. Run the app through Vercel (or `vercel dev`) so /api/roblox/search can respond.'
+              : 'Game search returned an unexpected response. Try again later.');
+          }
+          let payload;
+          try {
+            payload = await response.json();
+          } catch {
+            throw new Error('Game search returned invalid data. Try again later.');
+          }
+          if (requestId !== searchRequest) return;
+          if (!response.ok) throw new Error(payload.error || 'Search is unavailable right now. Try again.');
+          const games = Array.isArray(payload.results) ? payload.results : [];
+          if (!games.length) {
+            showSearchNote('No game names matched. Try a different search.');
+            return;
+          }
+          results.replaceChildren();
+          games.slice(0, 12).forEach(game => {
+            const row = document.createElement('div');
+            row.className = 'search-result';
+            const copy = document.createElement('div');
+            copy.className = 'search-result-copy';
+            const name = document.createElement('strong');
+            name.textContent = String(game.name || 'Untitled experience');
+            const details = document.createElement('span');
+            details.textContent = `By ${String(game.creator || 'Roblox creator')} · ${Number(game.playerCount || 0).toLocaleString()} playing`;
+            copy.append(name, details);
+            const id = String(game.placeId || '');
+            const queued = queue.some(item => item.id === id);
+            const add = document.createElement('button');
+            add.type = 'button';
+            add.className = 'action small';
+            add.textContent = queued ? 'Queued' : '＋ Queue';
+            add.disabled = queued;
+            add.setAttribute('aria-label', `${queued ? 'Already queued' : 'Queue'} ${name.textContent}`);
+            add.addEventListener('click', () => queueGame(game, add));
+            row.append(copy, add);
+            results.append(row);
+          });
+        } catch (error) {
+          if (error.name === 'AbortError' || requestId !== searchRequest) return;
+          showSearchNote(error.message || 'Could not search Roblox right now.', true);
+        } finally {
+          if (requestId === searchRequest) {
+            submit.disabled = false;
+            submit.textContent = '⌕ Search';
+          }
+        }
+      }
+
+      function readQueue() {
+        try {
+          const saved = JSON.parse(localStorage.getItem(queueKey) || '[]');
+          if (!Array.isArray(saved)) throw new Error('The saved lineup is not a list.');
+          const clean = [];
+          saved.forEach(item => {
+            const id = String(item?.id ?? '');
+            if (/^\d+$/.test(id) && item && typeof item.name === 'string' &&
+                !clean.some(game => game.id === id) && clean.length < 12) {
+              clean.push({
+                id,
+                name: item.name.slice(0, 120),
+                creator: String(item.creator || 'Roblox creator').slice(0, 100),
+                playerCount: Number.isFinite(Number(item.playerCount)) ? Number(item.playerCount) : 0
+              });
+            }
+          });
+          queue.push(...clean);
+          if (clean.length !== saved.length) setStatus('Some saved lineup entries were invalid and were left out.', true);
+        } catch {
+          setStatus('The saved lineup could not be read. Add places to start a new one.', true);
+        }
+      }
+
+      function saveTimer() {
+        try {
+          localStorage.setItem(timerKey, JSON.stringify({ durationSeconds, remainingSeconds, deadline, timerFinished, timerPaused }));
+        } catch {
+          sessionCaption.textContent = 'Timer is running, but could not be saved in this browser.';
+        }
+      }
+
+      function renderTimer() {
+        const minutes = Math.floor(remainingSeconds / 60);
+        const seconds = remainingSeconds % 60;
+        const display = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        document.querySelector('#clock').textContent = display;
+        document.querySelector('#clock').setAttribute('aria-label', `${minutes} minutes ${seconds} seconds remaining`);
+        const elapsed = Math.round((1 - remainingSeconds / durationSeconds) * 100);
+        document.querySelector('#progress-fill').style.width = `${Math.min(100, Math.max(0, elapsed))}%`;
+        const progress = document.querySelector('#progress-track');
+        progress.setAttribute('aria-valuenow', String(Math.min(100, Math.max(0, elapsed))));
+        const running = deadline > 0;
+        const paused = !running && timerPaused && !timerFinished;
+        const indicator = document.querySelector('#session-indicator');
+        indicator.textContent = timerFinished ? 'DONE' : running ? 'IN RUN' : 'READY';
+        indicator.classList.toggle('active', running);
+        document.querySelector('#timer-toggle').textContent = running ? 'Pause' : paused ? 'Resume' : 'Reset';
+        document.querySelector('#timer-toggle').setAttribute('aria-label', running ? 'Pause session timer' : paused ? 'Resume session timer' : 'Reset session timer');
+        document.querySelector('#run-start').disabled = running || queue.length === 0;
+        document.querySelector('#run-start').textContent = timerFinished ? 'Start new run' : running ? 'Run in progress' : 'Start run';
+        document.querySelectorAll('[data-minutes]').forEach(button => {
+          button.setAttribute('aria-pressed', String(Number(button.dataset.minutes) * 60 === durationSeconds));
+          button.disabled = running;
+        });
+      }
+
+      function tickTimer() {
+        if (!deadline) return;
+        remainingSeconds = Math.max(0, Math.ceil((deadline - Date.now()) / 1000));
+        if (remainingSeconds === 0) {
+          deadline = 0;
+          timerFinished = true;
+          timerPaused = false;
+          window.clearInterval(tickHandle);
+          tickHandle = 0;
+          sessionCaption.textContent = 'Time is up. Take a breather before starting another run.';
+          saveTimer();
+        }
+        renderTimer();
+      }
+
+      function startRun() {
+        if (!queue.length) return;
+        if (timerFinished || remainingSeconds === 0) {
+          remainingSeconds = durationSeconds;
+          timerFinished = false;
+        }
+        timerPaused = false;
+        deadline = Date.now() + remainingSeconds * 1000;
+        saveTimer();
+        sessionCaption.textContent = 'Your session is running. Launch the next place whenever you are ready.';
+        if (!tickHandle) tickHandle = window.setInterval(tickTimer, 250);
+        renderTimer();
+        launchNext();
+      }
+
+      function toggleTimer() {
+        if (deadline) {
+          remainingSeconds = Math.max(0, Math.ceil((deadline - Date.now()) / 1000));
+          deadline = 0;
+          window.clearInterval(tickHandle);
+          tickHandle = 0;
+          timerFinished = false;
+          timerPaused = remainingSeconds > 0;
+          sessionCaption.textContent = 'Session paused. Reset the clock or start another run when ready.';
+          saveTimer();
+          renderTimer();
+          return;
+        }
+        if (!timerFinished && timerPaused) {
+          deadline = Date.now() + remainingSeconds * 1000;
+          timerPaused = false;
+          sessionCaption.textContent = 'Session resumed. Take your time and enjoy the run.';
+          saveTimer();
+          if (!tickHandle) tickHandle = window.setInterval(tickTimer, 250);
+          renderTimer();
+          return;
+        }
+        remainingSeconds = durationSeconds;
+        timerFinished = false;
+        timerPaused = false;
+        sessionCaption.textContent = 'Clock reset. Start a run when you are ready.';
+        saveTimer();
+        renderTimer();
+      }
+
+      function loadTimer() {
+        try {
+          const saved = JSON.parse(localStorage.getItem(timerKey) || 'null');
+          if (!saved || !allowedMinutes.includes(saved.durationSeconds / 60) ||
+              !Number.isFinite(saved.remainingSeconds) || saved.remainingSeconds < 0 ||
+              saved.remainingSeconds > saved.durationSeconds ||
+              (saved.deadline && !Number.isFinite(saved.deadline))) {
+            if (saved !== null) throw new Error('Invalid timer state.');
+            return;
+          }
+          durationSeconds = saved.durationSeconds;
+          timerFinished = Boolean(saved.timerFinished);
+          if (saved.deadline > Date.now()) {
+            deadline = saved.deadline;
+            timerPaused = false;
+            remainingSeconds = Math.max(0, Math.ceil((deadline - Date.now()) / 1000));
+            tickHandle = window.setInterval(tickTimer, 250);
+            sessionCaption.textContent = 'Your session is running. Launch the next place whenever you are ready.';
+          } else {
+            remainingSeconds = saved.deadline ? 0 : saved.remainingSeconds;
+            deadline = 0;
+            timerFinished = timerFinished || Boolean(saved.deadline);
+            timerPaused = Boolean(saved.timerPaused) && !timerFinished;
+            if (timerFinished) sessionCaption.textContent = 'Time is up. Take a breather before starting another run.';
+          }
+        } catch {
+          sessionCaption.textContent = 'The saved timer was invalid and has been reset.';
+        }
+      }
+
+      document.querySelector('#search-form').addEventListener('submit', searchGames);
+      document.querySelector('#launch-next').addEventListener('click', launchNext);
+      document.querySelector('#shuffle-queue').addEventListener('click', () => {
+        const shuffled = [...queue];
+        for (let index = shuffled.length - 1; index > 0; index -= 1) {
+          const other = Math.floor(Math.random() * (index + 1));
+          [shuffled[index], shuffled[other]] = [shuffled[other], shuffled[index]];
+        }
+        replaceQueue(shuffled, 'Lineup shuffled.');
+      });
+      document.querySelector('#clear-queue').addEventListener('click', () => {
+        if (window.confirm('Clear every place from this lineup?')) replaceQueue([], 'Lineup cleared.');
+      });
+      document.querySelector('#run-start').addEventListener('click', startRun);
+      document.querySelector('#timer-toggle').addEventListener('click', toggleTimer);
+      document.querySelectorAll('[data-minutes]').forEach(button => button.addEventListener('click', () => {
+        durationSeconds = Number(button.dataset.minutes) * 60;
+        remainingSeconds = durationSeconds;
+        timerFinished = false;
+        timerPaused = false;
+        deadline = 0;
+        sessionCaption.textContent = `${button.dataset.minutes}-minute session selected.`;
+        saveTimer();
+        renderTimer();
+      }));
+
+      readQueue();
+      loadTimer();
+      renderQueue();
+      renderTimer();
+    })();
+  </script>
+</body>
+</html>

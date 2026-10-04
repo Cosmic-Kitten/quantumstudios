@@ -2,7 +2,9 @@
 
 Orbit is a Vercel-hosted static launcher with serverless Roblox OAuth sign-in. Roblox handles the account login; Orbit never asks for or receives the Roblox password.
 
-The deployed site is `https://quantumstudios.org`. Game-name search and experience details use public Roblox game/search/thumbnail APIs through the Vercel functions in `api/roblox`; these features do not use Roblox account permissions. Search results may contain multiple matches, so choose the intended experience before pinning it.
+The deployed site is `https://quantumstudios.org`. Game-name search and experience details use public Roblox game/search/thumbnail APIs through the Vercel functions in `api/roblox`; these features do not use Roblox account permissions. Search results may contain multiple matches, so choose the intended experience before pinning it. The Orbit Queue search requires the `/api/roblox/search` Vercel function, so a static-only preview server will not provide search results; use the deployed site or `vercel dev`.
+
+The classic launcher is served from `index.html`. A separate session-based launcher is available at `ai.html`; it builds a temporary launch queue and includes a session timer. The two editions have links to switch between them, but Orbit Queue does not use the Classic launcher's saved library, favorites, or recent-game data.
 
 ## Configure Roblox OAuth
 
