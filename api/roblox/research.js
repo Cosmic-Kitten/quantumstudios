@@ -17,11 +17,6 @@ function decodeHtml(value) {
     .trim();
 }
 
-function attribute(tag, name) {
-  const match = tag.match(new RegExp(`\\b${name}\\s*=\\s*(?:"([^"]*)"|'([^']*)'|([^\\s>]+))`, 'i'));
-  return match?.[1] ?? match?.[2] ?? match?.[3] ?? '';
-}
-
 function resultUrl(rawHref) {
   try {
     let url = new URL(rawHref, 'https://html.duckduckgo.com');
@@ -35,26 +30,6 @@ function resultUrl(rawHref) {
   } catch {
     return null;
   }
-}
-
-function parseResults(html) {
-  const anchors = [...html.matchAll(/<a\b[^>]*\bclass=(["'])[^"']*\bresult__a\b[^"']*\1[^>]*>([\s\S]*?)<\/a>/gi)];
-  const results = [];
-  const seen = new Set();
-  anchors.forEach((match, index) => {
-    const url = resultUrl(attribute(match[0], 'href'));
-    const title = decodeHtml(match[2]);
-    if (!url || !title || seen.has(url)) return;
-    seen.add(url);
-    const start = match.index + match[0].length;
-    const end = anchors[index + 1]?.index ?? html.length;
-    const following = html.slice(start, end);
-    const snippetMatch = following.match(/<(?:a|div|td)\b[^>]*\bclass=(["'])[^"']*\bresult__snippet\b[^"']*\1[^>]*>([\s\S]*?)<\/(?:a|div|td)>/i);
-    const snippet = snippetMatch ? decodeHtml(snippetMatch[2]) : '';
-    const host = new URL(url).hostname.replace(/^www\./i, '');
-    results.push({ title: title.slice(0, 180), snippet: snippet.slice(0, 500), url, host });
-  });
-  return results.slice(0, 8);
 }
 
 function xmlValue(item, tag) {
@@ -106,11 +81,10 @@ module.exports = async function research(req, res) {
     });
     if (!response.ok) return res.status(502).json({ error: 'Web research is temporarily unavailable.' });
     const xml = await response.text();
-    const isRss = /<rss\b|<channel\b/i.test(xml);
-    const results = isRss ? parseRssResults(xml) : parseResults(xml);
-    if (!results.length && !isRss) {
+    if (!/<rss\b|<channel\b/i.test(xml)) {
       return res.status(502).json({ error: 'The web search provider returned an unexpected response.' });
     }
+    const results = parseRssResults(xml);
     return res.status(200).json({ query, results });
   } catch {
     return res.status(502).json({ error: 'Could not reach web search. Try again.' });
