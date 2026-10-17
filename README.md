@@ -22,6 +22,20 @@ The classic launcher is served from `index.html`. A separate session-based launc
 
 Do not put the client secret or session secret in `index.html`, commit them, or expose them as `NEXT_PUBLIC_*` variables. The callback exchanges the authorization code on Vercel, discards the access token after reading the basic profile, and stores only an encrypted profile in an HttpOnly cookie for up to seven days.
 
+## Configure the Turnstile website gate
+
+The site checks visitors before serving pages, assets, or API requests. On the first visit, complete the Turnstile check; the resulting signed, HttpOnly access cookie lasts 12 hours. Page navigations are not cached by the service worker so an offline cached page cannot bypass the gate.
+
+In Vercel project settings, add these environment variables for the production deployment:
+
+- `TURNSTILE_SECRET`: the secret for the existing Turnstile widget. Store it directly in Vercel; never put it in source control or browser code.
+- `TURNSTILE_HOSTNAMES`: `quantumstudios.vercel.app`.
+- `ORBIT_SESSION_SECRET`: the existing random secret of at least 32 characters from the Roblox OAuth setup; it signs the short-lived gate cookie.
+
+The existing widget must allow `quantumstudios.vercel.app`. Local testing also requires `localhost` and `127.0.0.1` in the widget's allowed domains; configure a local `TURNSTILE_HOSTNAMES` value of `localhost,127.0.0.1` in an ignored local environment file. Production verification deliberately rejects local hostnames.
+
+Redeploy after setting the Vercel environment variables. The gate fails closed until `TURNSTILE_SECRET` and the allowed hostname are configured.
+
 ## Local checks
 
 Run the OAuth and public game API tests with:

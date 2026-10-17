@@ -1,8 +1,5 @@
-const CACHE_NAME = 'orbit-shell-v4';
+const CACHE_NAME = 'orbit-shell-v5';
 const APP_SHELL = [
-  '/',
-  '/index.html',
-  '/ai.html',
   '/manifest.webmanifest',
   '/icons/orbit.svg',
   '/icons/orbit-192.png',
@@ -33,17 +30,7 @@ self.addEventListener('fetch', event => {
   if (request.method !== 'GET' || url.origin !== self.location.origin || url.pathname.startsWith('/api/')) return;
 
   if (request.mode === 'navigate') {
-    event.respondWith(
-      fetch(request)
-        .then(response => {
-          if (response.ok) {
-            const copy = response.clone();
-            caches.open(CACHE_NAME).then(cache => cache.put(request, copy));
-          }
-          return response;
-        })
-        .catch(() => caches.match(request).then(cached => cached || caches.match('/index.html')))
-    );
+    event.respondWith(fetch(request));
     return;
   }
 

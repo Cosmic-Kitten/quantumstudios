@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#111713">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Verify to continue - Orbit</title>
+  <style>
+    :root { color-scheme: dark; font-family: Inter, "Segoe UI", system-ui, sans-serif; background: #111713; color: #f2f4ed; }
+    * { box-sizing: border-box; }
+    body { min-height: 100vh; margin: 0; padding: 24px; display: grid; place-items: center; }
+    main { width: min(100%, 440px); padding: 32px; border: 1px solid #344139; background: #19211c; }
+    h1 { margin: 0 0 12px; font-size: clamp(25px, 6vw, 34px); }
+    p { color: #a0aca2; line-height: 1.6; }
+    .widget { min-height: 65px; margin: 24px 0 16px; }
+    button { min-height: 44px; padding: 0 18px; border: 0; background: #c9f36b; color: #111713; font: inherit; font-weight: 800; cursor: pointer; }
+    button:disabled { opacity: .6; cursor: wait; }
+    #message { min-height: 24px; color: #ffb29e; font-size: 14px; }
+  </style>
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+</head>
+<body>
+  <main>
+    <h1>One quick check</h1>
+    <p>Complete the security check to continue to Orbit.</p>
+    <form id="verification-form">
+      <div class="widget">
+        <div class="cf-turnstile" data-sitekey="0x4AAAAAAFZQzVqDPGfI-Uhu" data-action="website"></div>
+      </div>
+      <button id="continue-button" type="submit">Continue to Orbit</button>
+      <p id="message" role="status" aria-live="polite"></p>
+    </form>
+  </main>
+  <script>
+    const form = document.querySelector('#verification-form');
+    const button = document.querySelector('#continue-button');
+    const message = document.querySelector('#message');
+
+    form.addEventListener('submit', async event => {
+      event.preventDefault();
+      const token = new FormData(form).get('cf-turnstile-response');
+      if (typeof token !== 'string' || !token) {
+        message.textContent = 'Complete the security check first.';
+        return;
+      }
+
+      button.disabled = true;
+      message.textContent = 'Verifying…';
+      try {
+        const response = await fetch('/api/turnstile/verify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ token }),
+          credentials: 'same-origin'
+        });
+        if (!response.ok) throw new Error(`Verification failed (${response.status}). Please try again.`);
+
+        const requestedPath = new URLSearchParams(location.search).get('next') || '/';
+        const destination = new URL(requestedPath, location.origin);
+        if (destination.origin !== location.origin || destination.pathname === '/turnstile-gate.html') {
+          destination.pathname = '/';
+          destination.search = '';
+          destination.hash = '';
+        }
+        location.replace(`${destination.pathname}${destination.search}${destination.hash}`);
+      } catch (error) {
+        message.textContent = error instanceof Error ? error.message : 'Verification failed. Please try again.';
+        if (window.turnstile) window.turnstile.reset();
+        button.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
