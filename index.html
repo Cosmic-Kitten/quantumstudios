@@ -211,6 +211,15 @@
     .orbit-button.primary:hover { background: #d8ff89; }
     .home-section[hidden] { display: none !important; }
     .library-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(205px, 1fr)); gap: 10px; }
+    .explore-description { margin: 7px 0 0; color: var(--orbit-muted); font-size: 10px; line-height: 1.6; }
+    .explore-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+    .explore-card { min-width: 0; overflow: hidden; border: 1px solid var(--orbit-line); border-radius: var(--orbit-radius); background: var(--orbit-panel); }
+    .explore-art { width: 100%; aspect-ratio: 16 / 9; display: block; object-fit: cover; background: var(--orbit-panel-2); }
+    .explore-card-copy { padding: 12px 13px 13px; }
+    .explore-card h3 { margin: 0; overflow: hidden; font-size: 12px; text-overflow: ellipsis; white-space: nowrap; }
+    .explore-card-meta { margin: 5px 0 0; color: var(--orbit-muted); font-size: 9px; }
+    .explore-card-actions { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 6px; }
+    .explore-message { grid-column: 1 / -1; min-height: 104px; padding: 22px; display: flex; align-items: center; justify-content: space-between; gap: 16px; border: 1px dashed #53634f; color: var(--orbit-muted); font-size: 10px; line-height: 1.6; }
     .library-tools { margin: 0 0 12px; display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
     .library-tool-group { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
     .library-filter, .library-sort { min-height: 36px; padding: 0 10px; border: 1px solid var(--orbit-line); border-radius: var(--orbit-radius); outline: none; background: var(--orbit-panel); color: var(--orbit-text); font-size: 10px; }
@@ -1045,6 +1054,7 @@
         <a class="active" href="#top"><span class="nav-icon" aria-hidden="true">⌂</span><span>Launch hub</span></a>
         <a href="#launch"><span class="nav-icon" aria-hidden="true">◎</span><span>Launch game</span></a>
         <a href="#library"><span class="nav-icon" aria-hidden="true">▦</span><span>My games</span></a>
+        <a href="#explore"><span class="nav-icon" aria-hidden="true">✦</span><span>Explore</span></a>
         <a href="#recent"><span class="nav-icon" aria-hidden="true">◷</span><span>Recent</span></a>
       </nav>
       <div class="orbit-side-bottom">
@@ -1055,62 +1065,6 @@
     <main class="orbit-main" id="top">
       <header class="orbit-topbar"><div class="orbit-breadcrumb"><span id="workspace-breadcrumb">Orbit</span> <span aria-hidden="true">/</span> <strong>Launch hub</strong></div><div class="orbit-top-actions"><span class="orbit-status"><i aria-hidden="true"></i> Roblox web</span><a class="customize-button ai-version-link" href="/ai.html"><span aria-hidden="true">✳</span> Orbit Queue</a><button class="customize-button" id="customize-open" type="button" aria-label="Customize your Orbit home"><span aria-hidden="true">☷</span> Customize</button><div class="account-tools"><a class="account-link" id="account-link" href="/api/roblox/login">Connect Roblox</a><span class="account-name" id="account-name" hidden></span><button class="account-logout" id="account-logout" type="button" hidden>Sign out</button><span class="account-message" id="account-message" role="status" aria-live="polite"></span></div><button class="install-button" id="install-button" type="button"><span aria-hidden="true">↓</span> Install Orbit</button></div></header>
       <section class="orbit-welcome"><div class="orbit-kicker">Your game library, one step away</div><h1 id="welcome-headline">Where to today?</h1><p>Start with a Roblox experience link or place ID. Orbit will open the official Roblox game page.</p></section>
-      <section class="showcase-panel" aria-labelledby="showcase-title">
-        <div class="showcase-copy">
-          <div class="orbit-kicker">Dramatic tutorial</div>
-          <h2 id="showcase-title">Three moves. One perfect launch. Zero chaos.</h2>
-          <p>Orbit turns a Roblox shortcut into a cinematic setup: add the game, queue the vibe, then launch it like it’s the final boss room.</p>
-          <div class="showcase-steps" aria-label="Tutorial steps">
-            <button class="showcase-step active" type="button" data-step-index="0">
-              <span class="showcase-step-number">01</span>
-              <div>
-                <strong>Paste the link</strong>
-                <small>Drop in a Roblox game URL or place ID.</small>
-              </div>
-            </button>
-            <button class="showcase-step" type="button" data-step-index="1">
-              <span class="showcase-step-number">02</span>
-              <div>
-                <strong>Queue the mood</strong>
-                <small>Pin your favorites and sort the run.</small>
-              </div>
-            </button>
-            <button class="showcase-step" type="button" data-step-index="2">
-              <span class="showcase-step-number">03</span>
-              <div>
-                <strong>Launch and go</strong>
-                <small>Open the official Roblox page and hit play.</small>
-              </div>
-            </button>
-          </div>
-          <div class="showcase-actions">
-            <button class="orbit-button primary" id="showcase-demo" type="button">Run tutorial</button>
-            <span class="showcase-status" id="showcase-status">Launch mode: ready to fire</span>
-          </div>
-        </div>
-        <div class="showcase-visual" data-mode="launch" aria-hidden="true">
-          <div class="showcase-window">
-            <div class="showcase-console-head">
-              <span></span>
-              <span></span>
-              <span></span>
-            </div>
-            <div class="showcase-console-body">
-              <div class="console-line small">SYSTEM // ORBIT LINK CHECK</div>
-              <div class="console-line accent" id="showcase-command">LINK VERIFIED // roblox.com/games/920587237</div>
-              <div class="console-progress">
-                <span id="showcase-progress-bar"></span>
-              </div>
-              <div class="console-line meta">READY // <strong id="showcase-core-label">Launch</strong> sequence unlocked</div>
-            </div>
-          </div>
-          <div class="showcase-metrics">
-            <div class="showcase-metric"><span class="showcase-metric-value">1 tap</span><small>Open</small></div>
-            <div class="showcase-metric"><span class="showcase-metric-value">3 steps</span><small>Flow</small></div>
-            <div class="showcase-metric"><span class="showcase-metric-value">∞ vibe</span><small>Mode</small></div>
-          </div>
-        </div>
-      </section>
       <div id="home-sections">
       <section class="orbit-launch-panel home-section" id="launch" data-home-section="launch" aria-labelledby="launch-title">
         <div class="launch-content">
@@ -1146,6 +1100,10 @@
         <div class="library-count" id="library-count" aria-live="polite"></div>
         <div class="library-grid" id="library-grid"></div>
         <p class="library-feedback" id="library-feedback" role="status" aria-live="polite"></p>
+      </section>
+      <section class="home-section" id="explore" data-home-section="explore" aria-labelledby="explore-title">
+        <div class="orbit-section-head"><div><h2 id="explore-title">Explore games</h2><p class="explore-description">Recommendations inspired by experiences in your library.</p></div><button class="orbit-button" id="refresh-recommendations" type="button">Refresh picks</button></div>
+        <div class="explore-grid" id="explore-grid" aria-live="polite"><div class="explore-message">Open Explore to get recommendations based on your saved games.</div></div>
       </section>
       <section class="home-section" id="discover" data-home-section="discover" aria-labelledby="quick-title">
         <div class="orbit-section-head"><h2 id="quick-title">Quick access</h2><span>Official Roblox links</span></div>
@@ -1262,240 +1220,6 @@
     <div class="intel-body" id="intel-content"><div class="search-status">Loading public Roblox information...</div></div>
     <div class="dialog-foot"><button class="orbit-button" type="button" data-close-dialog="intel-dialog">Close</button></div>
   </dialog>
-  <style>
-    .showcase-panel {
-      position: relative;
-      display: grid;
-      grid-template-columns: minmax(0, 1.1fr) minmax(320px, .9fr);
-      gap: 20px;
-      align-items: center;
-      padding: 30px 28px 24px;
-      margin: 0 0 26px;
-      border: 1px solid var(--orbit-line);
-      border-radius: 28px;
-      background: linear-gradient(135deg, rgba(20, 26, 25, .95), rgba(12, 18, 28, .96));
-      box-shadow: 0 26px 70px -40px rgba(0, 0, 0, .82);
-      overflow: hidden;
-    }
-    .showcase-panel::before {
-      content: "";
-      position: absolute;
-      inset: auto -10% -25% auto;
-      width: 260px;
-      height: 260px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(201,243,107,.14), transparent 60%);
-      pointer-events: none;
-    }
-    .showcase-copy { max-width: 560px; }
-    .showcase-copy h2 {
-      margin: 12px 0 10px;
-      color: var(--orbit-text);
-      font-size: clamp(28px, 4vw, 46px);
-      line-height: 1.06;
-      letter-spacing: -.04em;
-    }
-    .showcase-copy p {
-      margin: 0;
-      font-size: 15px;
-      line-height: 1.75;
-      color: var(--orbit-muted);
-    }
-    .showcase-steps {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 10px;
-      margin-top: 22px;
-    }
-    .showcase-step {
-      width: 100%;
-      display: grid;
-      grid-template-columns: 56px 1fr;
-      gap: 12px;
-      align-items: center;
-      padding: 12px 12px 12px 0;
-      border: 1px solid rgba(255,255,255,.07);
-      border-radius: 18px;
-      background: rgba(255,255,255,.02);
-      color: inherit;
-      text-align: left;
-      cursor: pointer;
-      transition: border-color .2s ease, transform .2s ease, background .2s ease;
-    }
-    .showcase-step.active {
-      border-color: rgba(201,243,107,.62);
-      background: rgba(201,243,107,.06);
-      transform: translateX(4px);
-    }
-    .showcase-step-number {
-      display: grid;
-      place-items: center;
-      width: 46px;
-      height: 46px;
-      border-radius: 12px;
-      background: rgba(201,243,107,.12);
-      border: 1px solid rgba(201,243,107,.35);
-      color: var(--orbit-lime);
-      font: 10px var(--orbit-mono);
-      letter-spacing: .12em;
-    }
-    .showcase-step strong {
-      display: block;
-      color: var(--orbit-text);
-      font-size: 14px;
-    }
-    .showcase-step small {
-      display: block;
-      margin-top: 4px;
-      color: var(--orbit-muted);
-      font-size: 11px;
-    }
-    .showcase-actions {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 12px 18px;
-      margin-top: 22px;
-    }
-    .showcase-status {
-      color: var(--orbit-lime);
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: .06em;
-      text-transform: uppercase;
-    }
-    .showcase-visual {
-      position: relative;
-      min-height: 330px;
-      padding: 18px 18px 12px;
-      border: 1px solid #2d3d40;
-      border-radius: 24px;
-      background: radial-gradient(circle at 30% 25%, rgba(201, 243, 107, .18), transparent 30%), radial-gradient(circle at 80% 30%, rgba(124, 156, 255, .2), transparent 26%), rgba(15, 19, 25, .72);
-      overflow: hidden;
-    }
-    .showcase-window {
-      position: relative;
-      height: 220px;
-      padding: 14px 14px 12px;
-      border: 1px solid rgba(255,255,255,.1);
-      border-radius: 18px;
-      background: rgba(8,12,18,.82);
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,.02);
-    }
-    .showcase-window::before,
-    .showcase-window::after {
-      content: "";
-      position: absolute;
-      border-radius: 50%;
-      pointer-events: none;
-      filter: blur(20px);
-    }
-    .showcase-window::before {
-      inset: -40px 35% auto auto;
-      width: 90px;
-      height: 90px;
-      background: rgba(201,243,107,.12);
-    }
-    .showcase-window::after {
-      inset: auto auto -30px 18%;
-      width: 110px;
-      height: 110px;
-      background: rgba(124,156,255,.12);
-    }
-    .showcase-console-head {
-      display: flex;
-      gap: 7px;
-      margin-bottom: 14px;
-    }
-    .showcase-console-head span {
-      display: block;
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: rgba(255,255,255,.25);
-    }
-    .showcase-console-head span:nth-child(1) { background: #ff7d7d; }
-    .showcase-console-head span:nth-child(2) { background: #ffcb5b; }
-    .showcase-console-head span:nth-child(3) { background: #73d38a; }
-    .showcase-console-body {
-      display: grid;
-      gap: 12px;
-      font: 11px var(--orbit-mono);
-      color: var(--orbit-muted);
-    }
-    .console-line {
-      letter-spacing: .08em;
-      text-transform: uppercase;
-    }
-    .console-line.accent {
-      color: var(--orbit-lime);
-      text-shadow: 0 0 10px rgba(201,243,107,.38);
-    }
-    .console-line.meta strong {
-      color: var(--orbit-text);
-    }
-    .console-progress {
-      width: 100%;
-      height: 10px;
-      overflow: hidden;
-      border-radius: 999px;
-      background: rgba(255,255,255,.04);
-      border: 1px solid rgba(255,255,255,.08);
-    }
-    .console-progress span {
-      display: block;
-      width: 32%;
-      height: 100%;
-      border-radius: inherit;
-      background: linear-gradient(90deg, var(--orbit-lime), #7ce0db 100%);
-      box-shadow: 0 0 18px rgba(201,243,107,.45);
-      transition: width .32s ease, filter .2s ease;
-    }
-    .showcase-panel[data-mode="queue"] .console-progress span {
-      filter: saturate(1.2);
-    }
-    .showcase-metrics {
-      position: absolute;
-      left: 18px;
-      right: 18px;
-      bottom: 18px;
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 10px;
-    }
-    .showcase-metric {
-      padding: 12px 10px 10px;
-      border: 1px solid rgba(255,255,255,.08);
-      border-radius: 14px;
-      background: rgba(10,14,16,.72);
-      text-align: center;
-    }
-    .showcase-metric-value {
-      display: block;
-      font-size: 18px;
-      line-height: 1;
-      letter-spacing: -.05em;
-      color: var(--orbit-lime);
-    }
-    .showcase-metric small {
-      display: block;
-      margin-top: 8px;
-      color: var(--orbit-muted);
-      font-size: 9px;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-    }
-    .showcase-panel[data-mode="queue"] .showcase-window { border-color: rgba(255,146,110,.5); }
-    .showcase-panel[data-mode="queue"] .console-line.accent { color: #ffb38b; }
-    .showcase-panel[data-mode="queue"] .console-progress span { background: linear-gradient(90deg, #ff926e, #ffd0a9 100%); box-shadow: 0 0 18px rgba(255,146,110,.42); }
-    .showcase-panel[data-mode="discover"] .showcase-window { border-color: rgba(124,156,255,.5); }
-    .showcase-panel[data-mode="discover"] .console-line.accent { color: #9cb8ff; }
-    .showcase-panel[data-mode="discover"] .console-progress span { background: linear-gradient(90deg, #7c9cff, #7ce0db 100%); box-shadow: 0 0 18px rgba(124,156,255,.42); }
-    @media (max-width: 740px) {
-      .showcase-panel { grid-template-columns: 1fr; }
-      .showcase-visual { min-height: 300px; }
-    }
-  </style>
   <script>
     const gameForm = document.querySelector('#launch-form');
     const gameInput = document.querySelector('#game-input');
@@ -1503,6 +1227,9 @@
     const recentList = document.querySelector('#recent-list');
     const installButton = document.querySelector('#install-button');
     const libraryGrid = document.querySelector('#library-grid');
+    const exploreGrid = document.querySelector('#explore-grid');
+    const refreshRecommendationsButton = document.querySelector('#refresh-recommendations');
+    const workspaceNavigation = document.querySelector('.orbit-nav');
     const libraryFilter = document.querySelector('#library-filter');
     const librarySort = document.querySelector('#library-sort');
     const libraryCount = document.querySelector('#library-count');
@@ -1546,103 +1273,21 @@
     const sectionDefinitions = [
       { id: 'launch', label: 'Launch game' },
       { id: 'library', label: 'My games' },
+      { id: 'explore', label: 'Explore games' },
       { id: 'discover', label: 'Quick access' },
       { id: 'activity', label: 'Recently opened' },
       { id: 'notes', label: 'Quick notes' }
     ];
-    const showcaseDemo = document.querySelector('#showcase-demo');
-    const showcaseStatus = document.querySelector('#showcase-status');
-    const showcaseCoreLabel = document.querySelector('#showcase-core-label');
-    const showcaseCommand = document.querySelector('#showcase-command');
-    const showcaseProgressBar = document.querySelector('#showcase-progress-bar');
-    const showcaseModes = [
-      { mode: 'launch', label: 'Launch mode', text: 'ready to fire', core: 'Launch', command: 'LINK VERIFIED // roblox.com/games/920587237', progress: '32%', metrics: ['1 tap', '3 steps', '∞ vibe'] },
-      { mode: 'queue', label: 'Queue mode', text: 'next up and synced', core: 'Queue', command: 'QUEUE LOCKED // 6 experiences staged', progress: '72%', metrics: ['6 game', '2 min', '90%'] },
-      { mode: 'discover', label: 'Discover mode', text: 'finding the next favorite', core: 'Discover', command: 'SIGNAL FOUND // new favorite detected', progress: '100%', metrics: ['12 picks', '5 vibes', 'wow'] }
-    ];
-    let showcaseIndex = 0;
-    let showcaseTimer = null;
-
-    function applyTutorialAction(index) {
-      const actions = [
-        () => {
-          if (gameInput) {
-            gameInput.value = '920587237';
-            gameInput.focus();
-            gameInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          }
-          if (launchError) launchError.textContent = 'Demo link loaded. Press Open game to continue.';
-        },
-        () => {
-          const librarySection = document.querySelector('#library');
-          if (librarySection) librarySection.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          if (document.querySelector('#add-game-open')) document.querySelector('#add-game-open').click();
-          if (launchError) launchError.textContent = 'Queue demo: favorites are staged for the next run.';
-        },
-        () => {
-          const launchSection = document.querySelector('#launch');
-          if (launchSection) launchSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          if (gameInput) {
-            gameInput.value = 'https://www.roblox.com/games/920587237';
-            gameInput.focus();
-          }
-          if (launchError) launchError.textContent = 'Demo ready. Orbit is primed to open Roblox.';
-        }
-      ];
-      if (actions[index]) actions[index]();
-    }
-
-    function renderShowcaseMode(index = showcaseIndex) {
-      const current = showcaseModes[index];
-      const panel = document.querySelector('.showcase-panel');
-      const steps = document.querySelectorAll('.showcase-step');
-      if (panel) panel.dataset.mode = current.mode;
-      if (showcaseStatus) showcaseStatus.textContent = `${current.label}: ${current.text}`;
-      if (showcaseCoreLabel) showcaseCoreLabel.textContent = current.core;
-      if (showcaseCommand) showcaseCommand.textContent = current.command;
-      if (showcaseProgressBar) showcaseProgressBar.style.width = current.progress;
-      steps.forEach((step, stepIndex) => {
-        step.classList.toggle('active', stepIndex === index);
-      });
-      const metricValues = document.querySelectorAll('.showcase-metric-value');
-      metricValues.forEach((el, metricIndex) => {
-        el.textContent = current.metrics[metricIndex] || '—';
-      });
-    }
-
-    function runShowcaseTutorial() {
-      clearInterval(showcaseTimer);
-     let step = 0;
-      renderShowcaseMode(step);
-      applyTutorialAction(step);
-      showcaseTimer = setInterval(() => {
-        step = (step + 1) % showcaseModes.length;
-        showcaseIndex = step;
-        renderShowcaseMode(step);
-        applyTutorialAction(step);
-      }, 1600);
-    }
-
-    document.querySelectorAll('.showcase-step').forEach((step) => {
-      step.addEventListener('click', () => {
-        clearInterval(showcaseTimer);
-        showcaseIndex = Number(step.dataset.stepIndex || 0);
-        renderShowcaseMode(showcaseIndex);
-        applyTutorialAction(showcaseIndex);
-      });
-    });
-
-    showcaseDemo?.addEventListener('click', () => {
-      runShowcaseTutorial();
-    });
-    renderShowcaseMode(0);
-
     let editingPlaceId = null;
     let selectedGameColor = 'lime';
     let currentSearchResults = [];
     let selectedSearchGame = null;
     let searchRequestId = 0;
     let nextSearchPageToken = null;
+    let exploreRecommendations = [];
+    let exploreRequestId = 0;
+    let exploreLoaded = false;
+    let exploreLoading = false;
     let installPrompt = null;
 
     function detectPlatform() {
@@ -1927,6 +1572,7 @@
         }
         renderLibrary();
         libraryFeedback.textContent = `Backup merged: ${added} added, ${updated} updated${skipped ? `, ${skipped} skipped (30-game limit)` : ''}.`;
+        exploreLoaded = false;
       } catch (error) {
         libraryFeedback.textContent = error instanceof SyntaxError
           ? 'Could not read that JSON backup file.'
@@ -2503,6 +2149,151 @@
       }
     }
 
+    function renderExploreMessage(message, actionLabel) {
+      exploreGrid.replaceChildren();
+      const empty = makeIntelElement('div', 'explore-message', message);
+      if (actionLabel) {
+        const action = makeIntelElement('button', 'orbit-button', actionLabel);
+        action.type = 'button';
+        action.addEventListener('click', () => openGameSearch());
+        empty.append(action);
+      }
+      exploreGrid.append(empty);
+    }
+
+    function renderExploreRecommendations() {
+      const library = loadLibrary();
+      const savedIds = new Set(library.flatMap(game => [game.id, game.universeId].filter(Boolean)));
+      const recommendations = exploreRecommendations
+        .filter(game => !savedIds.has(game.placeId) && !savedIds.has(game.universeId))
+        .slice(0, 12);
+
+      exploreGrid.replaceChildren();
+      if (!recommendations.length) {
+        renderExploreMessage('No new recommendations right now. Try refreshing your picks.');
+        return;
+      }
+
+      recommendations.forEach(game => {
+        const card = makeIntelElement('article', 'explore-card');
+        const art = makeIntelElement('img', 'explore-art');
+        art.src = game.thumbnail || '/icons/orbit-192.png';
+        art.alt = `${game.name} Roblox experience`;
+        art.loading = 'lazy';
+        art.addEventListener('error', () => {
+          if (art.src.endsWith('/icons/orbit-192.png')) return;
+          art.src = '/icons/orbit-192.png';
+        }, { once: true });
+
+        const copy = makeIntelElement('div', 'explore-card-copy');
+        copy.append(makeIntelElement('h3', '', game.name));
+        copy.append(makeIntelElement('p', 'explore-card-meta',
+          `By ${game.creator || 'Roblox creator'} · ${formatCount(game.playerCount)} playing${game.basedOn ? ` · Similar to ${game.basedOn}` : ''}`));
+        const actions = makeIntelElement('div', 'explore-card-actions');
+        const details = makeIntelElement('button', 'orbit-button', 'Details');
+        details.type = 'button';
+        details.addEventListener('click', () => showGameIntel({
+          id: game.placeId,
+          title: game.name,
+          universeId: game.universeId
+        }));
+        const add = makeIntelElement('button', 'orbit-button primary', 'Add to library');
+        add.type = 'button';
+        add.disabled = library.length >= 30;
+        add.title = add.disabled ? 'Remove a game before adding another; the library limit is 30.' : '';
+        add.addEventListener('click', () => {
+          const currentLibrary = loadLibrary();
+          if (currentLibrary.length >= 30) {
+            add.disabled = true;
+            add.title = 'Remove a game before adding another; the library limit is 30.';
+            return;
+          }
+          if (currentLibrary.some(item => item.id === game.placeId || item.universeId === game.universeId)) {
+            renderExploreRecommendations();
+            return;
+          }
+          saveJson(libraryKey, [...currentLibrary, {
+            id: game.placeId,
+            placeId: game.placeId,
+            universeId: game.universeId,
+            title: game.name.slice(0, 48),
+            color: 'lime'
+          }]);
+          renderLibrary();
+          exploreLoaded = false;
+          renderExploreRecommendations();
+        });
+        const play = makeIntelElement('a', 'orbit-button', 'Play ↗');
+        play.href = game.url;
+        play.target = '_blank';
+        play.rel = 'noopener noreferrer';
+        actions.append(details, add, play);
+        copy.append(actions);
+        card.append(art, copy);
+        exploreGrid.append(card);
+      });
+    }
+
+    async function loadExploreRecommendations(force = false) {
+      if ((exploreLoaded && !force) || exploreLoading) {
+        renderExploreRecommendations();
+        return;
+      }
+      const requestId = ++exploreRequestId;
+      const library = loadLibrary();
+      const byPlaceId = new Map(library.map(game => [game.id, game]));
+      const recentSeeds = loadRecents().map(game => byPlaceId.get(game.id)).filter(Boolean);
+      const seeds = [...recentSeeds, ...library.filter(game => !recentSeeds.some(recent => recent.id === game.id))]
+        .filter((game, index, all) => game.universeId && /^\d+$/.test(game.universeId) &&
+          all.findIndex(candidate => candidate.universeId === game.universeId) === index)
+        .slice(0, 3);
+
+      if (!seeds.length) {
+        exploreRecommendations = [];
+        exploreLoaded = true;
+        refreshRecommendationsButton.disabled = false;
+        renderExploreMessage('Add a game from Roblox search to your library first. Explore will use it to find similar experiences.', 'Find a game');
+        return;
+      }
+
+      renderExploreMessage('Finding games related to your library…');
+      exploreLoading = true;
+      refreshRecommendationsButton.disabled = true;
+      const results = await Promise.allSettled(seeds.map(async seed => {
+        const response = await fetch(`/api/roblox/game?universeId=${encodeURIComponent(seed.universeId)}`, { cache: 'no-store' });
+        const payload = await readApiResponse(response, 'Game recommendations');
+        if (!Array.isArray(payload.connections)) throw new Error('Roblox returned invalid recommendations. Try again.');
+        return payload.connections.map(game => ({ ...game, basedOn: seed.title }));
+      }));
+      if (requestId !== exploreRequestId) return;
+      exploreLoading = false;
+      refreshRecommendationsButton.disabled = false;
+
+      const fulfilled = results.filter(result => result.status === 'fulfilled');
+      if (!fulfilled.length) {
+        const failed = results.find(result => result.status === 'rejected');
+        exploreLoaded = false;
+        renderExploreMessage(failed.reason instanceof Error ? failed.reason.message : 'Could not load recommendations. Try again.');
+        return;
+      }
+
+      const seen = new Set();
+      exploreRecommendations = fulfilled.flatMap(result => result.value)
+        .filter(game => typeof game.placeId === 'string' && /^\d+$/.test(game.placeId) &&
+          typeof game.universeId === 'string' && /^\d+$/.test(game.universeId))
+        .filter(game => {
+          if (seen.has(game.universeId)) return false;
+          seen.add(game.universeId);
+          return true;
+        });
+      exploreLoaded = true;
+      renderExploreRecommendations();
+      if (fulfilled.length < seeds.length) {
+        const note = makeIntelElement('p', 'library-feedback', 'Some recommendations could not be loaded. Refresh to try again.');
+        exploreGrid.append(note);
+      }
+    }
+
     function setGameColor(color) {
       selectedGameColor = isGameColor(color) ? color : 'lime';
       document.querySelectorAll('.color-choice').forEach(button => {
@@ -2728,6 +2519,13 @@
     });
 
     document.querySelector('#add-game-open').addEventListener('click', () => openGameSearch());
+    workspaceNavigation.addEventListener('click', event => {
+      const link = event.target.closest('a[href^="#"]');
+      if (!link) return;
+      workspaceNavigation.querySelectorAll('a').forEach(item => item.classList.toggle('active', item === link));
+      if (link.hash === '#explore') loadExploreRecommendations();
+    });
+    refreshRecommendationsButton.addEventListener('click', () => loadExploreRecommendations(true));
     libraryFilter.addEventListener('input', renderLibrary);
     librarySort.addEventListener('change', renderLibrary);
     randomGameButton.addEventListener('click', () => {
@@ -2778,6 +2576,7 @@
       };
       saveJson(libraryKey, [...games.filter(game => game.id !== savedGame.id), savedGame]);
       searchDialog.close();
+      exploreLoaded = false;
       renderLibrary();
       renderRecents();
     });
@@ -2869,6 +2668,7 @@
       next.push({ id, title: title.slice(0, 48), color: selectedGameColor });
       saveJson(libraryKey, next);
       gameDialog.close();
+      exploreLoaded = false;
       renderLibrary();
       renderRecents();
     });
@@ -2883,6 +2683,7 @@
       if (button.dataset.action === 'edit') openGameEditor(game);
       if (button.dataset.action === 'remove') {
         saveJson(libraryKey, loadLibrary().filter(item => item.id !== game.id));
+        exploreLoaded = false;
         renderLibrary();
         renderRecents();
       }
@@ -2901,6 +2702,7 @@
     applySettings();
     renderLibrary();
     renderRecents();
+    if (location.hash === '#explore') loadExploreRecommendations();
 
     async function loadRobloxAccount() {
       const query = new URLSearchParams(location.search);

@@ -87,13 +87,14 @@ test('game intel validates universe ID and normalizes public details and recomme
       }] }) };
     }
     if (parsed.pathname.includes('/recommendations/')) {
-      return { ok: true, json: async () => ({ games: [{
-        universeId: 234,
-        placeId: 567,
-        name: 'Related Experience',
-        creatorName: 'Another Studio',
-        playerCount: 7
-      }] }) };
+      return { ok: true, json: async () => ({ games: [
+        { universeId: 123, placeId: 456, name: 'The current experience' },
+        { universeId: 234, placeId: 567, name: 'Related Experience', creatorName: 'Another Studio', playerCount: 7 },
+        { universeId: 234, placeId: 568, name: 'Duplicate recommendation' }
+      ] }) };
+    }
+    if (parsed.hostname === 'thumbnails.roblox.com' && parsed.searchParams.get('universeIds') === '234') {
+      return { ok: true, json: async () => ({ data: [{ targetId: 234, imageUrl: 'https://t4.rbxcdn.com/related' }] }) };
     }
     return { ok: true, json: async () => ({ data: [{ imageUrl: 'https://t4.rbxcdn.com/example' }] }) };
   };
@@ -113,7 +114,9 @@ test('game intel validates universe ID and normalizes public details and recomme
     assert.deepEqual(response.body.game.gameplay, []);
     assert.equal(response.body.game.thumbnail, 'https://t4.rbxcdn.com/example');
     assert.equal(response.body.connections[0].name, 'Related Experience');
-    assert.equal(requestedUrls.length, 3);
+    assert.equal(response.body.connections[0].thumbnail, 'https://t4.rbxcdn.com/related');
+    assert.deepEqual(response.body.connections.map(item => item.universeId), ['234']);
+    assert.equal(requestedUrls.length, 4);
   } finally {
     global.fetch = originalFetch;
   }

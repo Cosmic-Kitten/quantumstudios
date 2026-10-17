@@ -97,8 +97,15 @@ module.exports = async function game(req, res) {
       return res.status(404).json({ error: 'Roblox did not return details for that experience.' });
     }
 
-    const recommendations = (recommendationPayload.games || [])
+    const seenRecommendationIds = new Set([universeId]);
+    const recommendations = (Array.isArray(recommendationPayload.games) ? recommendationPayload.games : [])
       .filter(item => Number.isSafeInteger(item.universeId) && Number.isSafeInteger(item.placeId))
+      .filter(item => {
+        const universeId = String(item.universeId);
+        if (seenRecommendationIds.has(universeId)) return false;
+        seenRecommendationIds.add(universeId);
+        return true;
+      })
       .slice(0, 8)
       .map(item => ({
         universeId: String(item.universeId),
@@ -108,6 +115,21 @@ module.exports = async function game(req, res) {
         playerCount: Number.isFinite(item.playerCount) ? item.playerCount : 0,
         url: `https://www.roblox.com/games/${item.placeId}`
       }));
+    let recommendationThumbnails = new Map();
+    if (recommendations.length) {
+      const thumbnailIds = recommendations.map(item => item.universeId).join(',');
+      try {
+        const recommendationThumbnailPayload = await getJson(
+          `https://thumbnails.roblox.com/v1/games/icons?universeIds=${thumbnailIds}&returnPolicy=PlaceHolder&size=512x512&format=Png&isCircular=false`
+        );
+        recommendationThumbnails = new Map((Array.isArray(recommendationThumbnailPayload.data) ? recommendationThumbnailPayload.data : [])
+          .filter(item => /^\d+$/.test(String(item.targetId || '')) && typeof item.imageUrl === 'string' && item.imageUrl.startsWith('https://'))
+          .map(item => [String(item.targetId), item.imageUrl]));
+      } catch (error) {
+        console.error('Roblox recommendation thumbnails request failed:', error instanceof Error ? error.message : 'unknown error');
+      }
+    }
+    recommendations.forEach(item => { item.thumbnail = recommendationThumbnails.get(item.universeId) || null; });
 
     return res.status(200).json({
       game: {
