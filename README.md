@@ -6,6 +6,8 @@ The deployed site is `https://quantumstudios.vercel.app`. Game-name search and e
 
 The classic launcher is served from `index.html`. Its Explore page recommends public Roblox experiences related to up to three games in the user's local library, with options to inspect, save, or open each pick. The library remains stored in the browser and is not synced to an account. A separate session-based launcher is available at `ai.html`; it supports paginated and sortable name search, public experience details and recommendations, queue ordering/shuffle/launch controls, and a 15/30/45-minute session timer. From either edition, a game's detail view searches the web inside Orbit and draws a graph connecting the experience, gameplay topics, and guide sources. Web research uses the `/api/roblox/research` Vercel function and Bing's RSS search results; source results are unverified links and snippets. A static-only preview server cannot run these APIs; use the deployed site or `vercel dev`. The two editions have links to switch between them, but Orbit Queue does not use the Classic launcher's saved library, favorites, or recent-game data.
 
+Both launchers can show one optional support prompt after one to four minutes of visible use. It links to the Orbit creator's PayPal.Me page; visitors can donate, snooze the prompt for five minutes, or dismiss future prompts on that browser. The five-minute snooze is synchronized across open Orbit tabs.
+
 ## Configure Roblox OAuth
 
 1. Register an OAuth application in the Roblox Creator Dashboard.
