@@ -24,7 +24,7 @@ Do not put the client secret or session secret in `index.html`, commit them, or 
 
 ## Configure the Turnstile website gate
 
-The site checks visitors before serving pages, assets, or API requests. On the first visit, complete the Turnstile check; the resulting signed, HttpOnly access cookie lasts 12 hours. The gate follows the Classic launcher's saved color theme and custom accent when available. Page navigations are not cached by the service worker so an offline cached page cannot bypass the gate.
+The site checks visitors before serving pages, assets, or API requests. On the first visit, complete the Turnstile check; the resulting signed, HttpOnly access cookie lasts 12 hours. Use the subtle **Reset verification** button in the lower-right corner of any page to sign out and require a new check. The gate follows the Classic launcher's saved color theme and custom accent when available. Page navigations are not cached by the service worker so an offline cached page cannot bypass the gate.
 
 In Vercel project settings, add these environment variables for the production deployment:
 

@@ -2,6 +2,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const { isValidSession } = require('../lib/turnstile-session');
 const verifyTurnstile = require('../api/turnstile/verify');
+const signOutOfTurnstile = require('../api/turnstile/signout');
 
 function createResponse() {
   return {
@@ -139,4 +140,22 @@ test('signed access sessions reject tampering and expiration', () => {
   const token = `${now + 60_000}.${'a'.repeat(43)}`;
   assert.equal(isValidSession(token, 'session-secret-that-is-at-least-32-characters', now), false);
   assert.equal(isValidSession(null, 'session-secret-that-is-at-least-32-characters', now), false);
+});
+
+test('signing out expires the HttpOnly access cookie', () => {
+  const previousVercel = process.env.VERCEL;
+  process.env.VERCEL = '1';
+  try {
+    const response = createResponse();
+    signOutOfTurnstile({ method: 'POST', headers: {} }, response);
+
+    assert.equal(response.statusCode, 204);
+    assert.match(response.headers['set-cookie'], /orbit_turnstile=/);
+    assert.match(response.headers['set-cookie'], /Max-Age=0/);
+    assert.match(response.headers['set-cookie'], /HttpOnly/);
+    assert.match(response.headers['set-cookie'], /Secure/);
+  } finally {
+    if (previousVercel === undefined) delete process.env.VERCEL;
+    else process.env.VERCEL = previousVercel;
+  }
 });

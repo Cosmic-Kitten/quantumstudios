@@ -1,7 +1,11 @@
 import { next } from '@vercel/functions';
 import session from './lib/turnstile-session.js';
 
-const PUBLIC_PATHS = new Set(['/turnstile-gate.html', '/api/turnstile/verify']);
+const PUBLIC_PATHS = new Set([
+  '/turnstile-gate.html',
+  '/api/turnstile/verify',
+  '/api/turnstile/signout'
+]);
 
 export default function proxy(request: Request) {
   const url = new URL(request.url);
