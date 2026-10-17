@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
+  <script id="Cookiebot" src="https://consent.cookiebot.com/uc.js" data-cbid="f543a979-9477-415c-9fef-6d88a96d1e84" data-blockingmode="auto" type="text/javascript"></script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" id="orbit-theme-color" content="#111713">
@@ -1054,6 +1055,62 @@
     <main class="orbit-main" id="top">
       <header class="orbit-topbar"><div class="orbit-breadcrumb"><span id="workspace-breadcrumb">Orbit</span> <span aria-hidden="true">/</span> <strong>Launch hub</strong></div><div class="orbit-top-actions"><span class="orbit-status"><i aria-hidden="true"></i> Roblox web</span><a class="customize-button ai-version-link" href="/ai.html"><span aria-hidden="true">✳</span> Orbit Queue</a><button class="customize-button" id="customize-open" type="button" aria-label="Customize your Orbit home"><span aria-hidden="true">☷</span> Customize</button><div class="account-tools"><a class="account-link" id="account-link" href="/api/roblox/login">Connect Roblox</a><span class="account-name" id="account-name" hidden></span><button class="account-logout" id="account-logout" type="button" hidden>Sign out</button><span class="account-message" id="account-message" role="status" aria-live="polite"></span></div><button class="install-button" id="install-button" type="button"><span aria-hidden="true">↓</span> Install Orbit</button></div></header>
       <section class="orbit-welcome"><div class="orbit-kicker">Your game library, one step away</div><h1 id="welcome-headline">Where to today?</h1><p>Start with a Roblox experience link or place ID. Orbit will open the official Roblox game page.</p></section>
+      <section class="showcase-panel" aria-labelledby="showcase-title">
+        <div class="showcase-copy">
+          <div class="orbit-kicker">Dramatic tutorial</div>
+          <h2 id="showcase-title">Three moves. One perfect launch. Zero chaos.</h2>
+          <p>Orbit turns a Roblox shortcut into a cinematic setup: add the game, queue the vibe, then launch it like it’s the final boss room.</p>
+          <div class="showcase-steps" aria-label="Tutorial steps">
+            <button class="showcase-step active" type="button" data-step-index="0">
+              <span class="showcase-step-number">01</span>
+              <div>
+                <strong>Paste the link</strong>
+                <small>Drop in a Roblox game URL or place ID.</small>
+              </div>
+            </button>
+            <button class="showcase-step" type="button" data-step-index="1">
+              <span class="showcase-step-number">02</span>
+              <div>
+                <strong>Queue the mood</strong>
+                <small>Pin your favorites and sort the run.</small>
+              </div>
+            </button>
+            <button class="showcase-step" type="button" data-step-index="2">
+              <span class="showcase-step-number">03</span>
+              <div>
+                <strong>Launch and go</strong>
+                <small>Open the official Roblox page and hit play.</small>
+              </div>
+            </button>
+          </div>
+          <div class="showcase-actions">
+            <button class="orbit-button primary" id="showcase-demo" type="button">Run tutorial</button>
+            <span class="showcase-status" id="showcase-status">Launch mode: ready to fire</span>
+          </div>
+        </div>
+        <div class="showcase-visual" data-mode="launch" aria-hidden="true">
+          <div class="showcase-window">
+            <div class="showcase-console-head">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+            <div class="showcase-console-body">
+              <div class="console-line small">SYSTEM // ORBIT LINK CHECK</div>
+              <div class="console-line accent" id="showcase-command">LINK VERIFIED // roblox.com/games/920587237</div>
+              <div class="console-progress">
+                <span id="showcase-progress-bar"></span>
+              </div>
+              <div class="console-line meta">READY // <strong id="showcase-core-label">Launch</strong> sequence unlocked</div>
+            </div>
+          </div>
+          <div class="showcase-metrics">
+            <div class="showcase-metric"><span class="showcase-metric-value">1 tap</span><small>Open</small></div>
+            <div class="showcase-metric"><span class="showcase-metric-value">3 steps</span><small>Flow</small></div>
+            <div class="showcase-metric"><span class="showcase-metric-value">∞ vibe</span><small>Mode</small></div>
+          </div>
+        </div>
+      </section>
       <div id="home-sections">
       <section class="orbit-launch-panel home-section" id="launch" data-home-section="launch" aria-labelledby="launch-title">
         <div class="launch-content">
@@ -1205,6 +1262,240 @@
     <div class="intel-body" id="intel-content"><div class="search-status">Loading public Roblox information...</div></div>
     <div class="dialog-foot"><button class="orbit-button" type="button" data-close-dialog="intel-dialog">Close</button></div>
   </dialog>
+  <style>
+    .showcase-panel {
+      position: relative;
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(320px, .9fr);
+      gap: 20px;
+      align-items: center;
+      padding: 30px 28px 24px;
+      margin: 0 0 26px;
+      border: 1px solid var(--orbit-line);
+      border-radius: 28px;
+      background: linear-gradient(135deg, rgba(20, 26, 25, .95), rgba(12, 18, 28, .96));
+      box-shadow: 0 26px 70px -40px rgba(0, 0, 0, .82);
+      overflow: hidden;
+    }
+    .showcase-panel::before {
+      content: "";
+      position: absolute;
+      inset: auto -10% -25% auto;
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(201,243,107,.14), transparent 60%);
+      pointer-events: none;
+    }
+    .showcase-copy { max-width: 560px; }
+    .showcase-copy h2 {
+      margin: 12px 0 10px;
+      color: var(--orbit-text);
+      font-size: clamp(28px, 4vw, 46px);
+      line-height: 1.06;
+      letter-spacing: -.04em;
+    }
+    .showcase-copy p {
+      margin: 0;
+      font-size: 15px;
+      line-height: 1.75;
+      color: var(--orbit-muted);
+    }
+    .showcase-steps {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      margin-top: 22px;
+    }
+    .showcase-step {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 56px 1fr;
+      gap: 12px;
+      align-items: center;
+      padding: 12px 12px 12px 0;
+      border: 1px solid rgba(255,255,255,.07);
+      border-radius: 18px;
+      background: rgba(255,255,255,.02);
+      color: inherit;
+      text-align: left;
+      cursor: pointer;
+      transition: border-color .2s ease, transform .2s ease, background .2s ease;
+    }
+    .showcase-step.active {
+      border-color: rgba(201,243,107,.62);
+      background: rgba(201,243,107,.06);
+      transform: translateX(4px);
+    }
+    .showcase-step-number {
+      display: grid;
+      place-items: center;
+      width: 46px;
+      height: 46px;
+      border-radius: 12px;
+      background: rgba(201,243,107,.12);
+      border: 1px solid rgba(201,243,107,.35);
+      color: var(--orbit-lime);
+      font: 10px var(--orbit-mono);
+      letter-spacing: .12em;
+    }
+    .showcase-step strong {
+      display: block;
+      color: var(--orbit-text);
+      font-size: 14px;
+    }
+    .showcase-step small {
+      display: block;
+      margin-top: 4px;
+      color: var(--orbit-muted);
+      font-size: 11px;
+    }
+    .showcase-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px 18px;
+      margin-top: 22px;
+    }
+    .showcase-status {
+      color: var(--orbit-lime);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .showcase-visual {
+      position: relative;
+      min-height: 330px;
+      padding: 18px 18px 12px;
+      border: 1px solid #2d3d40;
+      border-radius: 24px;
+      background: radial-gradient(circle at 30% 25%, rgba(201, 243, 107, .18), transparent 30%), radial-gradient(circle at 80% 30%, rgba(124, 156, 255, .2), transparent 26%), rgba(15, 19, 25, .72);
+      overflow: hidden;
+    }
+    .showcase-window {
+      position: relative;
+      height: 220px;
+      padding: 14px 14px 12px;
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 18px;
+      background: rgba(8,12,18,.82);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.02);
+    }
+    .showcase-window::before,
+    .showcase-window::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      filter: blur(20px);
+    }
+    .showcase-window::before {
+      inset: -40px 35% auto auto;
+      width: 90px;
+      height: 90px;
+      background: rgba(201,243,107,.12);
+    }
+    .showcase-window::after {
+      inset: auto auto -30px 18%;
+      width: 110px;
+      height: 110px;
+      background: rgba(124,156,255,.12);
+    }
+    .showcase-console-head {
+      display: flex;
+      gap: 7px;
+      margin-bottom: 14px;
+    }
+    .showcase-console-head span {
+      display: block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.25);
+    }
+    .showcase-console-head span:nth-child(1) { background: #ff7d7d; }
+    .showcase-console-head span:nth-child(2) { background: #ffcb5b; }
+    .showcase-console-head span:nth-child(3) { background: #73d38a; }
+    .showcase-console-body {
+      display: grid;
+      gap: 12px;
+      font: 11px var(--orbit-mono);
+      color: var(--orbit-muted);
+    }
+    .console-line {
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .console-line.accent {
+      color: var(--orbit-lime);
+      text-shadow: 0 0 10px rgba(201,243,107,.38);
+    }
+    .console-line.meta strong {
+      color: var(--orbit-text);
+    }
+    .console-progress {
+      width: 100%;
+      height: 10px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.08);
+    }
+    .console-progress span {
+      display: block;
+      width: 32%;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--orbit-lime), #7ce0db 100%);
+      box-shadow: 0 0 18px rgba(201,243,107,.45);
+      transition: width .32s ease, filter .2s ease;
+    }
+    .showcase-panel[data-mode="queue"] .console-progress span {
+      filter: saturate(1.2);
+    }
+    .showcase-metrics {
+      position: absolute;
+      left: 18px;
+      right: 18px;
+      bottom: 18px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .showcase-metric {
+      padding: 12px 10px 10px;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 14px;
+      background: rgba(10,14,16,.72);
+      text-align: center;
+    }
+    .showcase-metric-value {
+      display: block;
+      font-size: 18px;
+      line-height: 1;
+      letter-spacing: -.05em;
+      color: var(--orbit-lime);
+    }
+    .showcase-metric small {
+      display: block;
+      margin-top: 8px;
+      color: var(--orbit-muted);
+      font-size: 9px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    .showcase-panel[data-mode="queue"] .showcase-window { border-color: rgba(255,146,110,.5); }
+    .showcase-panel[data-mode="queue"] .console-line.accent { color: #ffb38b; }
+    .showcase-panel[data-mode="queue"] .console-progress span { background: linear-gradient(90deg, #ff926e, #ffd0a9 100%); box-shadow: 0 0 18px rgba(255,146,110,.42); }
+    .showcase-panel[data-mode="discover"] .showcase-window { border-color: rgba(124,156,255,.5); }
+    .showcase-panel[data-mode="discover"] .console-line.accent { color: #9cb8ff; }
+    .showcase-panel[data-mode="discover"] .console-progress span { background: linear-gradient(90deg, #7c9cff, #7ce0db 100%); box-shadow: 0 0 18px rgba(124,156,255,.42); }
+    @media (max-width: 740px) {
+      .showcase-panel { grid-template-columns: 1fr; }
+      .showcase-visual { min-height: 300px; }
+    }
+  </style>
   <script>
     const gameForm = document.querySelector('#launch-form');
     const gameInput = document.querySelector('#game-input');
@@ -1259,6 +1550,93 @@
       { id: 'activity', label: 'Recently opened' },
       { id: 'notes', label: 'Quick notes' }
     ];
+    const showcaseDemo = document.querySelector('#showcase-demo');
+    const showcaseStatus = document.querySelector('#showcase-status');
+    const showcaseCoreLabel = document.querySelector('#showcase-core-label');
+    const showcaseCommand = document.querySelector('#showcase-command');
+    const showcaseProgressBar = document.querySelector('#showcase-progress-bar');
+    const showcaseModes = [
+      { mode: 'launch', label: 'Launch mode', text: 'ready to fire', core: 'Launch', command: 'LINK VERIFIED // roblox.com/games/920587237', progress: '32%', metrics: ['1 tap', '3 steps', '∞ vibe'] },
+      { mode: 'queue', label: 'Queue mode', text: 'next up and synced', core: 'Queue', command: 'QUEUE LOCKED // 6 experiences staged', progress: '72%', metrics: ['6 game', '2 min', '90%'] },
+      { mode: 'discover', label: 'Discover mode', text: 'finding the next favorite', core: 'Discover', command: 'SIGNAL FOUND // new favorite detected', progress: '100%', metrics: ['12 picks', '5 vibes', 'wow'] }
+    ];
+    let showcaseIndex = 0;
+    let showcaseTimer = null;
+
+    function applyTutorialAction(index) {
+      const actions = [
+        () => {
+          if (gameInput) {
+            gameInput.value = '920587237';
+            gameInput.focus();
+            gameInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+          if (launchError) launchError.textContent = 'Demo link loaded. Press Open game to continue.';
+        },
+        () => {
+          const librarySection = document.querySelector('#library');
+          if (librarySection) librarySection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          if (document.querySelector('#add-game-open')) document.querySelector('#add-game-open').click();
+          if (launchError) launchError.textContent = 'Queue demo: favorites are staged for the next run.';
+        },
+        () => {
+          const launchSection = document.querySelector('#launch');
+          if (launchSection) launchSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          if (gameInput) {
+            gameInput.value = 'https://www.roblox.com/games/920587237';
+            gameInput.focus();
+          }
+          if (launchError) launchError.textContent = 'Demo ready. Orbit is primed to open Roblox.';
+        }
+      ];
+      if (actions[index]) actions[index]();
+    }
+
+    function renderShowcaseMode(index = showcaseIndex) {
+      const current = showcaseModes[index];
+      const panel = document.querySelector('.showcase-panel');
+      const steps = document.querySelectorAll('.showcase-step');
+      if (panel) panel.dataset.mode = current.mode;
+      if (showcaseStatus) showcaseStatus.textContent = `${current.label}: ${current.text}`;
+      if (showcaseCoreLabel) showcaseCoreLabel.textContent = current.core;
+      if (showcaseCommand) showcaseCommand.textContent = current.command;
+      if (showcaseProgressBar) showcaseProgressBar.style.width = current.progress;
+      steps.forEach((step, stepIndex) => {
+        step.classList.toggle('active', stepIndex === index);
+      });
+      const metricValues = document.querySelectorAll('.showcase-metric-value');
+      metricValues.forEach((el, metricIndex) => {
+        el.textContent = current.metrics[metricIndex] || '—';
+      });
+    }
+
+    function runShowcaseTutorial() {
+      clearInterval(showcaseTimer);
+     let step = 0;
+      renderShowcaseMode(step);
+      applyTutorialAction(step);
+      showcaseTimer = setInterval(() => {
+        step = (step + 1) % showcaseModes.length;
+        showcaseIndex = step;
+        renderShowcaseMode(step);
+        applyTutorialAction(step);
+      }, 1600);
+    }
+
+    document.querySelectorAll('.showcase-step').forEach((step) => {
+      step.addEventListener('click', () => {
+        clearInterval(showcaseTimer);
+        showcaseIndex = Number(step.dataset.stepIndex || 0);
+        renderShowcaseMode(showcaseIndex);
+        applyTutorialAction(showcaseIndex);
+      });
+    });
+
+    showcaseDemo?.addEventListener('click', () => {
+      runShowcaseTutorial();
+    });
+    renderShowcaseMode(0);
+
     let editingPlaceId = null;
     let selectedGameColor = 'lime';
     let currentSearchResults = [];
