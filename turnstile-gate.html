@@ -87,7 +87,19 @@
           body: JSON.stringify({ token }),
           credentials: 'same-origin'
         });
-        if (!response.ok) throw new Error(`Verification failed (${response.status}). Please try again.`);
+        if (!response.ok) {
+          let result = {};
+          try {
+            result = await response.json();
+          } catch {}
+          const messages = {
+            turnstile_configuration_error: 'The Vercel TURNSTILE_SECRET is invalid. Check it matches this Turnstile widget’s secret, then redeploy.',
+            turnstile_configuration_mismatch: 'The Turnstile widget action or allowed hostname does not match this site. Check the widget allows quantumstudios.vercel.app and uses the website action.',
+            turnstile_challenge_rejected: 'Cloudflare rejected the challenge token. Refresh the check and try again; also confirm the Vercel secret belongs to the site key shown on this page.',
+            turnstile_verification_failed: 'Turnstile rejected the challenge. Refresh the check and try again.'
+          };
+          throw new Error(messages[result.error] || `Verification failed (${response.status}). Please try again.`);
+        }
 
         const requestedPath = new URLSearchParams(location.search).get('next') || '/';
         const destination = new URL(requestedPath, location.origin);

@@ -36,6 +36,8 @@ The existing widget must allow `quantumstudios.vercel.app`. Local testing also r
 
 Redeploy after setting the Vercel environment variables. The gate fails closed until `TURNSTILE_SECRET` and the allowed hostname are configured.
 
+If the check returns **Verification failed (403)**, confirm the Turnstile widget's action is `website`, its allowed domains include `quantumstudios.vercel.app`, and `TURNSTILE_SECRET` in Vercel belongs to the same widget as the site key in `turnstile-gate.html`. The gate now shows distinct messages for a rejected challenge versus an action/hostname or secret configuration problem; matching diagnostic details are also written to the Vercel function logs.
+
 ## Local checks
 
 Run the OAuth and public game API tests with:

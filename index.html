@@ -1655,6 +1655,12 @@
       saveJson(searchCacheKey, Object.fromEntries(recent));
     }
 
+    function redirectToVerification() {
+      const gate = new URL('/turnstile-gate.html', location.origin);
+      gate.searchParams.set('next', `${location.pathname}${location.search}${location.hash}`);
+      location.replace(gate.toString());
+    }
+
     async function readApiResponse(response, operation) {
       const body = await response.text();
       let result;
@@ -1663,6 +1669,10 @@
       } catch {
         if (response.status === 403) throw new Error(`${operation} was blocked by the server (HTTP 403). Check the Vercel deployment's API access settings.`);
         throw new Error(`${operation} returned an unexpected response (HTTP ${response.status}). Try again.`);
+      }
+      if (response.status === 403 && result.error === 'turnstile_required') {
+        redirectToVerification();
+        throw new Error('Website verification expired. Complete the security check to continue.');
       }
       if (!response.ok) throw new Error(result.error || `${operation} failed (HTTP ${response.status}).`);
       return result;

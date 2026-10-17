@@ -363,6 +363,14 @@
       let researchRequest = 0;
       let researchController = null;
 
+      function handleVerificationRequired(response, payload) {
+        if (response.status !== 403 || payload.error !== 'turnstile_required') return false;
+        const gate = new URL('/turnstile-gate.html', location.origin);
+        gate.searchParams.set('next', `${location.pathname}${location.search}${location.hash}`);
+        location.replace(gate.toString());
+        return true;
+      }
+
       function setStatus(message, isError = false) {
         queueStatus.textContent = message;
         queueStatus.classList.toggle('error', isError);
@@ -608,6 +616,7 @@
             throw new Error('Game search returned invalid data. Try again later.');
           }
           if (requestId !== searchRequest) return;
+          if (handleVerificationRequired(response, payload)) return;
           if (!response.ok) throw new Error(payload.error || 'Search is unavailable right now. Try again.');
           const games = Array.isArray(payload.results) ? payload.results : [];
           if (!games.length && !append) {
@@ -793,6 +802,7 @@
             throw new Error('Web search returned invalid data. Try again.');
           }
           if (requestId !== researchRequest) return;
+          if (handleVerificationRequired(response, payload)) return;
           if (!response.ok) throw new Error(payload.error || 'Web search is unavailable right now.');
           renderResearchResults(panel, game, payload);
         } catch (error) {
@@ -848,6 +858,7 @@
             throw new Error('Game details returned invalid data. Try again later.');
           }
           if (requestId !== detailRequest) return;
+          if (handleVerificationRequired(response, payload)) return;
           if (!response.ok) throw new Error(payload.error || 'Could not load experience details.');
           const game = payload.game;
           if (!game) throw new Error('Roblox returned no public experience details.');

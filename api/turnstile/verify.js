@@ -68,14 +68,28 @@ module.exports = async function verifyTurnstile(req, res) {
     return res.status(503).json({ error: 'turnstile_verification_unavailable' });
   }
 
-  if (
-    !result ||
-    typeof result !== 'object' ||
-    result.success !== true ||
-    result.action !== EXPECTED_ACTION ||
-    result.hostname !== hostname
-  ) {
+  const errorCodes = Array.isArray(result?.['error-codes'])
+    ? result['error-codes'].filter(code => typeof code === 'string').slice(0, 5)
+    : [];
+  if (errorCodes.includes('invalid-input-secret') || errorCodes.includes('missing-input-secret')) {
+    console.error('Turnstile rejected the configured secret:', errorCodes.join(', ') || 'unknown error');
+    return res.status(503).json({ error: 'turnstile_configuration_error' });
+  }
+  if (!result || typeof result !== 'object' || result.success !== true) {
+    console.error('Turnstile rejected the challenge:', errorCodes.join(', ') || 'no error code');
+    if (errorCodes.includes('timeout-or-duplicate') || errorCodes.includes('invalid-input-response') || errorCodes.includes('missing-input-response')) {
+      return res.status(403).json({ error: 'turnstile_challenge_rejected' });
+    }
     return res.status(403).json({ error: 'turnstile_verification_failed' });
+  }
+  if (result.action !== EXPECTED_ACTION || result.hostname !== hostname) {
+    console.error('Turnstile challenge did not match the expected action/hostname:', JSON.stringify({
+      action: result.action,
+      hostname: result.hostname,
+      expectedAction: EXPECTED_ACTION,
+      expectedHostname: hostname
+    }));
+    return res.status(403).json({ error: 'turnstile_configuration_mismatch' });
   }
 
   const expiresAt = Date.now() + SESSION_SECONDS * 1000;

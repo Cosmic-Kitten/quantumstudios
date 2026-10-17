@@ -74,7 +74,7 @@ test('Turnstile verification rejects unsuccessful, mismatched-action, and mismat
   const restoreEnvironment = setTurnstileEnvironment();
   const originalFetch = global.fetch;
   const results = [
-    { success: false, action: 'website', hostname: 'quantumstudios.vercel.app' },
+    { success: false, action: 'website', hostname: 'quantumstudios.vercel.app', 'error-codes': ['timeout-or-duplicate'] },
     { success: true, action: 'login', hostname: 'quantumstudios.vercel.app' },
     { success: true, action: 'website', hostname: 'other.example' }
   ];
@@ -85,8 +85,29 @@ test('Turnstile verification rejects unsuccessful, mismatched-action, and mismat
       const response = createResponse();
       await verifyTurnstile(createRequest(), response);
       assert.equal(response.statusCode, 403);
+      assert.equal(response.body.error, index === 0 ? 'turnstile_challenge_rejected' : 'turnstile_configuration_mismatch');
       assert.equal(response.headers['set-cookie'], undefined);
     }
+  } finally {
+    global.fetch = originalFetch;
+    restoreEnvironment();
+  }
+});
+
+test('Turnstile verification reports an invalid configured secret as a configuration error', async () => {
+  const restoreEnvironment = setTurnstileEnvironment();
+  const originalFetch = global.fetch;
+
+  try {
+    global.fetch = async () => ({
+      ok: true,
+      json: async () => ({ success: false, 'error-codes': ['invalid-input-secret'] })
+    });
+    const response = createResponse();
+    await verifyTurnstile(createRequest(), response);
+    assert.equal(response.statusCode, 503);
+    assert.equal(response.body.error, 'turnstile_configuration_error');
+    assert.equal(response.headers['set-cookie'], undefined);
   } finally {
     global.fetch = originalFetch;
     restoreEnvironment();
