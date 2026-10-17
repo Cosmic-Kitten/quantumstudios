@@ -23,7 +23,15 @@ export default function proxy(request: Request) {
   const cookie = cookieHeader.split(';').map(part => part.trim())
     .find(part => part.startsWith(`${session.COOKIE_NAME}=`));
   const token = cookie ? cookie.slice(session.COOKIE_NAME.length + 1) : null;
-  if (session.isValidSession(token, secret)) return next();
+
+  if (session.isValidSession(token, secret)) {
+    // The session authorises exactly one page load. Clear it on the way out so
+    // that reloading the page always sends the visitor back through the gate,
+    // while the request that is already in flight still renders normally.
+    const response = next();
+    response.headers.append('Set-Cookie', session.clearCookieHeader(request));
+    return response;
+  }
 
   if (url.pathname.startsWith('/api/')) {
     return Response.json({ error: 'turnstile_required' }, {
