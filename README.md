@@ -2,20 +2,20 @@
 
 Orbit is a Vercel-hosted static launcher with serverless Roblox OAuth sign-in. Roblox handles the account login; Orbit never asks for or receives the Roblox password.
 
-The deployed site is `https://quantumstudios.org`. Game-name search and experience details use public Roblox game/search/thumbnail APIs through the Vercel functions in `api/roblox`; these features do not use Roblox account permissions. Search results may contain multiple matches, so choose the intended experience before pinning it. The Orbit Queue search requires the `/api/roblox/search` Vercel function, so a static-only preview server will not provide search results; use the deployed site or `vercel dev`.
+The deployed site is `https://quantumstudios.vercel.app`. Game-name search and experience details use public Roblox game/search/thumbnail APIs through the Vercel functions in `api/roblox`; these features do not use Roblox account permissions. Search results may contain multiple matches, so choose the intended experience before pinning it. The Orbit Queue search requires the `/api/roblox/search` Vercel function, so a static-only preview server will not provide search results; use the deployed site or `vercel dev`.
 
 The classic launcher is served from `index.html`. A separate session-based launcher is available at `ai.html`; it supports paginated and sortable name search, public experience details and recommendations, queue ordering/shuffle/launch controls, and a 15/30/45-minute session timer. From either edition, a game's detail view searches the web inside Orbit and draws a graph connecting the experience, gameplay topics, and guide sources. Web research uses the `/api/roblox/research` Vercel function and Bing's RSS search results; source results are unverified links and snippets. A static-only preview server cannot run these APIs; use the deployed site or `vercel dev`. The two editions have links to switch between them, but Orbit Queue does not use the Classic launcher's saved library, favorites, or recent-game data.
 
 ## Configure Roblox OAuth
 
 1. Register an OAuth application in the Roblox Creator Dashboard.
-2. Add this exact redirect URI to the application: `https://quantumstudios.org/api/roblox/callback`.
+2. Add this exact redirect URI to the application: `https://quantumstudios.vercel.app/api/roblox/callback`.
 3. Enable the `openid` and `profile` scopes.
 4. In Vercel project settings, add these environment variables for the deployment environments you use:
 
    - `ROBLOX_CLIENT_ID`: the OAuth application's client ID.
    - `ROBLOX_CLIENT_SECRET`: the OAuth application's client secret.
-   - `ROBLOX_REDIRECT_URI`: `https://quantumstudios.org/api/roblox/callback`.
+   - `ROBLOX_REDIRECT_URI`: `https://quantumstudios.vercel.app/api/roblox/callback`.
    - `ORBIT_SESSION_SECRET`: a random secret with at least 32 characters. Generate one with `openssl rand -base64 32`.
 
 5. Redeploy the Vercel project and open the deployed HTTPS URL. Choose **Connect Roblox** and approve the requested scopes on Roblox.
@@ -32,7 +32,7 @@ In Vercel project settings, add these environment variables for the production d
 - `TURNSTILE_HOSTNAMES`: `quantumstudios.vercel.app`.
 - `ORBIT_SESSION_SECRET`: the existing random secret of at least 32 characters from the Roblox OAuth setup; it signs the short-lived gate cookie.
 
-The existing widget must allow `quantumstudios.vercel.app`. Local testing also requires `localhost` and `127.0.0.1` in the widget's allowed domains; configure a local `TURNSTILE_HOSTNAMES` value of `localhost,127.0.0.1` in an ignored local environment file. Production verification deliberately rejects local hostnames.
+The existing widget must allow `quantumstudios.vercel.app`. Local testing also requires `localhost` and `127.0.0.1` in the widget's allowed domains; configure `TURNSTILE_SECRET` and `TURNSTILE_HOSTNAMES=localhost,127.0.0.1` in an ignored local environment file. Production verification deliberately rejects local hostnames.
 
 Redeploy after setting the Vercel environment variables. The gate fails closed until `TURNSTILE_SECRET` and the allowed hostname are configured.
 

@@ -30,5 +30,11 @@ export default function proxy(request: Request) {
 
   const gateUrl = new URL('/turnstile-gate.html', url);
   gateUrl.searchParams.set('next', `${url.pathname}${url.search}`);
-  return Response.redirect(gateUrl, 307);
+  return new Response(null, {
+    status: 307,
+    headers: {
+      'Cache-Control': 'no-store',
+      Location: gateUrl.toString()
+    }
+  });
 }
