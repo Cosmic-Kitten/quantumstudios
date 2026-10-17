@@ -4,3 +4,5 @@
 !.env.example
 node_modules/
 .codegraphy/*
+# Downloaded Piper binary + voice model for the promo voiceover (promo/build.mjs)
+promo/.tts/

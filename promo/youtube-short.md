@@ -44,3 +44,11 @@ gaming launcher, Roblox session timer, quantum studios
   progress bar sits above the caption area.
 - Re-render with `node promo/build.mjs`; re-capture footage first with
   `node promo/capture.mjs` (expects a static server on :4173).
+- The voiceover is generated with [Piper](https://github.com/rhasspy/piper)
+  neural TTS (`en_US-ryan-high` by default), so it sounds like a real narrator.
+  On the first build the script downloads the Piper binary and the voice model
+  into `promo/.tts/` (about 170 MB, git-ignored) and reuses them afterwards.
+  To change the voice, set `VOICE_MODEL` to any voice under
+  [rhasspy/piper-voices](https://huggingface.co/rhasspy/piper-voices), e.g.
+  `VOICE_MODEL=en/en_US/hfc_female/medium/en_US-hfc_female-medium`; adjust
+  `VOICE_GAIN` if a voice reads too loud or quiet.

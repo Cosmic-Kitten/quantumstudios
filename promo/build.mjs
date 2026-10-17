@@ -3,8 +3,8 @@
 //   node promo/build.mjs
 //
 // Steps: upscales each clip 720x1280 -> 1080x1920, draws branded overlays with
-// the site's own fonts/palette, synthesises a matching voiceover, then muxes an
-// H.264/AAC MP4 at 9:16.
+// the site's own fonts/palette, synthesises a matching voiceover with Piper
+// neural TTS, then muxes an H.264/AAC MP4 at 9:16.
 import { createRequire } from 'node:module';
 import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
@@ -20,14 +20,26 @@ const { chromium } = (() => {
 })();
 
 const ROOT = path.dirname(fileURLToPath(import.meta.url));
-// This machine keeps Chromium under chromium-*/chrome-linux64 rather than the
-// chrome-linux path Playwright expects, so point at it explicitly when present.
+// This machine keeps Chromium under chromium-<build>/chrome-linux64 rather than
+// the chrome-linux path Playwright expects, so point at it explicitly when
+// present. The build number varies by Playwright version, so glob for any
+// chromium-* directory instead of pinning one.
 for (const base of [process.env.PLAYWRIGHT_BROWSERS_PATH, path.join(process.env.HOME || '', '.cache/ms-playwright'), '/tmp/node_modules/.cache/ms-playwright']) {
-  if (!base || process.env.CHROMIUM_PATH) break;
-  const dir = path.join(base, 'chromium-1248', 'chrome-linux64', 'chrome');
-  if (fs.existsSync(dir)) process.env.CHROMIUM_PATH = dir;
+  if (!base || process.env.CHROMIUM_PATH || !fs.existsSync(base)) continue;
+  const dir = fs.readdirSync(base)
+    .filter(name => /^chromium-\d+$/.test(name))
+    .sort()
+    .reverse()
+    .map(name => path.join(base, name, 'chrome-linux64', 'chrome'))
+    .find(candidate => fs.existsSync(candidate));
+  if (dir) process.env.CHROMIUM_PATH = dir;
 }
-if (process.env.CHROMIUM_PATH) chromium.launch = ((launch) => (options = {}) => launch({ executablePath: process.env.CHROMIUM_PATH, ...options }))(chromium.launch);
+if (process.env.CHROMIUM_PATH) {
+  // Call through the binding, not a detached reference: playwright-core reads
+  // `this._playwright` inside launch(), so a bare function call throws.
+  const launch = chromium.launch.bind(chromium);
+  chromium.launch = (options = {}) => launch({ executablePath: process.env.CHROMIUM_PATH, ...options });
+}
 
 const FOOTAGE = path.join(ROOT, 'footage');
 const WORK = path.join(ROOT, 'work');
@@ -78,7 +90,7 @@ const SCENES = [
 
 // Voiceover script + on-screen beats. Timings are relative to each scene and
 // follow the footage beats, so audio and picture describe the same action.
-// No dots in the outro line: espeak reads "vercel.app" as an odd sound.
+// "vercel" is spelled out so the TTS reads it as words, not a domain name.
 const VOICE = [
   { clip: 'classic', at: 0.9, text: 'Meet Orbit.' },
   { clip: 'classic', at: 3.4, text: 'A launcher for your Roblox games.' },
@@ -93,7 +105,7 @@ const VOICE = [
   { clip: 'queue', at: 6.0, text: 'Set a session clock.' },
   { clip: 'queue', at: 8.8, text: 'Then launch the next.' },
   { clip: 'outro', at: 0.5, text: 'Orbit. Free in your browser.' },
-  { clip: 'outro', at: 2.3, text: 'quantumstudios dot vercel dot app.' }
+  { clip: 'outro', at: 2.3, text: 'quantum studios dot vercel dot app.' }
 ];
 
 // Output goes straight to the terminal: execFileSync buffers stdout by default
@@ -216,6 +228,57 @@ async function renderOverlays() {
 }
 
 // ---------------------------------------------------------------- voiceover
+// Speech is synthesised with Piper, a neural TTS that sounds like a real
+// person. The old build used espeak-ng, a formant synthesiser, and no amount of
+// pitch-shifting hides that it sounds like a robot. Piper needs a binary and a
+// voice model that are not part of this repo, so fetch and cache them on first
+// run; later builds reuse the cache and make no network calls.
+const TTS_DIR = path.join(ROOT, '.tts');
+const PIPER_VERSION = '2023.11.14-2';
+// en_US-ryan-high is a high-quality male US voice: natural prosody and clear
+// consonants, which survives the -14 LUFS phone-speaker master below. Swap the
+// three path parts (or set VOICE_MODEL) for any voice under
+// https://huggingface.co/rhasspy/piper-voices — e.g.
+// en/en_US/hfc_female/medium/en_US-hfc_female-medium for a female read.
+const VOICE_MODEL = process.env.VOICE_MODEL || 'en/en_US/ryan/high/en_US-ryan-high';
+
+async function download(url, dest) {
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`${url} -> HTTP ${res.status}`);
+  fs.writeFileSync(dest, Buffer.from(await res.arrayBuffer()));
+}
+
+async function ensurePiper() {
+  const bin = path.join(TTS_DIR, 'piper');
+  const model = path.join(TTS_DIR, 'voice.onnx');
+  const config = path.join(TTS_DIR, 'voice.onnx.json');
+  if (fs.existsSync(bin) && fs.existsSync(model) && fs.existsSync(config)) {
+    return { bin, model, config };
+  }
+  fs.mkdirSync(TTS_DIR, { recursive: true });
+  console.log('voice: downloading Piper + voice model (one time)…');
+  if (!fs.existsSync(bin)) {
+    const tarball = path.join(TTS_DIR, 'piper.tgz');
+    await download(
+      `https://github.com/rhasspy/piper/releases/download/${PIPER_VERSION}/piper_linux_x86_64.tar.gz`,
+      tarball
+    );
+    // The archive holds the binary, its .so deps and espeak-ng-data, all of
+    // which the binary needs at runtime; extract in place and clean up.
+    execFileSync('tar', ['xzf', tarball, '-C', TTS_DIR, '--strip-components=1']);
+    fs.rmSync(tarball);
+    fs.chmodSync(bin, 0o755);
+  }
+  if (!fs.existsSync(model)) {
+    const base = `https://huggingface.co/rhasspy/piper-voices/resolve/main/${VOICE_MODEL}`;
+    await download(`${base}.onnx`, model);
+    await download(`${base}.onnx.json`, config);
+  }
+  return { bin, model, config };
+}
+
+const piper = await ensurePiper();
+
 // A soft, low trailer bed: two detuned saws + a filtered noise "air" layer,
 // ducked under a brightening filter and a gentle sidechain pulse.
 function musicTrack(seconds) {
@@ -348,7 +411,10 @@ const overlays = await renderOverlays();
 }
 
 // ---------------------------------------------------------------- compose
-const args = ['-hide_banner', '-loglevel', 'error', '-y'];
+// ffmpeg() already prepends -hide_banner -loglevel error -y, so this list holds
+// inputs and output options only; repeating the globals makes ffmpeg reject the
+// command with "Option not found".
+const args = [];
 const filters = [];
 let idx = 0;
 function input(file, extra = []) { args.push(...extra, '-i', file); return idx++; }
@@ -394,17 +460,19 @@ for (const line of VOICE) {
   if (!scene) continue;
   const at = (scene.start + line.at).toFixed(2);
   const padded = path.join(WORK, `vo-${voIdx}.wav`);
-  execFileSync('espeak-ng', [
-    '-v', 'en-us+m3', '-s', '168', '-p', '40', '-a', '165', '-w', padded, line.text
-  ]);
+  // Piper reads text on stdin and writes 22050 Hz mono WAV. LD_LIBRARY_PATH is
+  // needed because the binary links the .so files shipped beside it.
+  execFileSync(piper.bin, ['-m', piper.model, '-f', padded], {
+    input: `${line.text}\n`,
+    env: { ...process.env, LD_LIBRARY_PATH: TTS_DIR }
+  });
   voLabels.push({ label: `vo${voIdx}`, at: Number(at), i: input(padded) });
   voIdx++;
 }
-// espeak writes 22050 Hz mono. Set the declared sample rate to the *pitch*
-// factor (no /48000) so the octave shift works, then atempo 1/factor to bring
-// duration back. The old 48000*factor made every line 2.2x too fast, so the
-// whole voiceover finished seconds before its caption.
-const voicePitch = Number(process.env.VOICE_PITCH || '0.84');
+// Piper already outputs natural speech at 22050 Hz mono, so there is no pitch
+// trick to undo: just lift it to the 48 kHz stereo bed and shape it for a phone
+// speaker. VOICE_GAIN trims level if a voice model runs hot.
+const voiceGain = Number(process.env.VOICE_GAIN || '1.9');
 const delays = [
   `[${bedIdx}:a]aformat=sample_fmts=fltp:sample_rates=48000:channel_layouts=stereo,` +
   `volume=0.6,afade=t=in:st=0:d=1.2,afade=t=out:st=${(TOTAL - 0.8).toFixed(2)}:d=0.8[bed]`
@@ -412,12 +480,12 @@ const delays = [
 const voiceLabels = [];
 for (const v of voLabels) {
   delays.push(
-    `[${v.i}:a]asetrate=22050*${voicePitch},aresample=48000,atempo=${(1 / voicePitch).toFixed(3)},` +
+    `[${v.i}:a]aformat=sample_fmts=fltp:sample_rates=48000,` +
     `aformat=channel_layouts=stereo,` +
-    // espeak adds ~6 s of silence after each line; cut it so the voice does not
-    // hold the music ducked until the end of the video.
+    // Trim any leading/trailing silence so the voice does not hold the music
+    // ducked after the line has finished.
     `silenceremove=start_periods=1:start_threshold=-45dB:start_silence=0.05:stop_periods=-1:stop_threshold=-45dB:stop_silence=0.2,` +
-    `highpass=f=110,lowpass=f=7200,volume=2.2,` +
+    `highpass=f=90,lowpass=f=9000,volume=${voiceGain},` +
     `adelay=${Math.round(v.at * 1000)}|${Math.round(v.at * 1000)}[${v.label}]`
   );
   voiceLabels.push(`[${v.label}]`);
@@ -442,9 +510,17 @@ filters.push(
 );
 
 fs.writeFileSync(path.join(WORK, 'filters.txt'), filters.join(';\n'));
+// Older and some newer ffmpeg builds ship without -filter_complex_script, so
+// pass the graph inline when the flag is unavailable (the graph is a few KB,
+// well inside the argv limit).
+const supportsScript = execFileSync('ffmpeg', ['-hide_banner', '-h', 'full'], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'], maxBuffer: 16 * 1024 * 1024 })
+  .includes('filter_complex_script');
+const graphArgs = supportsScript
+  ? ['-filter_complex_script', path.join(WORK, 'filters.txt')]
+  : ['-filter_complex', filters.join(';')];
 ffmpeg([
   ...args,
-  '-filter_complex_script', path.join(WORK, 'filters.txt'),
+  ...graphArgs,
   '-map', '[vout]', '-map', '[aout]',
   '-t', String(TOTAL),
   '-c:v', 'libx264', '-preset', 'slow', '-crf', '19', '-profile:v', 'high', '-level', '4.2',
