@@ -96,7 +96,9 @@ const VOICE = [
   { clip: 'outro', at: 2.3, text: 'quantumstudios dot vercel dot app.' }
 ];
 
-const ffmpeg = (args) => execFileSync('ffmpeg', ['-hide_banner', '-loglevel', 'error', '-y', ...args], { stdio: 'inherit' });
+// Output goes straight to the terminal: execFileSync buffers stdout by default
+// and a multi-megabyte encode overflows that buffer.
+const ffmpeg = (args) => execFileSync('ffmpeg', ['-hide_banner', '-loglevel', 'error', '-y', ...args], { stdio: ['ignore', 'inherit', 'inherit'], maxBuffer: 64 * 1024 * 1024 });
 /* Same FFmpeg graph, but executed by name. Executed as a file the shebang can
    be `#!/usr/bin/env -S ffmpeg -hide_banner -loglevel error -y`, so on macOS
    and Linux alike every run is silent, and pressing Play on the script can
@@ -170,8 +172,8 @@ function overlayHTML(scene, duration, index, total) {
   .bar{position:absolute;left:48px;width:720px;bottom:270px}
   .progress{height:5px;background:rgba(255,255,255,.22);border-radius:99px;overflow:hidden}
   .fill{height:100%;background:${LIME};box-shadow:0 0 14px ${LIME};width:${((index + 1) / total) * 100}%}
-  .cta{display:flex;align-items:center;gap:12px;margin-top:20px;color:#fff;font:800 30px Manrope;
-    text-shadow:0 2px 10px rgba(0,0,0,.9)}
+  .cta{display:flex;align-items:center;gap:12px;margin-top:20px;color:#fff;font:800 28px Manrope;
+    white-space:nowrap;text-shadow:0 2px 10px rgba(0,0,0,.9)}
   .cta b{color:${LIME}}
   .cta small{font:500 19px 'DM Mono';letter-spacing:.08em;color:#e2e9df;margin-left:auto}
   .cursor{position:absolute;width:38px;height:38px;transform:${

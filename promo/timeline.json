@@ -1,29 +1,29 @@
 {
-  "total": 38.762,
+  "total": 40.841,
   "starts": [
     {
       "scene": "classic",
-      "start": 1.5,
-      "duration": 9.337
+      "start": 3.2,
+      "duration": 9.2
     },
     {
       "scene": "typing",
-      "start": 10.837,
-      "duration": 5.77
+      "start": 12.399999999999999,
+      "duration": 5.822
     },
     {
       "scene": "customize",
-      "start": 16.607,
-      "duration": 6.055
+      "start": 18.221999999999998,
+      "duration": 6.519
     },
     {
       "scene": "queue",
-      "start": 22.662,
+      "start": 24.741,
       "duration": 12.5
     },
     {
       "scene": "outro",
-      "start": 35.162,
+      "start": 37.241,
       "duration": 3.6
     }
   ]
