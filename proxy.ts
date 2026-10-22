@@ -43,6 +43,18 @@ export default function proxy(request: Request) {
 export function proxy(request) {
   const ua = request.headers.get("user-agent") || "";
   const host = request.nextUrl.host;
+  export const config = {
+  matcher: [
+    // Only run proxy on your human-facing site
+    "/:path*",
+    {
+      // Skip proxy entirely for Roblox-origin requests
+      source: "/api/(.*)",
+      has: [{ type: "header", key: "User-Agent", value: "Roblox" }],
+      missing: []
+    }
+  ]
+};
 
   // ✅ If request comes from Roblox, bypass Turnstile
   if (ua.includes("Roblox") || host.includes("roblox-orbit.vercel.app")) {
