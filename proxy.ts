@@ -38,7 +38,31 @@ export default function proxy(request: Request) {
       headers: { 'Cache-Control': 'no-store' }
     });
   }
+  import { NextResponse } from "next/server";
 
+export function proxy(request) {
+  const ua = request.headers.get("user-agent") || "";
+  const host = request.nextUrl.host;
+
+  // ✅ If request comes from Roblox, bypass Turnstile
+  if (ua.includes("Roblox") || host.includes("roblox-orbit.vercel.app")) {
+    return NextResponse.next();
+  }
+
+  // ✅ If request comes from quantumstudios.vercel.app, enforce Turnstile
+  if (host.includes("quantumstudios.vercel.app")) {
+    const token = request.cookies.get("turnstile_token");
+
+    if (!token) {
+      return NextResponse.redirect(
+        new URL("/turnstile", request.url)
+      );
+    }
+  }
+
+  return NextResponse.next();
+}
+      
   const gateUrl = new URL('/turnstile-gate.html', url);
   gateUrl.searchParams.set('next', `${url.pathname}${url.search}`);
   return new Response(null, {
