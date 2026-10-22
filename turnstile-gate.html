@@ -72,6 +72,7 @@
 
     form.addEventListener('submit', async event => {
       event.preventDefault();
+    
       const token = new FormData(form).get('cf-turnstile-response');
       if (typeof token !== 'string' || !token) {
         message.textContent = 'Complete the security check first.';

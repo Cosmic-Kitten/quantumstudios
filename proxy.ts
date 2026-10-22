@@ -29,7 +29,6 @@ export default function proxy(request: Request) {
     // that reloading the page always sends the visitor back through the gate,
     // while the request that is already in flight still renders normally.
     const response = next();
-    response.headers.append('Set-Cookie', session.clearCookieHeader(request));
     return response;
   }
 
